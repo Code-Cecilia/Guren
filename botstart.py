@@ -4,7 +4,8 @@ import datetime
 from discord.ext import commands
 import asyncio
 import random
-
+import dashcord
+import routes
 
 description = ''' A clever discord bot written in python for the guild Uploading Nation'''
 
@@ -21,6 +22,9 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency*1000, 2)
     print('Running discord.py version ' + discord.__version__)
+    # await bot.dashboard.start("144.172.83.148", 5000)
+
+# app = dashcord.App(bot, template_path="templates", static_path="static", routing_file="routes");
 
 for cog in os.listdir("./cogs"):
     if cog.endswith(".py"):
@@ -45,6 +49,7 @@ async def chng_pr():
         await asyncio.sleep(60)    
 
 
+
 bot.loop.create_task(chng_pr())
 bot.load_extension("jishaku")
-bot.run("")
+bot.run(""your mom fat")
