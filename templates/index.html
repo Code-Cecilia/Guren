@@ -5,17 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- In order to link the css / javascript, we simply say the file name within the defined static_path within out App class. -->
     <link rel="stylesheet" href="index.css">
     <script src="index.js"></script>
 
     <title>Guren Dashboard</title>
 </head>
 <body>
-    <!--
-        Within the route function, we supply the html file with the variable `guilds`
-        To access variables we use {{variable}}
-    -->
     {{guilds}}
 
     <form action="/" method="POST" id="myForm">
