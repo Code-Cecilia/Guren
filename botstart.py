@@ -22,9 +22,9 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency*1000, 2)
     print('Running discord.py version ' + discord.__version__)
-    # await bot.dashboard.start("", 5000)
+    await bot.dashboard.start("", 5000)
 
-# app = dashcord.App(bot, template_path="templates", static_path="static", routing_file="routes");
+app = dashcord.App(bot, template_path="templates", static_path="static", routing_file="routes");
 
 for cog in os.listdir("./cogs"):
     if cog.endswith(".py"):
