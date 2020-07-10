@@ -21,7 +21,7 @@
 
 
 # Guren
-![Build Status](https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master)](https://travis-ci.com/Uplodading-Team/Guren)
+[![Build Status](https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master)](https://travis-ci.com/Uplodading-Team/Guren)
 
 
 A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
