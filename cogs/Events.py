@@ -31,8 +31,9 @@ class Events(commands.Cog):
             await ctx.send("Hey! You lack permission to use this command.")     
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("Command not found!")
-        else:
+        else:    
             raise error
+
 
 def setup(bot):
     bot.add_cog(Events(bot))
