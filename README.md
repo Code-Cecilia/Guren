@@ -93,4 +93,4 @@ Edit those lines to match the path for their respective JSON in your system / vp
 
 Run the bot
 
-> Double click on botstart.bat
+Double click on botstart.bat
