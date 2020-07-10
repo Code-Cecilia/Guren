@@ -6,8 +6,8 @@ import random
 import datetime
 
 
-reddit = praw.Reddit(client_id="nzXLSEZ7SOxHOg",
-                    client_secret="8q1JBZE5_Mo7eXogVq6C2Yz6vNA",
+reddit = praw.Reddit(client_id="",
+                    client_secret="",
                     user_agent="discordapipythonlib:com.GURENBOT:v1.0.0 (by /u/yuichiro__)",
                     username="GurenBOT")
 
