@@ -107,9 +107,6 @@ class Moderation(commands.Cog):
     async def clear(self, ctx, amount: int):
         """Clears messages."""
         channel = ctx.channel
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot clear yourself? Stinky.")
-            return    
         try:
             await channel.purge(limit=amount+1)
         except discord.Forbidden:
