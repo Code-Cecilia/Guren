@@ -25,7 +25,7 @@ Install python modules.
 
 Edit botstart.py token
 
-> TOKEN = "PLACE YOUR BOT TOKEBN HERE"
+> TOKEN = "PLACE YOUR BOT TOKEN HERE"
 
 Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
 
@@ -34,6 +34,9 @@ Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
 - `botstart.py` - Line 18
 - `_Levels.py` - Lines 13 and 19
 - `Server Owner.py` - Lines 17 and 23
+
+![Screenshot_2](images/Screenshot_2.png?raw=true "Title")
+
 
 
 Run the bot
