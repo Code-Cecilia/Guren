@@ -81,7 +81,7 @@ class Maymay(commands.Cog):
 
     @commands.command()
     async def howsimp(self, ctx, *, question = None, member: discord.Member = None):
-        """-i tell you how much gay you are"""
+        """I tell you how much gay you are"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
         responses = [
