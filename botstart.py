@@ -7,14 +7,29 @@ import random
 import dashcord
 import routes
 
+TOKEN = "your mom fat"
 description = ''' A clever discord bot written in python for the guild Uploading Nation'''
 
+def get_prefix(bot, message):
+    if not message.guild:
+        return commands.when_mentioned_or("g$")(bot, message)
+
+    with open("/root/bots/Guren/cogs/prefixes.json", 'r') as f:
+        prefixes = json.load(f)
+
+    if str(message.guild.id) not in prefixes:
+        return commands.when_mentioned_or("g$")(bot, message)
+
+    prefix = prefixes[str(message.guild.id)]
+    return commands.when_mentioned_or(prefix)(bot, message)
+
 bot = commands.Bot(
-    commands.when_mentioned_or('g$'), 
+    command_prefix=get_prefix, 
     description=description,
     owner_id=219410026631135232,
     case_insensitive=True
 )
+
 
 @bot.event
 async def on_ready():
@@ -22,9 +37,9 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency*1000, 2)
     print('Running discord.py version ' + discord.__version__)
-    await bot.dashboard.start("", 5000)
+    #await bot.dashboard.start("144.172.83.148", 5000)
 
-app = dashcord.App(bot, template_path="templates", static_path="static", routing_file="routes");
+#app = dashcord.App(bot, template_path="templates", static_path="static", routing_file="routes");
 
 for cog in os.listdir("./cogs"):
     if cog.endswith(".py"):
@@ -46,10 +61,11 @@ async def chng_pr():
 
         await bot.change_presence(activity=discord.Game(status))
 
-        await asyncio.sleep(60)    
+        await asyncio.sleep(60)  
+
 
 
 
 bot.loop.create_task(chng_pr())
 bot.load_extension("jishaku")
-bot.run(""your mom fat")
+bot.run(TOKEN)
