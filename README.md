@@ -58,7 +58,7 @@ python3 -m pip install -r file.txt
 
 Edit botstart.py token with your bot token. Assuming you have a bot user associated with your Application at [Discord Developers](https://discord.com/developers/applications)
 
-![Screenshot_4](images/Screenshot_4.png?raw=true "Title")
+![Screenshot_4](images/Screenshot_4.png?raw=true "Developer Portal")
 
 The copied value is what you are gonna put in the gap of "".
 
