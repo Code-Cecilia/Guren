@@ -136,6 +136,25 @@ class Utilities(commands.Cog):
         except:
             await ctx.send("An error happened.")
 
+    @commands.command()
+    async def permissions(self, ctx, member: discord.Member = None):
+        '''Displays my current permissions'''
+        permissions = ctx.channel.permissions_for(ctx.me)
+        member = ctx.author if not member else member
+        embed = discord.Embed(title=':customs:  Permissions', colour=member.color, timestamp=datetime.datetime.utcnow())
+        embed.add_field(name='Server', value=ctx.guild)
+        embed.add_field(name='Channel', value=ctx.channel, inline=False)
+
+        for item, valueBool in permissions:
+            if valueBool == True:
+                value = ':white_check_mark:'
+            else:
+                value = ':x:'
+            embed.add_field(name=item, value=value)
+            embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        
+        await ctx.send(embed=embed)            
+            
 def setup(bot):
     bot.remove_command('Help')
     bot.add_cog(Utilities(bot))
