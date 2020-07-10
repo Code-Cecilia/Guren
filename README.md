@@ -41,10 +41,7 @@ The copied value is what you are gonna put in the gap of "".
 ![Screenshot_3](images/Screenshot_3.png?raw=true "Title")
 
 Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
-
-```bash
 Edit those lines to match the path for their respective JSON in your system / vps 
-```
 
 - `botstart.py` - Line 18
 - `_Levels.py` - Lines 13 and 19
@@ -72,7 +69,9 @@ Download latest python version from the official website and dont forget to chec
 
 After installing, open a cmd window, also linked to the place where the file.txt is and run the following
 
-> python3 -m pip install -r file.txt
+```bash
+python3 -m pip install -r file.txt
+```
 
 Edit botstart.py token with your bot token. Assuming you have a bot user associated with your Application at [Discord Developers](https://discord.com/developers/applications)
 
@@ -80,12 +79,11 @@ Edit botstart.py token with your bot token. Assuming you have a bot user associa
 
 The copied value is what you are gonna put in the gap of "".
 
-> TOKEN = "PLACE YOUR BOT TOKEN HERE"
+> 
 ![Screenshot_3](images/Screenshot_3.png?raw=true "Title")
 
-Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
-
-> Edit those lines to match the path for their respective JSON in your system / vps 
+Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`.
+Edit those lines to match the path for their respective JSON in your system / vps. 
 
 - `botstart.py` - Line 18
 - `_Levels.py` - Lines 13 and 19
