@@ -12,8 +12,6 @@
   <a href="https://discord.gg/8wCez2n">
     <img src="https://discordapp.com/api/guilds/133049272517001216/widget.png?style=shield" alt="Discord Server">
  <a href="https://travis-ci.com/Uplodading-Team/Guren"><img src="https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master"></a>
-  <a href="https://www.python.org/downloads/">
-    <img src="https://img.shields.io/badge/Made%20With-Python%203.8-blue.svg?style=for-the-badge" alt="Made with Python 3.8">
   <a href="https://github.com/Rapptz/discord.py/">
       <img src="https://img.shields.io/badge/discord-py-blue.svg" alt="discord.py">
   </a>
