@@ -1,6 +1,28 @@
-[![Build Status](https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master)](https://travis-ci.com/Uplodading-Team/Guren)
+<h1 align="center">
+  <br>
+  <a href=""><img src="https://cdn.discordapp.com/attachments/713430084039737354/731176680139522139/wallpaperflare.com_wallpaper_2.jpg" alt="Guren"></a>
+  <br>
+  Guren Ichinose Discord Bot
+  <br>
+</h1>
+
+<h4 align="center">Utilities, Moderation, Memes.</h4>
+
+<p align="center">
+  <a href="https://discord.gg/8wCez2n">
+    <img src="https://discordapp.com/api/guilds/133049272517001216/widget.png?style=shield" alt="Discord Server">
+  </a>
+  <a href="https://www.python.org/downloads/">
+    <img src="https://img.shields.io/badge/Made%20With-Python%203.8-blue.svg?style=for-the-badge" alt="Made with Python 3.8">
+  <a href="https://github.com/Rapptz/discord.py/">
+      <img src="https://img.shields.io/badge/discord-py-blue.svg" alt="discord.py">
+  </a>
+</p>
+
 
 # Guren
+![Build Status](https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master)](https://travis-ci.com/Uplodading-Team/Guren)
+
 
 A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim my code as yours.
