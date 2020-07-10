@@ -48,12 +48,16 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="ban")
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason="No reason"):
         """Bans someone"""
-        try:    
-            await member.ban(reason=reason)
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot ban yourself!")
+            return
+        try:
+            memberid =  await self.bot.fetch_user(int(member))    
+            await member.ban(reason=reason) or await memberid.ban(reason=reason)
         except discord.Forbidden:
             await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")    
         else:
@@ -65,21 +69,27 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    @commands.guild_only()
-    async def unban(self, ctx, member, *, reason=None):
+    async def unban(self, ctx, member, *, reason="No reason"):
+        print("unbanned")
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot unban yourself!")
+            return
         try:
-            member = await self.bot.fetch_user(int(member))
+            member =  await self.bot.fetch_user(int(member))
             await ctx.guild.unban(member, reason=reason)
         except discord.Forbidden:
-            await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")    
+            await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")
         else:
             await ctx.send(f"`{member}` was unbanned by **{ctx.author.name}**.")
-        print(ctx.author.name, 'used the command ban')
+        print(ctx.author.name, 'used the command unban')
 
-    @commands.command()
+    @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason="No reason"):
         """Kicks someone"""
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot kick yourself!")
+            return
         try:
             await member.kick(reason=reason)
         except discord.Forbidden:    
@@ -92,11 +102,14 @@ class Moderation(commands.Cog):
         print(ctx.author.name, 'used the command kick')
 
 
-    @commands.command()
+    @commands.command(name="clear")
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int):
         """Clears messages."""
-        channel = ctx.channel    
+        channel = ctx.channel
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot clear yourself? Stinky.")
+            return    
         try:
             await channel.purge(limit=amount+1)
         except discord.Forbidden:
@@ -141,11 +154,17 @@ class Moderation(commands.Cog):
     @commands.command()
     async def mute(self, ctx, user: Sinner, reason=None):
         """Mutes a user."""
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot mute yourself!")
+            return        
         await mute(ctx, user, reason or "treason")
 
     @commands.command()
     async def unmute(self, ctx, user: Redeemed):
         """Unmutes a muted user"""
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot unmute yourself!")
+            return   
         await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
         await ctx.send(f"{user.mention} has been unmuted")
 
@@ -175,7 +194,7 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Is that a person?")
         if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")        
+            await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
