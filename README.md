@@ -63,7 +63,7 @@ Edit botstart.py token with your bot token. Assuming you have a bot user associa
 The copied value is what you are gonna put in the gap of "".
 
 >
-![Screenshot_3](images/Screenshot_3.png?raw=true "Token)
+![Screenshot_3](images/Screenshot_3.png?raw=true "Token")
 
 Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
 Edit those lines to match the path for their respective JSON in your system / vps 
@@ -72,7 +72,7 @@ Edit those lines to match the path for their respective JSON in your system / vp
 - `_Levels.py` - Lines 13 and 19
 - `Server Owner.py` - Lines 17 and 23
 
-![Screenshot_2](images/Screenshot_2.png?raw=true "Title")
+![Screenshot_2](images/Screenshot_2.png?raw=true "Lines to edit")
 
 Run the bot
 ```bash
@@ -90,7 +90,7 @@ Download latest python version from the official website and dont forget to chec
 
 > [Python](https://www.python.org/downloads/release/python-383/)
 
-![Screenshot_1](images/Screenshot_1.png?raw=true "Title")
+![Screenshot_1](images/Screenshot_1.png?raw=true "PATH Checkbox")
 
 After installing, open a cmd window, also linked to the place where the file.txt is and run the following
 
@@ -100,12 +100,12 @@ python3 -m pip install -r file.txt
 
 Edit botstart.py token with your bot token. Assuming you have a bot user associated with your Application at [Discord Developers](https://discord.com/developers/applications)
 
-![Screenshot_4](images/Screenshot_4.png?raw=true "Title")
+![Screenshot_4](images/Screenshot_4.png?raw=true "Developer Portal")
 
 The copied value is what you are gonna put in the gap of "".
 
 > 
-![Screenshot_3](images/Screenshot_3.png?raw=true "Title")
+![Screenshot_3](images/Screenshot_3.png?raw=true "Token")
 
 Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`.
 Edit those lines to match the path for their respective JSON in your system / vps. 
@@ -114,7 +114,7 @@ Edit those lines to match the path for their respective JSON in your system / vp
 - `_Levels.py` - Lines 13 and 19
 - `Server Owner.py` - Lines 17 and 23
 
-![Screenshot_2](images/Screenshot_2.png?raw=true "Title")
+![Screenshot_2](images/Screenshot_2.png?raw=true "Lines to edit")
 
 Run the bot
 
