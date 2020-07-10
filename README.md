@@ -1,10 +1,11 @@
 # Guren
 
-A discord bot written in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
+A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
+Don't use my code without crediting. You are free to host it and fork it yourself but don't claim my code as yours.
 
 
-the token in the screenshot is invalid so you don't have to worry :P
-dashboard included, developer of the python module is fixing the issue #2. When fixed, dependencies here will be updated
+The token in the screenshot is invalid so you don't have to worry :P
+Dashboard included, developer of the python module is fixing the issue #2. When fixed, dependencies here will be updated
 
 # Usage and installation
 
