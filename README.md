@@ -8,8 +8,6 @@
 
 <h4 align="center">Utilities, Moderation, Memes.</h4>
 
-{<img src="https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master" alt="Build Status" />}[https://travis-ci.com/Uplodading-Team/Guren]
-
 <p align="center">
   <a href="https://discord.gg/8wCez2n">
     <img src="https://discordapp.com/api/guilds/133049272517001216/widget.png?style=shield" alt="Discord Server">
@@ -23,11 +21,6 @@
 
 
 # Guren
-[![Build Status](https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master)](https://travis-ci.com/Uplodading-Team/Guren)
-<a href="https://scan.coverity.com/projects/uplodading-team-guren">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/21462/badge.svg"/>
-</a>
 
 A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim my code as yours.
