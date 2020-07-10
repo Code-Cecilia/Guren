@@ -27,8 +27,35 @@ Edit botstart.py token
 
 > TOKEN = "PLACE YOUR BOT TOKEBN HERE"
 
+Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
+
+> Edit those lines to match the path for their respective JSON in your system / vps 
+
+- `botstart.py` - Line 18
+- `_Levels.py` - Lines 13 and 19
+- `Server Owner.py` - Lines 17 and 23
+
+
 Run the bot
 
 > python3 botstart.py
 or
 > ./startbot.sh
+
+
+Windows: Download latest python version from the official website and dont forget to check ADD PYTHON X.X.X to PATH.
+
+> [https://www.python.org/downloads/release/python-383/](url)
+
+![Screenshot_1](images/Screenshot_1.png?raw=true "Title")
+
+After installing, open a cmd window, also linked to the place where the file.txt is and run the following
+
+> python3 -m pip install -r file.txt
+
+Edit botstart.py token
+
+> TOKEN = "PLACE YOUR BOT TOKEBN HERE"
+
+
+
