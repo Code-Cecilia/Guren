@@ -63,7 +63,7 @@ Edit botstart.py token with your bot token. Assuming you have a bot user associa
 The copied value is what you are gonna put in the gap of "".
 
 >
-![Screenshot_3](images/Screenshot_3.png?raw=true "Title")
+![Screenshot_3](images/Screenshot_3.png?raw=true "Token)
 
 Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
 Edit those lines to match the path for their respective JSON in your system / vps 
