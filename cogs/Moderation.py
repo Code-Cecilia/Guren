@@ -68,6 +68,7 @@ class Moderation(commands.Cog):
     async def unban(self, ctx, member, *, reason="No reason"):
         print("unbanned")
         try:
+            member =  await self.bot.fetch_user(int(member))
             await ctx.guild.unban(member, reason=reason)
         except discord.Forbidden:
             await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")
