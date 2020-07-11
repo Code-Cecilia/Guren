@@ -79,6 +79,8 @@ class Utilities(commands.Cog):
         embed.add_field(name='Total Guilds:', value=serverCount)
         embed.add_field(name='Total Users:', value=memberCount)
         embed.add_field(name='Bot Developer:', value="<@219410026631135232>")
+        embed.add_field(name="Bot Invite Link", value=f"[You can invite me by clicking in this link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)")
+        embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
 
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
