@@ -68,4 +68,4 @@ async def chng_pr():
 
 bot.loop.create_task(chng_pr())
 bot.load_extension("jishaku")
-bot.run(TOKEN)
+bot.loop.create_task(bot.run(TOKEN))
