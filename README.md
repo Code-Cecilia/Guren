@@ -34,7 +34,7 @@ Open a temrinal window and type in the following
 
 ```bash
 chmod +x ./startbot.sh
-sudo apt-get install python3
+sudo apt-get install python3.8
 sudo apt-get update
 sudo apt-get install python3-pip
 ```
