@@ -1,14 +1,8 @@
-import os
-import discord
-import datetime
+import discord, os, asyncio, dashcord, random, routes, json
 from discord.ext import commands
-import asyncio
-import random
-import dashcord
-import routes
 
 TOKEN = "your mom fat"
-description = ''' A clever discord bot written in python for the guild Uploading Nation'''
+description = '''A clever discord bot written in python for the guild Uploading Nation'''
 
 def get_prefix(bot, message):
     if not message.guild:
@@ -62,9 +56,6 @@ async def chng_pr():
         await bot.change_presence(activity=discord.Game(status))
 
         await asyncio.sleep(60)  
-
-
-
 
 bot.loop.create_task(chng_pr())
 bot.load_extension("jishaku")
