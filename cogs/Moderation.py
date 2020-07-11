@@ -52,12 +52,8 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason="No reason"):
         """Bans someone"""
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot ban yourself!")
-            return
-        try:
-            memberid =  await self.bot.fetch_user(int(member))    
-            await member.ban(reason=reason) or await memberid.ban(reason=reason)
+        try: 
+            await member.ban(reason=reason)
         except discord.Forbidden:
             await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")    
         else:
@@ -71,11 +67,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, member, *, reason="No reason"):
         print("unbanned")
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot unban yourself!")
-            return
         try:
-            member =  await self.bot.fetch_user(int(member))
             await ctx.guild.unban(member, reason=reason)
         except discord.Forbidden:
             await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")
@@ -87,9 +79,6 @@ class Moderation(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason="No reason"):
         """Kicks someone"""
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot kick yourself!")
-            return
         try:
             await member.kick(reason=reason)
         except discord.Forbidden:    
