@@ -4,16 +4,13 @@ from discord.ext import commands
 
 import json
 
-async def is_guild_owner(ctx):
-    return ctx.author.id == ctx.guild.owner.id
-
 class ServerOwner(commands.Cog):
     """Commands for server owners """
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
-    @commands.check(is_guild_owner)
+    @commands.has_permissions(manage_guild=True)
     async def setprefix(self, ctx, *, pre):
         with open(r"/root/bots/Guren/cogs/prefixes.json", "r") as f:
             prefixes = json.load(f)
