@@ -1,5 +1,13 @@
-import discord, os, asyncio, dashcord, random, routes, json
+import asyncio
+import json
+import os
+import random
+
+import discord
 from discord.ext import commands
+
+import dashcord
+import routes
 
 TOKEN = "your mom fat"
 description = '''A clever discord bot written in python for the guild Uploading Nation'''
