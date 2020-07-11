@@ -15,7 +15,7 @@ async def index(bot, request):
         return bot.dashboard.render_html("index.html", guilds=guilds)
     else:
         json = await request.json()
-        
+        guilds = len(bot.guilds)
         channel = bot.get_channel()
         await channel.send("POST Request received with the data: {}".format(str(json)))
         
