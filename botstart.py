@@ -2,28 +2,42 @@ import asyncio
 import json
 import os
 import random
+import logging
 
 import discord
 from discord.ext import commands
+from pathlib import Path
+import motor.motor_asyncio
 
 import dashcord
 import routes
 
-TOKEN = "your mom fat"
+import utils.json_loader
+from utils.mongo import Document
+
+cwd = Path(__file__).parents[0]
+cwd = str(cwd)
+print(f"{cwd}\n-----")
+
+
 description = '''A clever discord bot written in python for the guild Uploading Nation'''
 
-def get_prefix(bot, message):
+async def get_prefix(bot, message):
     if not message.guild:
         return commands.when_mentioned_or("g$")(bot, message)
 
-    with open("/root/bots/Guren/cogs/prefixes.json", 'r') as f:
-        prefixes = json.load(f)
+    try:
+        data = await bot.config.find(message.guild.id)
 
-    if str(message.guild.id) not in prefixes:
+        if not data or "prefix" not in data:
+            return commands.when_mentioned_or("g$")(bot, message)
+        return commands.when_mentioned_or(data["prefix"])(bot, message)
+    except:
         return commands.when_mentioned_or("g$")(bot, message)
 
-    prefix = prefixes[str(message.guild.id)]
-    return commands.when_mentioned_or(prefix)(bot, message)
+
+secret_file = utils.json_loader.read_json('secrets')
+
 
 bot = commands.Bot(
     command_prefix=get_prefix, 
@@ -32,6 +46,36 @@ bot = commands.Bot(
     case_insensitive=True
 )
 
+bot.config_token = secret_file["token"]
+logging.basicConfig(level=logging.INFO)
+bot.blacklisted_users = []
+bot.connection_url = secret_file["mongo"]
+bot.cwd = cwd
+
+bot.version = "1.0"
+
+bot.colors = {
+    "WHITE": 0xFFFFFF,
+    "AQUA": 0x1ABC9C,
+    "GREEN": 0x2ECC71,
+    "BLUE": 0x3498DB,
+    "PURPLE": 0x9B59B6,
+    "LUMINOUS_VIVID_PINK": 0xE91E63,
+    "GOLD": 0xF1C40F,
+    "ORANGE": 0xE67E22,
+    "RED": 0xE74C3C,
+    "NAVY": 0x34495E,
+    "DARK_AQUA": 0x11806A,
+    "DARK_GREEN": 0x1F8B4C,
+    "DARK_BLUE": 0x206694,
+    "DARK_PURPLE": 0x71368A,
+    "DARK_VIVID_PINK": 0xAD1457,
+    "DARK_GOLD": 0xC27C0E,
+    "DARK_ORANGE": 0xA84300,
+    "DARK_RED": 0x992D22,
+    "DARK_NAVY": 0x2C3E50,
+}
+bot.color_list = [c for c in bot.colors.values()]
 
 @bot.event
 async def on_ready():
@@ -39,16 +83,31 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency*1000, 2)
     print('Running discord.py version ' + discord.__version__)
+    bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
+    bot.db = bot.mongo["menudocs"]
+    bot.config = Document(bot.db, "config")
+    print("Initialized Database\n-----")
+    for document in await bot.config.get_all():
+        print(document)
 
-for cog in os.listdir("./cogs"):
-    if cog.endswith(".py"):
-        try:
-            cog = f"cogs.{cog.replace('.py', '')}"
-            print(f'Loaded {cog} successfully')
-            bot.load_extension(cog)
-        except Exception as e:
-            print(f"{cog} can not be loaded:")
-            raise e
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    if message.author.id in bot.blacklisted_users:
+        return
+
+    if message.content.startswith(f"<@!{bot.user.id}>") and \
+        len(message.content) == len(f"<@!{bot.user.id}>"
+    ):
+        data = await bot.config.get_by_id(message.guild.id)
+        if not data or "prefix" not in data:
+            prefix = "gb$"
+        else:
+            prefix = data["prefix"]
+        await message.channel.send(f"My prefix here is `{prefix}`", delete_after=15)
+
+    await bot.process_commands(message)
 
 async def chng_pr():
     await bot.wait_until_ready()
@@ -64,4 +123,9 @@ async def chng_pr():
 
 bot.loop.create_task(chng_pr())
 bot.load_extension("jishaku")
-bot.loop.create_task(bot.run(TOKEN))
+if __name__ == "__main__":
+    for file in os.listdir(cwd + "/cogs"):
+        if file.endswith(".py") and not file.startswith("_"):
+            bot.load_extension(f"cogs.{file[:-3]}")
+
+    bot.run(bot.config_token)
