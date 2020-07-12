@@ -1,11 +1,13 @@
+import asyncio
+
 import discord
 from discord.ext import commands
+
 
 class Events(commands.Cog):
     """Comtains a number of events when errors happen"""
     def __init__(self, bot):
         self.bot = bot
-
 
     async def on_message(self, message):
         if message.author == self.bot.user:
@@ -15,7 +17,11 @@ class Events(commands.Cog):
         user = message.author
         msg = message.content
         print(f"{user} said {msg}")
-    
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
