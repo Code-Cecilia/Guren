@@ -9,7 +9,11 @@ class Fun(commands.Cog):
     """A bunch of shitpost commands that i made"""
     def __init__(self, bot):
         self.bot = bot
-
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+    
     @commands.command(name="say")
     @commands.has_permissions(manage_messages=True)
     async def Say(self, ctx, *, message):
