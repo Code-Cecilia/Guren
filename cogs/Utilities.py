@@ -22,26 +22,18 @@ class Utilities(commands.Cog):
     @commands.guild_only()
     async def userinfo(self, ctx, member: discord.Member = None):
         member = ctx.author if not member else member
-
         roles = [role for role in member.roles]
-
         embed = discord.Embed(color=member.color, timestamp=datetime.datetime.utcnow())
-
         embed.set_author(name=f"User Info - {member}")
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
-
         embed.add_field(name="ID:", value=member.id)
         embed.add_field(name="Guild name:", value=member.display_name)
-
         embed.add_field(name="Created at:", value=member.created_at)
         embed.add_field(name="Joined at:", value=member.joined_at)
-
         embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
         embed.add_field(name="Top Role:", value=member.top_role.mention)
-
         embed.add_field(name="Bot?", value=member.bot)
-
         await ctx.send(embed=embed)
         print(ctx.author.name, "used the command userinfo")
 
@@ -70,9 +62,7 @@ class Utilities(commands.Cog):
         dpyVersion = discord.__version__
         serverCount = len(self.bot.guilds)
         memberCount = len(set(self.bot.get_all_members()))
-
         embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=ctx.author.colour, timestamp=ctx.message.created_at)
-
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Bot Version:', value="1.0BETA")
         embed.add_field(name='Discord.Py Version', value=dpyVersion)
@@ -82,9 +72,7 @@ class Utilities(commands.Cog):
         embed.add_field(name="Bot Invite Link", value=f"[You can invite me by clicking in this link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)")
         embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
-
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
-
         await ctx.send(embed=embed)
 
     @commands.command(pass_context=True)
