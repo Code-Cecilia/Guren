@@ -29,9 +29,10 @@ Dashboard included, developer of the python module is fixing the issue #2. When 
 
 # Usage and installation
 
-Download the repo as zip or do the following below:
+Download the repo as zip or do the following below in a terminal window:
 
 ```bash
+sudo apt-get install git
 git clone https://github.com/Uplodading-Team/Guren
 ``` 
 
