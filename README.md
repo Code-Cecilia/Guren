@@ -36,6 +36,19 @@ sudo apt-get install git
 git clone https://github.com/Uplodading-Team/Guren
 ``` 
 
+# MongoDB Configuration Tutorial
+
+- Get an account [here](https://www.mongodb.com/)
+- Create a cluster and wait for it to complete setup. (It's free per 1 project)
+- Whitelist your system/vps external ip address on the network tab
+- After whitelisting and the cluster creation is complete, press on connect
+- Create a user with password
+- Select 2 method to connect
+- Change nodejs to Python, 3.6 or later
+- Copy the link it generated but edit `<password>` with the password you set on the previous step
+
+Done
+
 ### Linux:
 Open a temrinal window and type in the following
 
@@ -59,23 +72,17 @@ Install python modules.
 python3 -m pip install -r file.txt
 ```
 
-Edit botstart.py token with your bot token. Assuming you have a bot user associated with your Application at [Discord Developers](https://discord.com/developers/applications)
+Get your bot token to place in `bot_config/secrets.json` [Discord Developers](https://discord.com/developers/applications)
 
 ![Screenshot_4](images/Screenshot_4.png?raw=true "Developer Portal")
 
-The copied value is what you are gonna put in the gap of "".
+Navigate to these files: `Levels.py` | `bot_config/secrets.json`
+Edit those to match your bot configuration
 
->
-![Screenshot_3](images/Screenshot_3.png?raw=true "Token")
+- `Levels.py` - Lines 13 and 19
+- `secrets.json` - "token" and "mongo"
 
-Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`
-Edit those lines to match the path for their respective JSON in your system / vps 
-
-- `botstart.py` - Line 18
-- `_Levels.py` - Lines 13 and 19
-- `Server Owner.py` - Lines 17 and 23
-
-![Screenshot_2](images/Screenshot_2.png?raw=true "Lines to edit")
+![Screenshot_2](images/Screenshot_5.png?raw=true "Lines to edit")
 
 Run the bot
 ```bash
@@ -101,23 +108,18 @@ After installing, open a cmd window, also linked to the place where the file.txt
 python3 -m pip install -r file.txt
 ```
 
-Edit botstart.py token with your bot token. Assuming you have a bot user associated with your Application at [Discord Developers](https://discord.com/developers/applications)
+Get your bot token to place in `bot_config/secrets.json` [Discord Developers](https://discord.com/developers/applications)
 
 ![Screenshot_4](images/Screenshot_4.png?raw=true "Developer Portal")
 
-The copied value is what you are gonna put in the gap of "".
 
-> 
-![Screenshot_3](images/Screenshot_3.png?raw=true "Token")
+Navigate to these files: `Levels.py` | `bot_config/secrets.json`
+Edit those to match your bot configuration
 
-Navigate to these files: `_Levels.py` | `Server Owner.py` | `botstart.py`.
-Edit those lines to match the path for their respective JSON in your system / vps. 
+- `Levels.py` - Lines 13 and 19
+- `secrets.json` - "token" and "mongo"
 
-- `botstart.py` - Line 18
-- `_Levels.py` - Lines 13 and 19
-- `Server Owner.py` - Lines 17 and 23
-
-![Screenshot_2](images/Screenshot_2.png?raw=true "Lines to edit")
+![Screenshot_2](images/Screenshot_5.png?raw=true "Lines to edit")
 
 Run the bot
 
