@@ -149,3 +149,6 @@ Edit those to match your bot configuration
 Run the bot
 
 Double click on botstart.bat
+
+
+- Note: There's still some stuff that is not working, i just uploaded earlier so i can revert things if it breaks the bot completely.
