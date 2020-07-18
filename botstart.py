@@ -1,8 +1,10 @@
 import asyncio
+import aiohttp
 import json
 import os
 import random
 import logging
+
 
 import discord
 from discord.ext import commands
@@ -15,6 +17,7 @@ import routes
 import utils.json_loader
 from utils.mongo import Document
 
+
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
@@ -24,16 +27,16 @@ description = '''A clever discord bot written in python for the guild Uploading 
 
 async def get_prefix(bot, message):
     if not message.guild:
-        return commands.when_mentioned_or("g$")(bot, message)
+        return commands.when_mentioned_or("gb$")(bot, message)
 
     try:
         data = await bot.config.find(message.guild.id)
 
         if not data or "prefix" not in data:
-            return commands.when_mentioned_or("g$")(bot, message)
+            return commands.when_mentioned_or("gb$")(bot, message)
         return commands.when_mentioned_or(data["prefix"])(bot, message)
     except:
-        return commands.when_mentioned_or("g$")(bot, message)
+        return commands.when_mentioned_or("gb$")(bot, message)
 
 
 secret_file = utils.json_loader.read_json('secrets')
@@ -45,6 +48,8 @@ bot = commands.Bot(
     owner_id=219410026631135232,
     case_insensitive=True
 )
+
+app = dashcord.App(bot, template_path="templates", static_path="static", routing_file=routes)
 
 bot.config_token = secret_file["token"]
 logging.basicConfig(level=logging.INFO)
@@ -89,6 +94,7 @@ async def on_ready():
     print("Initialized Database\n-----")
     for document in await bot.config.get_all():
         print(document)
+    await bot.dashboard.start("144.172.83.148", 5000)
 
 @bot.event
 async def on_message(message):
@@ -112,7 +118,7 @@ async def on_message(message):
 async def chng_pr():
     await bot.wait_until_ready()
 
-    statuses = ["g$help", "with Yuichiro!", "with epic lines of code", "getting fancy"]
+    statuses = ["gb$help", "with Yuichiro!", "with epic lines of code", "getting fancy"]
 
     while not bot.is_closed():
         status = random.choice(statuses)
@@ -121,11 +127,10 @@ async def chng_pr():
 
         await asyncio.sleep(60)  
 
-bot.loop.create_task(chng_pr())
-bot.load_extension("jishaku")
 if __name__ == "__main__":
     for file in os.listdir(cwd + "/cogs"):
         if file.endswith(".py") and not file.startswith("_"):
             bot.load_extension(f"cogs.{file[:-3]}")
-
+    bot.load_extension("jishaku")
+    bot.loop.create_task(chng_pr())
     bot.run(bot.config_token)
