@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h4 align="center">Utilities, Moderation, Memes.</h4>
+<h4 align="center">Utilities, Moderation, Memes, Music, Logs.</h4>
 
 <p align="center">
   <a href="https://discord.gg/8wCez2n">
