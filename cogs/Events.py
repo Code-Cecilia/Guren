@@ -9,6 +9,7 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     async def on_message(self, message):
         if message.author == self.bot.user:
             return 
@@ -21,7 +22,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-
+        
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):

@@ -1,8 +1,12 @@
-import discord
-from discord.ext import commands
+import asyncio
 import datetime
-from discord.utils import get
+import json
+
+import discord
 from discord import User
+from discord.ext import commands
+from discord.utils import get
+
 
 class Sinner(commands.Converter):
     async def convert(self, ctx, argument):
@@ -39,7 +43,7 @@ async def mute(ctx, user, reason="No reason"):
         await ctx.send(f"{user.mention} has been muted for {reason}")
     else:
         await user.add_roles(role) 
-        await ctx.send(f"{user.mention} has been muted for  {reason}")
+        await ctx.send(f"{user.mention} has been muted for {reason}")
         channel = ctx.bot.get_channel(718865797006753892)
         await channel.send(f"{user.mention}, welcome to the bad kids club.")
 
@@ -48,10 +52,22 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+        with open(r'/root/bots/Guren Beta/Guren/bot_config/reports.json', 'r') as f:
+            try:
+                self.report = json.load(f)
+            except ValueError:
+                self.report = {}
+                self.report["users"] = []
+    async def report(self):
+        await self.bot.wait_until_ready()
+        while not self.bot.is_closed():
+            with open(r'/root/bots/Guren Beta/Guren/bot_config/reports.json', 'w') as f:
+                f.write(json.dumps(self.report))
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-        
+
     @commands.command(name="ban")
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason="No reason"):
@@ -145,17 +161,15 @@ class Moderation(commands.Cog):
     @commands.command()
     async def mute(self, ctx, user: Sinner, reason=None):
         """Mutes a user."""
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot mute yourself!")
-            return        
+        mute_time = int  
         await mute(ctx, user, reason or "treason")
+        await asyncio.sleep(mute_time)
+        await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
+        await ctx.send(f"{user.mention} has been unmuted")
 
     @commands.command()
     async def unmute(self, ctx, user: Redeemed):
-        """Unmutes a muted user"""
-        if member == None or member == ctx.message.author:
-            await ctx.send("You cannot unmute yourself!")
-            return   
+        """Unmutes a muted user"""  
         await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
         await ctx.send(f"{user.mention} has been unmuted")
 
@@ -187,5 +201,31 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
 
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def warn(self, ctx, user: discord.User, *reason:str):
+        if not reason:
+            await ctx.send("Provide a reason.")
+        reason = ' '.join(reason)
+        for current_user in self.report["users"]:
+            if current_user['name'] == user.name:
+                current_user['reasons'].append(reason)
+            else:
+                self.report["users"].append({
+                    'Name': user.name,
+                    'reasons': [reason,]
+                })
+            await ctx.send(f"User `{user}` has been warned for `{reason}`.")
+
+    @commands.command(aliases=['warns'])
+    @commands.has_permissions(ban_members=True)
+    async def warnings(self, ctx, user: discord.User):
+        for current_user in self.report["users"]:
+            if user.name == current_user['name']:
+                embed = discord.Embed(title=f"Warnings for {user}", color=user.color, timestamp=datetime.datetime.utcnow())
+                embed.add_field(name=f"This user has been warned {len(current_user['reasons'])} times.", value=f"{' '.join(current_user['reasons'])}",)
+                embed.set_footer(text=f"UUID: {user.id}")
+                await ctx.send(embed=embed)
+                           
 def setup(bot):
     bot.add_cog(Moderation(bot))

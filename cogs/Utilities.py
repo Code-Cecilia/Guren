@@ -10,7 +10,7 @@ class Utilities(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-        
+
     @commands.command(name="avatar")
     @commands.guild_only()
     async def avatar(self, ctx, member: discord.Member = None):
@@ -56,7 +56,6 @@ class Utilities(commands.Cog):
         embed.add_field(name="Booster Count", value=guild.premium_subscription_count)
         embed.add_field(name="Member Count", value=guild.member_count)
         embed.add_field(name="Max Emojis", value=guild.emoji_limit)
-
         await ctx.send(embed=embed)
         print(ctx.author.name, "used the command serverinfo")
 
@@ -66,6 +65,7 @@ class Utilities(commands.Cog):
         dpyVersion = discord.__version__
         serverCount = len(self.bot.guilds)
         memberCount = len(set(self.bot.get_all_members()))
+
         embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=ctx.author.colour, timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Bot Version:', value="1.0BETA")
@@ -73,10 +73,11 @@ class Utilities(commands.Cog):
         embed.add_field(name='Total Guilds:', value=serverCount)
         embed.add_field(name='Total Users:', value=memberCount)
         embed.add_field(name='Bot Developer:', value="<@219410026631135232>")
-        embed.add_field(name="Bot Invite Link", value=f"[You can invite me by clicking in this link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)")
         embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
+
         await ctx.send(embed=embed)
 
     @commands.command(pass_context=True)
@@ -86,7 +87,7 @@ class Utilities(commands.Cog):
             if not cog:
                 """Cog listing.  What more?"""
                 halp=discord.Embed(title='Command category listing',
-                                description='Use `g$help *cog*` to find out more about them!)', timestamp=datetime.datetime.utcnow(), color=ctx.author.color)
+                                description=f'Use `gb$ *cog*` to find out more about them!', timestamp=datetime.datetime.utcnow(), color=ctx.author.color)
                 cogs_desc = ''
                 for x in self.bot.cogs:
                     cogs_desc += ('{} - {}'.format(x,self.bot.cogs[x].__doc__)+'\n')

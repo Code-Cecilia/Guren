@@ -1,7 +1,11 @@
-import discord
 import datetime
 import os
+
+import aiohttp
+import discord
+import pendulum
 from discord.ext import commands
+
 
 class Misc(commands.Cog):
     """Commands that i dont know where to put"""
@@ -11,7 +15,7 @@ class Misc(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-        
+
     @commands.command(name="ping")
     @commands.guild_only()
     async def ping(self, ctx, member: discord.Member = None):
@@ -24,6 +28,18 @@ class Misc(commands.Cog):
         await ctx.send(embed=embed)
         print(ctx.author.name, 'used the command ping')
 
-    
+    @commands.command()
+    async def fact(self, ctx):
+        url = f'https://uselessfacts.jsph.pl/random.json?language=en'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                r = await response.json()
+                fact = r['text']
+                embed = discord.Embed(title=f'Random Fact', colour=ctx.author.colour, timestamp=ctx.message.created_at)
+                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
+                embed.set_footer(text="Useless Facts")
+                embed.add_field(name='***Fun Fact***', value=fact, inline=False)
+                await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Misc(bot))
