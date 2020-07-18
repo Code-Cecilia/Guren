@@ -36,6 +36,31 @@ sudo apt-get install git
 git clone https://github.com/Uplodading-Team/Guren
 ``` 
 
+# Lavalink Configuration Tutorial
+WARNING: IT's highly recommended to use a VPS, not some funky "hosts" like Glitch and such.
+
+### Requirements before starting
+- [Lavalink.jar](https://github.com/Frederikam/Lavalink/releases/tag/3.3.1.1)
+- OpenJDK 11 or 13
+- application.yml ( You can use and edit the sample [here](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example)
+
+### Steps to launch Lavalink
+
+Open a terminal window and type:
+
+- Getting OpenJDK11
+```bash
+sudo apt-get install openjdk-11-jre
+```
+
+- Launching Lavalink ( Note: If you are using the sample application.yml you need to make some required changes such as the host ip, you can also opt for changing the password to connect to the lavalink app. )
+
+```bash
+java -jar Lavalink.jar
+```
+
+- Another note: Edit the cog Music.py matching the configuration on application for the connection to be made.
+
 # MongoDB Configuration Tutorial
 
 - Get an account [here](https://www.mongodb.com/)
@@ -50,7 +75,7 @@ git clone https://github.com/Uplodading-Team/Guren
 Done
 
 ### Linux:
-Open a temrinal window and type in the following
+- Open a temrinal window and type in the following
 
 ```bash
 chmod +x ./startbot.sh
@@ -59,14 +84,14 @@ sudo apt-get update
 sudo apt-get install python3-pip
 ```
 
-Verify that you have the terminal window linked to the folder where file.txt is
+- Verify that you have the terminal window linked to the folder where file.txt is
 If you are not, simply cd into it
 
 ```bash
 cd ./Guren
 ```
 
-Install python modules.
+- Install python modules.
 
 ```bash
 python3 -m pip install -r file.txt
