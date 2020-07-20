@@ -7,6 +7,31 @@ from discord import User
 from discord.ext import commands
 from discord.utils import get
 
+import utils.json_loader
+from utils import default, permissions
+
+
+class MemberID(commands.Converter):
+    async def convert(self, ctx, argument):
+        try:
+            m = await commands.MemberConverter().convert(ctx, argument)
+        except commands.BadArgument:
+            try:
+                return int(argument, base=10)
+            except ValueError:
+                raise commands.BadArgument(f"{argument} is not a valid member or member ID.") from None
+        else:
+            return m.id
+
+
+class ActionReason(commands.Converter):
+    async def convert(self, ctx, argument):
+        ret = argument
+
+        if len(ret) > 512:
+            reason_max = 512 - len(ret) - len(argument)
+            raise commands.BadArgument(f'reason is too long ({len(argument)}/{reason_max})')
+        return ret
 
 class Sinner(commands.Converter):
     async def convert(self, ctx, argument):
@@ -28,25 +53,6 @@ class Redeemed(commands.Converter):
             raise commands.BadArgument("The user was not muted.") 
             
 
-async def mute(ctx, user, reason="No reason"):
-    role = discord.utils.get(ctx.guild.roles, name="Muted")  
-    if not role: 
-        try: 
-            muted = await ctx.guild.create_role(name="Muted", reason="To use for muting")
-            for channel in ctx.guild.channels: 
-                await channel.set_permissions(muted, send_messages=False,
-                                              read_message_history=False,
-                                              read_messages=False)
-        except discord.Forbidden:
-            return await ctx.send("I have no permissions to make a muted role")
-        await user.add_roles(muted) 
-        await ctx.send(f"{user.mention} has been muted for {reason}")
-    else:
-        await user.add_roles(role) 
-        await ctx.send(f"{user.mention} has been muted for {reason}")
-        channel = ctx.bot.get_channel(718865797006753892)
-        await channel.send(f"{user.mention}, welcome to the bad kids club.")
-
 class Moderation(commands.Cog):
     """Moderation Commands"""
     def __init__(self, bot):
@@ -58,6 +64,7 @@ class Moderation(commands.Cog):
             except ValueError:
                 self.report = {}
                 self.report["users"] = []
+
     async def report(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
@@ -68,33 +75,44 @@ class Moderation(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command(name="ban")
-    @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, *, reason="No reason"):
-        """Bans someone"""
-        try: 
-            await member.ban(reason=reason)
-        except discord.Forbidden:
-            await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")    
-        else:
-            embed = discord.Embed(title=f"`{ctx.author}` banned {member}", colour=member.color, timestamp=datetime.datetime.utcnow())
-            embed.add_field(name="● Details:", value=f" - Reason: {reason}")
-            embed.set_footer(icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
-            await ctx.send(embed=embed)
-        print(ctx.author.name, 'used the command ban')
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(ban_members=True)
+    async def ban(self, ctx, member: MemberID, *, reason: str = None):
+        """ Bans a user from the current server. """
+        m = ctx.guild.get_member(member)
+        if m is not None and await permissions.check_priv(ctx, m):
+            return
+
+        try:
+            await ctx.guild.ban(discord.Object(id=member), reason=default.responsible(ctx.author, reason))
+            await ctx.send(default.actionmessage("banned"))
+        except Exception as e:
+            await ctx.send(e)
 
     @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, member, *, reason="No reason"):
-        print("unbanned")
+    @commands.guild_only()
+    @commands.max_concurrency(1, per=commands.BucketType.user)
+    @permissions.has_permissions(ban_members=True)
+    async def massban(self, ctx, reason: ActionReason, *members: MemberID):
+        """ Mass bans multiple members from the server. """
         try:
-            member =  await self.bot.fetch_user(int(member))
-            await ctx.guild.unban(member, reason=reason)
-        except discord.Forbidden:
-            await ctx.send(f"It looks like i dont have the permission `BAN_MEMBERS` to do this. Please check my permissions and try running the command again.")
-        else:
-            await ctx.send(f"`{member}` was unbanned by **{ctx.author.name}**.")
-        print(ctx.author.name, 'used the command unban')
+            for member_id in members:
+                await ctx.guild.ban(discord.Object(id=member_id), reason=default.responsible(ctx.author, reason))
+            await ctx.send(default.actionmessage("massbanned", mass=True))
+        except Exception as e:
+            await ctx.send(e)
+
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(ban_members=True)
+    async def unban(self, ctx, member: MemberID, *, reason: str = None):
+        """ Unbans a user from the current server. """
+        try:
+            await ctx.guild.unban(discord.Object(id=member), reason=default.responsible(ctx.author, reason))
+            await ctx.send(default.actionmessage("unbanned"))
+        except Exception as e:
+            await ctx.send(e)
 
     @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
@@ -110,6 +128,17 @@ class Moderation(commands.Cog):
             embed.set_footer(icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
             await ctx.send(embed=embed)
         print(ctx.author.name, 'used the command kick')
+        roles = [role for role in member.roles]
+        guild_ID = ctx.guild.id
+        data = utils.json_loader.read_json("server_config")
+        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
+
+        embed = discord.Embed(title=f"`{member}` was kicked from the server", color=member.color, timestamp=datetime.datetime.utcnow(), description=f"**Moderator:** {ctx.author}")
+        embed.set_thumbnail(url=f"{member.avatar_url}")
+        embed.add_field(name="Their roles:", value=" ".join([role.mention for role in roles]))
+        embed.set_footer(text=f"UUID: {member.id}")
+        await modlogs.send(embed=embed)
+
 
 
     @commands.command(name="clear")
@@ -161,11 +190,8 @@ class Moderation(commands.Cog):
     @commands.command()
     async def mute(self, ctx, user: Sinner, reason=None):
         """Mutes a user."""
-        mute_time = int  
-        await mute(ctx, user, reason or "treason")
-        await asyncio.sleep(mute_time)
-        await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
-        await ctx.send(f"{user.mention} has been unmuted")
+        await ctx.send("Command disabled until its fixed.")
+
 
     @commands.command()
     async def unmute(self, ctx, user: Redeemed):
@@ -173,6 +199,52 @@ class Moderation(commands.Cog):
         await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
         await ctx.send(f"{user.mention} has been unmuted")
 
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def tempmute(self, ctx, member: discord.Member, time=0, reason=None):
+        guild_ID = ctx.guild.id
+        data = utils.json_loader.read_json("server_config")
+        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
+        
+        if not member or time == 0 or time == str:
+            await ctx.channel.send(embed=commanderror)
+            return
+        elif reason == None:
+            reason = "No Reason Provided"
+
+        muteRole = discord.utils.get(ctx.guild.id, name="Muted")
+        await member.add_roles(muteRole)
+        tempMuteEmbed = discord.Embed(colour=embedcolour, description=f"**Reason:** {reason}")
+        tempMuteEmbed.set_author(name=f"{member} Has Been Muted", icon_url=f"{member.avatar_url}")
+        tempMuteEmbed.set_footer(text=embedfooter)
+
+        await ctx.channel.send(embed=tempMuteEmbed)
+
+        tempMuteModLogEmbed = discord.Embed(color=embedcolour)
+        tempMuteModLogEmbed.set_author(name=f"[MUTE] {member}", icon_url=f"{member.avatar_url}")
+        tempMuteModLogEmbed.add_field(name="User", value=f"{member.mention}")
+        tempMuteModLogEmbed.add_field(name="Moderator", value=f"{ctx.message.author}")
+        tempMuteModLogEmbed.add_field(name="Reason", value=f"{reason}")
+        tempMuteModLogEmbed.add_field(name="Duration", value=f"{str(time)}")
+        tempMuteModLogEmbed.set_footer(text=embedfooter)
+        await modlogs.send(embed=tempMuteModLogEmbed)
+
+        tempMuteDM = discord.Embed(color=embedcolour, title="Mute Notification", description=f"You Were Muted In **{ctx.guild.name}**")
+        tempMuteDM.set_footer(text=embedfooter)
+        tempMuteDM.add_field(name="Reason", value=f"{reason}")
+        tempMuteDM.add_field(name="Duration", value=f"{time}")
+
+        userToDM = client.get_user(member.id)
+        await userToDM.send(embed=tempMuteDM)
+
+        await asyncio.sleep(time)
+        await member.remove_roles(muteRole)
+
+        unMuteModLogEmbed = discord.Embed(color=embedcolour)
+        unMuteModLogEmbed.set_author(name=f"[UNMUTE] {member}", icon_url=f"{member.avatar_url}")
+        unMuteModLogEmbed.add_field(name="User", value=f"{member.mention}")
+        unMuteModLogEmbed.set_footer(text=embedfooter)
+        await modlogs.send(embed=unMuteModLogEmbed)
 
     @mute.error
     async def mute_error(self, ctx, error):
