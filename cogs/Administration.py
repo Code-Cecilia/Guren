@@ -20,7 +20,7 @@ class Administration(commands.Cog):
     async def new(self, ctx):
         await ctx.send("Invalid sub-command passed.")
 
-    @commands.command()
+    @commands.command(aliases=["lock"])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_channels=True)
     @commands.bot_has_guild_permissions(manage_channels=True)
@@ -39,11 +39,18 @@ class Administration(commands.Cog):
             overwrites.send_messages = False
             await channel.set_permissions(ctx.guild.default_role, overwrite=overwrites)
             await ctx.send(f"I have put `{channel.name}` on lockdown.")
-        else:
-            overwrites = channel.overwrites[ctx.guild.default_role]
-            overwrites.send_messages = True
-            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrites)
-            await ctx.send(f"I have removed `{channel.name}` from lockdown.")
+
+    @commands.command(aliases=["unlock"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_channels=True)
+    @commands.bot_has_guild_permissions(manage_channels=True)
+    async def unlockdown(self, ctx, channel: discord.TextChannel=None):
+        """Removes a channel from lockdown"""
+        channel = channel or ctx.channel
+        overwrites = channel.overwrites[ctx.guild.default_role]
+        overwrites.send_messages = True
+        await channel.set_permissions(ctx.guild.default_role, overwrite=overwrites)
+        await ctx.send(f"I have removed `{channel.name}` from lockdown-")
 
 def setup(bot):
     bot.add_cog(Administration(bot))
