@@ -42,7 +42,7 @@ WARNING: IT's highly recommended to use a VPS, not some funky "hosts" like Glitc
 ### Requirements before starting
 - [Lavalink.jar](https://github.com/Frederikam/Lavalink/releases/tag/3.3.1.1)
 - OpenJDK 11 or 13
-- application.yml ( You can use and edit the sample [here](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example)
+- application.yml ( You can use and edit the sample [here](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example) )
 
 ### Steps to launch Lavalink
 
