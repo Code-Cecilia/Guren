@@ -1,15 +1,36 @@
 import asyncio
 import datetime
 import json
+import re
+from copy import deepcopy
 
 import discord
 from discord import User
-from discord.ext import commands
+from discord.ext import commands, tasks
+from dateutil.relativedelta import relativedelta
 from discord.utils import get
 
 import utils.json_loader
 from utils import default, permissions
 
+time_regex = re.compile("(?:(\d{1,5})(h|m|s|d))+?")
+time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
+
+class TimeConverter(commands.Converter):
+    async def convert(self, ctx, argument):
+        args = argument.lower()
+        matches = re.findall(time_regex, args)
+        time = 0
+        for key, value in matches:
+            try:
+                time += time_dict[value] * float(key)
+            except KeyError:
+                    raise commands.BadArgument(
+                    f"{value} is an invalid time key! h|m|s|d are valid arguments."
+            )
+            except ValueError:
+                raise commands.BadArgument(f"{key} is not a number.")
+        return round(time)
 
 class MemberID(commands.Converter):
     async def convert(self, ctx, argument):
@@ -32,44 +53,45 @@ class ActionReason(commands.Converter):
             reason_max = 512 - len(ret) - len(argument)
             raise commands.BadArgument(f'reason is too long ({len(argument)}/{reason_max})')
         return ret
-
-class Sinner(commands.Converter):
-    async def convert(self, ctx, argument):
-        argument = await commands.MemberConverter().convert(ctx, argument)
-        permission = argument.guild_permissions.manage_messages 
-        if not permission:
-            return argument 
-        else:
-            raise commands.BadArgument("You cannot punish other staff members") 
-
-
-class Redeemed(commands.Converter):
-    async def convert(self, ctx, argument):
-        argument = await commands.MemberConverter().convert(ctx, argument)
-        muted = discord.utils.get(ctx.guild.roles, name="Muted") 
-        if muted in argument.roles:
-            return argument
-        else:
-            raise commands.BadArgument("The user was not muted.") 
-            
+    
 
 class Moderation(commands.Cog):
     """Moderation Commands"""
     def __init__(self, bot):
         self.bot = bot
+        self.mute_task = self.check_current_mutes.start()
 
-        with open(r'/root/bots/Guren Beta/Guren/bot_config/reports.json', 'r') as f:
-            try:
-                self.report = json.load(f)
-            except ValueError:
-                self.report = {}
-                self.report["users"] = []
+    def cog_unload(self):
+        self.mute_task.cancel()
 
-    async def report(self):
+    @tasks.loop(minutes=5)
+    async def check_current_mutes(self):
+        currentTime = datetime.datetime.now()
+        mutes = deepcopy(self.bot.muted_users)
+        for key, value in mutes.items():
+            if value['muteDuration'] is None:
+                continue
+        
+        unmuteTime = value['mutedAt'] + relativedelta(seconds=value['muteDuration'])
+
+        if currentTime >= unmuteTime:
+            guild = self.bot.get_guild(value['guildId'])
+            member = guild.get_member(value['_id'])
+
+        role = discord.utils.get(guild.roles, name="Muted")
+        if role in member.roles:
+            await member.remove_roles(role)
+            print(f"Unmuted: {member.display.name}")
+
+        await self.bot.mutes.delete(member.id)
+        try:
+            self.bot.muted_users.pop(member.id)
+        except KeyError:
+            pass
+    
+    @check_current_mutes.before_loop
+    async def before_check_current_mutes(self):
         await self.bot.wait_until_ready()
-        while not self.bot.is_closed():
-            with open(r'/root/bots/Guren Beta/Guren/bot_config/reports.json', 'w') as f:
-                f.write(json.dumps(self.report))
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -187,64 +209,105 @@ class Moderation(commands.Cog):
 
             raise error
 
-    @commands.command()
-    async def mute(self, ctx, user: Sinner, reason=None):
-        """Mutes a user."""
-        await ctx.send("Command disabled until its fixed.")
-
-
-    @commands.command()
-    async def unmute(self, ctx, user: Redeemed):
-        """Unmutes a muted user"""  
-        await user.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
-        await ctx.send(f"{user.mention} has been unmuted")
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def tempmute(self, ctx, member: discord.Member, time=0, reason=None):
-        guild_ID = ctx.guild.id
-        data = utils.json_loader.read_json("server_config")
-        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
-        
-        if not member or time == 0 or time == str:
-            await ctx.channel.send(embed=commanderror)
+    @commands.command(
+        name='mute',
+        description="Mutes a given user for x time!",
+        ussage='<user> [time]'
+    )
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member: discord.Member, *, time: TimeConverter=None, reason="No reason yet."):
+        role = discord.utils.get(ctx.guild.roles, name="Muted")
+        if not role:
+            await ctx.send("No muted role was found! Please create one called `Muted`")
             return
-        elif reason == None:
-            reason = "No Reason Provided"
 
-        muteRole = discord.utils.get(ctx.guild.id, name="Muted")
-        await member.add_roles(muteRole)
-        tempMuteEmbed = discord.Embed(colour=embedcolour, description=f"**Reason:** {reason}")
-        tempMuteEmbed.set_author(name=f"{member} Has Been Muted", icon_url=f"{member.avatar_url}")
-        tempMuteEmbed.set_footer(text=embedfooter)
+        try:
+            if self.bot.muted_users[member.id]:
+                await ctx.send("This user is already muted")
+                return
+        except KeyError:
+            pass
 
-        await ctx.channel.send(embed=tempMuteEmbed)
+        data = {
+            '_id': member.id,
+            'mutedAt': datetime.datetime.now(),
+            'muteDuration': time or None,
+            'mutedBy': ctx.author.id,
+            'guildId': ctx.guild.id,
+            'reason': reason,
+        }
+        await self.bot.mutes.upsert(data)
+        self.bot.muted_users[member.id] = data
 
-        tempMuteModLogEmbed = discord.Embed(color=embedcolour)
-        tempMuteModLogEmbed.set_author(name=f"[MUTE] {member}", icon_url=f"{member.avatar_url}")
-        tempMuteModLogEmbed.add_field(name="User", value=f"{member.mention}")
-        tempMuteModLogEmbed.add_field(name="Moderator", value=f"{ctx.message.author}")
-        tempMuteModLogEmbed.add_field(name="Reason", value=f"{reason}")
-        tempMuteModLogEmbed.add_field(name="Duration", value=f"{str(time)}")
-        tempMuteModLogEmbed.set_footer(text=embedfooter)
-        await modlogs.send(embed=tempMuteModLogEmbed)
+        await member.add_roles(role)
 
-        tempMuteDM = discord.Embed(color=embedcolour, title="Mute Notification", description=f"You Were Muted In **{ctx.guild.name}**")
-        tempMuteDM.set_footer(text=embedfooter)
-        tempMuteDM.add_field(name="Reason", value=f"{reason}")
-        tempMuteDM.add_field(name="Duration", value=f"{time}")
+        if not time:
+            await ctx.send(f"Muted {member.display_name}")
+        else:
+            minutes, seconds = divmod(time, 60)
+            hours, minutes = divmod(minutes, 60)
+            if int(hours):
+                
+                embed = discord.Embed(title=f"Member `{member}` has been muted.", timestamp=datetime.datetime.utcnow(), description=f"**Duration**: {hours} hours.", color=member.color)
+                embed.add_field(name=f"Moderator: `{ctx.author}`", value="\u200b", inline=True)
+                embed.set_footer(text="For some reason they were muted! :D")
 
-        userToDM = client.get_user(member.id)
-        await userToDM.send(embed=tempMuteDM)
+                await ctx.send(embed=embed)
+            elif int(minutes):
+                
+                embed = discord.Embed(title=f"Member `{member}` has been muted.", timestamp=datetime.datetime.utcnow(), description=f"**Duration**: {minutes} minutes.", color=member.color)
+                embed.add_field(name=f"Moderator: `{ctx.author}`", value="\u200b", inline=True)
+                embed.set_footer(text="For some reason they were muted! :D")
 
-        await asyncio.sleep(time)
-        await member.remove_roles(muteRole)
+                await ctx.send(embed=embed)
 
-        unMuteModLogEmbed = discord.Embed(color=embedcolour)
-        unMuteModLogEmbed.set_author(name=f"[UNMUTE] {member}", icon_url=f"{member.avatar_url}")
-        unMuteModLogEmbed.add_field(name="User", value=f"{member.mention}")
-        unMuteModLogEmbed.set_footer(text=embedfooter)
-        await modlogs.send(embed=unMuteModLogEmbed)
+            elif int(seconds):
+                
+                embed = discord.Embed(title=f"Member `{member}` has been muted.", timestamp=datetime.datetime.utcnow(), description=f"**Duration**: {seconds} seconds.", color=member.color)
+                embed.add_field(name=f"Moderator: `{ctx.author}`", value="\u200b", inline=True)
+                embed.set_footer(text="For some reason they were muted! :D")
+
+                await ctx.send(embed=embed)
+
+        if time and time < 300:
+            await asyncio.sleep(time)
+
+            if role in member.roles:
+                await member.remove_roles(role)
+                await ctx.send(f"Unmuted `{member}`")
+
+            await self.bot.mutes.delete(member.id)
+            try:
+                self.bot.muted_users.pop(member.id)
+            except KeyError:
+                pass
+
+
+    @commands.command(
+        name='unmute',
+        description="Unmuted a member!",
+        usage='<user>'
+    )
+    @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, member: discord.Member):
+        role = discord.utils.get(ctx.guild.roles, name="Muted")
+        if not role:
+            await ctx.send("No muted role was found! Please create one called `Muted`")
+            return
+
+        await self.bot.mutes.delete(member.id)
+        try:
+            self.bot.muted_users.pop(member.id)
+        except KeyError:
+            pass
+
+        if role not in member.roles:
+            await ctx.send("This member is not muted.")
+            return
+
+        await member.remove_roles(role)
+        await ctx.send(f"Unmuted `{member}`")
+
 
     @mute.error
     async def mute_error(self, ctx, error):
@@ -272,32 +335,6 @@ class Moderation(commands.Cog):
             await ctx.send("Is that a person?")
         if isinstance(error, commands.CheckFailure):
             await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def warn(self, ctx, user: discord.User, *reason:str):
-        if not reason:
-            await ctx.send("Provide a reason.")
-        reason = ' '.join(reason)
-        for current_user in self.report["users"]:
-            if current_user['name'] == user.name:
-                current_user['reasons'].append(reason)
-            else:
-                self.report["users"].append({
-                    'Name': user.name,
-                    'reasons': [reason,]
-                })
-            await ctx.send(f"User `{user}` has been warned for `{reason}`.")
-
-    @commands.command(aliases=['warns'])
-    @commands.has_permissions(ban_members=True)
-    async def warnings(self, ctx, user: discord.User):
-        for current_user in self.report["users"]:
-            if user.name == current_user['name']:
-                embed = discord.Embed(title=f"Warnings for {user}", color=user.color, timestamp=datetime.datetime.utcnow())
-                embed.add_field(name=f"This user has been warned {len(current_user['reasons'])} times.", value=f"{' '.join(current_user['reasons'])}",)
-                embed.set_footer(text=f"UUID: {user.id}")
-                await ctx.send(embed=embed)
                            
 def setup(bot):
     bot.add_cog(Moderation(bot))
