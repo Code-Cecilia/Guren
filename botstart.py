@@ -1,3 +1,4 @@
+
 import asyncio
 import aiohttp
 import json
@@ -10,9 +11,6 @@ import discord
 from discord.ext import commands
 from pathlib import Path
 import motor.motor_asyncio
-
-import dashcord
-import routes
 
 import utils.json_loader
 from utils.mongo import Document
@@ -49,12 +47,11 @@ bot = commands.Bot(
     case_insensitive=True
 )
 
-app = dashcord.App(bot, template_path="templates", static_path="static", routing_file=routes)
-
 bot.config_token = secret_file["token"]
 logging.basicConfig(level=logging.INFO)
 bot.blacklisted_users = []
 bot.connection_url = secret_file["mongo"]
+bot.muted_users = {}
 bot.cwd = cwd
 
 bot.version = "1.0"
@@ -91,10 +88,17 @@ async def on_ready():
     bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
     bot.db = bot.mongo["menudocs"]
     bot.config = Document(bot.db, "config")
+    bot.mutes = Document(bot.db, "mutes")
+
     print("Initialized Database\n-----")
     for document in await bot.config.get_all():
         print(document)
-    await bot.dashboard.start("144.172.83.148", 5000)
+
+    currentMutes = await bot.mutes.get_all()
+    for mute in currentMutes:
+        bot.muted_users[mute["_id"]] = mute
+
+    print(bot.muted_users)
 
 @bot.event
 async def on_message(message):
