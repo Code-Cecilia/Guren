@@ -37,7 +37,7 @@ class Events(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("Hey! You lack permission to use this command.")     
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Command not found!")
+            print("Command not found!")
         else:    
             raise error
 
