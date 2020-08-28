@@ -9,7 +9,7 @@
 <h4 align="center">Utilities, Moderation, Memes, Music, Logs, Economy, Leveling.</h4>
 
 <p align="center">
-  <a href="https://discord.gg/8wCez2n">
+  <a href="https://discord.gg/MkfPYvp">
     <img src="https://discordapp.com/api/guilds/133049272517001216/widget.png?style=shield" alt="Discord Server">
  <a href="https://travis-ci.com/Uplodading-Team/Guren"><img src="https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master"></a>
   <a href="https://github.com/Rapptz/discord.py/">
