@@ -87,7 +87,7 @@ class Utilities(commands.Cog):
             if not cog:
                 """Cog listing.  What more?"""
                 halp=discord.Embed(title='Command category listing',
-                                description=f'Use `gb$ *cog*` to find out more about them!', timestamp=datetime.datetime.utcnow(), color=ctx.author.color)
+                                description=f'Use `g$ *cog*` to find out more about them!', timestamp=datetime.datetime.utcnow(), color=ctx.author.color)
                 cogs_desc = ''
                 for x in self.bot.cogs:
                     cogs_desc += ('{} - {}'.format(x,self.bot.cogs[x].__doc__)+'\n')
