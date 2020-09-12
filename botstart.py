@@ -31,10 +31,10 @@ async def get_prefix(bot, message):
         data = await bot.config.find(message.guild.id)
 
         if not data or "prefix" not in data:
-            return commands.when_mentioned_or("gb$")(bot, message)
+            return commands.when_mentioned_or("g$")(bot, message)
         return commands.when_mentioned_or(data["prefix"])(bot, message)
     except:
-        return commands.when_mentioned_or("gb$")(bot, message)
+        return commands.when_mentioned_or("g$")(bot, message)
 
 
 secret_file = utils.json_loader.read_json('secrets')
@@ -112,7 +112,7 @@ async def on_message(message):
     ):
         data = await bot.config.get_by_id(message.guild.id)
         if not data or "prefix" not in data:
-            prefix = "gb$"
+            prefix = "g$"
         else:
             prefix = data["prefix"]
         await message.channel.send(f"My prefix here is `{prefix}`", delete_after=15)
@@ -122,7 +122,7 @@ async def on_message(message):
 async def chng_pr():
     await bot.wait_until_ready()
 
-    statuses = ["gb$help", "with Yuichiro!", "with epic lines of code", "getting fancy"]
+    statuses = ["g$help", "with Yuichiro!", "with epic lines of code", "getting fancy"]
 
     while not bot.is_closed():
         status = random.choice(statuses)
