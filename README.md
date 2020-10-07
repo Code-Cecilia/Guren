@@ -27,6 +27,8 @@ Don't use my code without crediting. You are free to host it and fork it yoursel
 The token in the screenshot is invalid so you don't have to worry :P
 Dashboard included, developer of the python module is fixing the issue #2. When fixed, dependencies here will be updated
 
+fr this readme is dumb and outdated as week, next sunday new fancy one coming
+
 # Usage and installation
 
 Download the repo as zip or do the following below in a terminal window:
