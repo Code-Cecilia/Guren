@@ -60,14 +60,6 @@ class Fun(commands.Cog):
         await ctx.message.delete()
         await ctx.send("Pro lengthy pp user.")
 
-    @commands.command(name="bitch")
-    async def bitch(self, ctx):
-        await ctx.send("no u")
-
-    @commands.command(name="gay")
-    async def gay(self, ctx):
-        await ctx.send("Sorry but if that was an insult it did'nt work.")
-
     @commands.command()
     @commands.cooldown(1, 1500, commands.BucketType.user)
     @commands.is_owner()
@@ -101,53 +93,6 @@ class Fun(commands.Cog):
             if timer == 0:
                 active = False
 
-    @commands.command()
-    @commands.cooldown(2, 600, commands.BucketType.user)
-    @commands.is_owner()
-    async def nick(self, ctx, *, string):
-        """Set's the nick of a random person, with nick of choice."""
-
-        user = random.choice([x for x in ctx.guild.members if not x.bot])
-        self.bot.nicks[user.id] = user.display_name
-        try:
-            await user.edit(nick=string)
-            embed = discord.Embed(
-                title="Changed/Set Nickname",
-                description=f"{string}",
-                color=self.bot.embed_color,
-
-            )
-            embed.set_author(name=user, icon_url=user.avatar_url)
-            embed.set_footer(text=f'Sent by {ctx.author}')
-            await ctx.send(embed=embed)
-        except discord.Forbidden:
-            pass
-
-        await asyncio.sleep(600)
-        await user.edit(nick=self.bot.nicks[user.id])
-
-    @commands.command(name="chatrev")
-    @commands.cooldown(3, 1500, commands.BucketType.user)
-    @commands.is_owner()
-    async def chatrev(self, ctx, user: discord.Member, *, message):
-        await ctx.send(f"Hello, <@&615179614544723981>! {message.author} wants you to revive chat, come and chat with them!")
-        timer = 1500
-        active = True
-        while active:
-            timer -= 300
-            try:
-                await user.send(f"idk")
-            except discord.Forbidden:
-                return await ctx.send("Somehow i dont have perms to ping that role")
-            await asyncio.sleep(300)
-
-            if timer == 0:
-                active = False
-
-    @commands.command()
-    async def freyandrodolfo(self, ctx):
-        await ctx.message.delete()
-        await ctx.send("My lord Yuichiro, those people dont deserve any respect and they are ignored by me for giving a negative rate of your professional code block.")
-
 def setup(bot):
     bot.add_cog(Fun(bot))
+
