@@ -74,8 +74,7 @@ bot.colors = {
     "DARK_VIVID_PINK": 0xAD1457,
     "DARK_GOLD": 0xC27C0E,
     "DARK_ORANGE": 0xA84300,
-    "DARK_RED": 0x992D22,
-    "DARK_NAVY": 0x2C3E50,
+    "DARK_RED": 0x992D22
 }
 bot.color_list = [c for c in bot.colors.values()]
 
