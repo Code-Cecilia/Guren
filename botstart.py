@@ -44,7 +44,8 @@ bot = commands.Bot(
     command_prefix=get_prefix, 
     description=description,
     owner_id=219410026631135232,
-    case_insensitive=True
+    case_insensitive=True,
+    intents=intents
 )
 
 bot.config_token = secret_file["token"]
