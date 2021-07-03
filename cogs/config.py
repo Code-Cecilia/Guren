@@ -44,52 +44,10 @@ class Config(commands.Cog):
         await self.bot.config.unset({"_id": ctx.guild.id, "prefix": 1})
         await ctx.send("This guilds prefix has been set back to the default")
 
-
-    @commands.command(
-        name="blacklist", description="Blacklist a user from the bot", usage="<user>"
-    )
-    @commands.is_owner()
-    async def blacklist(self, ctx, user: discord.Member):
-        if ctx.message.author.id == user.id:
-            await ctx.send("Hey, you cannot blacklist yourself!")
-            return
-
-        self.bot.blacklisted_users.append(user.id)
-        data = utils.json_loader.read_json("blacklist")
-        data["blacklistedUsers"].append(user.id)
-        utils.json_loader.write_json(data, "blacklist")
-        await ctx.send(f"Hey, I have blacklisted {user.name} for you.")
-
-    @commands.command(
-        name="unblacklist",
-        description="Unblacklist a user from the bot",
-        usage="<user>",
-    )
-    @commands.is_owner()
-    async def unblacklist(self, ctx, user: discord.Member):
-        """
-        Unblacklist someone from the bot
-        """
-        self.bot.blacklisted_users.remove(user.id)
-        data = utils.json_loader.read_json("blacklist")
-        data["blacklistedUsers"].remove(user.id)
-        utils.json_loader.write_json(data, "blacklist")
-        await ctx.send(f"Hey, I have unblacklisted {user.name} for you.")
-
-    @commands.command(
-        name="logout",
-        aliases=["disconnect", "close", "stopbot"],
-        description="Log the bot out of discord!",
-    )
-    @commands.is_owner()
-    async def logout(self, ctx):
-        await ctx.send(f"Hey {ctx.author.mention}, I am now logging out :wave:")
-        await self.bot.logout()
-
-
     @commands.command(aliases=["sc"])
     @commands.has_guild_permissions(manage_channels=True)
     async def setsuggestionchannel(self, ctx, channel: discord.TextChannel):
+        """Set a suggestion channel."""
         guild_ID = ctx.guild.id
         data = utils.json_loader.read_json("suggestionc")
         data[str(guild_ID)] = {"suggestionC": None, "ownerID": None}
@@ -105,6 +63,7 @@ class Config(commands.Cog):
 
     @commands.command(aliases=["sg"])
     async def suggest(self, ctx, *, message):
+        """Suggest something."""
         data = utils.json_loader.read_json("suggestionc")
         guild_ID = ctx.guild.id
         suggestions = self.bot.get_channel(data[str(guild_ID)]["suggestionC"])
