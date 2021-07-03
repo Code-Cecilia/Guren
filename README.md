@@ -10,8 +10,7 @@
 
 <p align="center">
   <a href="https://discord.gg/MkfPYvp">
-    <img src="https://discordapp.com/api/guilds/133049272517001216/widget.png?style=shield" alt="Discord Server">
- <a href="https://travis-ci.com/Uplodading-Team/Guren"><img src="https://travis-ci.com/Uplodading-Team/Guren.svg?branch=master"></a>
+    <img src="https://discord.com/api/guilds/556114920417001491/widget.png?style=shield" alt="Discord Server">
   <a href="https://github.com/Rapptz/discord.py/">
       <img src="https://img.shields.io/badge/discord-py-blue.svg" alt="discord.py">
   </a>
@@ -85,7 +84,7 @@ Done
 chmod +x ./startbot.sh
 sudo apt-get install python3.8
 sudo apt-get update
-sudo apt-get install python3-pip
+sudo apt-get install python3.8-pip
 ```
 
 - Verify that you have the terminal window linked to the folder where file.txt is
@@ -98,17 +97,16 @@ cd ./Guren
 - Install python modules.
 
 ```bash
-python3 -m pip install -r file.txt
+python3 -m pip install -r requirements.txt
 ```
 
 Get your bot token to place in `bot_config/secrets.json` [Discord Developers](https://discord.com/developers/applications)
 
 ![Screenshot_4](images/Screenshot_4.png?raw=true "Developer Portal")
 
-Navigate to these files: `Levels.py` | `bot_config/secrets.json`
+Navigate to the file `bot_config/secrets.json`
 Edit those to match your bot configuration
 
-- `Levels.py` - Lines 13 and 19
 - `secrets.json` - "token" and "mongo"
 
 ![Screenshot_2](images/Screenshot_5.png?raw=true "Lines to edit")
@@ -145,7 +143,6 @@ Get your bot token to place in `bot_config/secrets.json` [Discord Developers](ht
 Navigate to these files: `Levels.py` | `bot_config/secrets.json`
 Edit those to match your bot configuration
 
-- `Levels.py` - Lines 13 and 19
 - `secrets.json` - "token" and "mongo"
 
 ![Screenshot_2](images/Screenshot_5.png?raw=true "Lines to edit")
@@ -158,3 +155,6 @@ Double click on botstart.bat
 - Note: There's still some stuff that is not working, i just uploaded earlier so i can revert things if it breaks the bot completely.
 
 - Note 2: Temporarily left this project due to private reasons. Do not use this bot as it is and if you want to update the code then pull request but please do not re-publish it.
+
+- Note 3: Working on the project again, if you want a stable instance up and running of the bot use my own. [Invite Link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)
+ 
