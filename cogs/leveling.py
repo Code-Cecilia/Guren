@@ -157,7 +157,7 @@ class TextLeveling(commands.Cog, name='Leveling'):
                     val = (str(message.guild.id), str(message.author.id), datetime.datetime.utcnow())
                     cursor.execute(sql, val)
                     main.commit()
-                    TextLeveling(self).ranking(message) 
+                    await TextLeveling(self).ranking(message) 
                 else:
                     cursor.execute(f"SELECT xp_time FROM tlevel WHERE guild_id = '{message.guild.id}' and user_id = '{message.author.id}'")
                     result2 = cursor.fetchone()
