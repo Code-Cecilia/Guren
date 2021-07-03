@@ -10,13 +10,13 @@ class Levels (commands.Cog):
     
         self.bot.loop.create_task(self.save_users())
 
-        with open(r"/root/bots/Guren/cogs/users.json", "r") as f:
+        with open(r"/home/bot/python/Guren/bot_config/users.json", "r") as f:
             self.users = json.load(f)
     
     async def save_users(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
-            with open(r"/root/bots/Guren/cogs/users.json", "w") as f:
+            with open(r"/home/bot/python/Guren/bot_config/users.json", "w") as f:
                 f.write(json.dumps(self.users, indent=4))
         
             await asyncio.sleep(5)
@@ -90,7 +90,9 @@ class Levels (commands.Cog):
     async def leaderboard(self, ctx):
         """Displays the top 5 users"""
         leaderboard = sorted(self.users, key=lambda x:self.users [x]["exp"], reverse=True)[:5]
+        level = sorted(self.users, key=lambda x:self.users [x]["level"], reverse=True)[:5]
         await ctx.send(f"\n".join(leaderboard))
+        await ctx.send(f"\n".join(level))
 
 def setup(bot):
     bot.add_cog(Levels(bot))

@@ -4,7 +4,7 @@ from utils import default
 from discord.ext import commands
 import json
 
-owners = default.get("config.json").owners
+owners = default.get("/home/bot/python/Guren/bot_config/config.json").owners
 
 
 def is_owner(ctx):

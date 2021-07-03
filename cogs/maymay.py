@@ -6,14 +6,15 @@ import random
 import datetime
 
 
-reddit = praw.Reddit(client_id="",
-                    client_secret="",
+reddit = praw.Reddit(client_id="nzXLSEZ7SOxHOg",
+                    client_secret="8q1JBZE5_Mo7eXogVq6C2Yz6vNA",
+                    redirect_uri="http://localhost:8080",
                     user_agent="discordapipythonlib:com.GURENBOT:v1.0.0 (by /u/yuichiro__)",
                     username="GurenBOT")
 
 
 class Maymay(commands.Cog):
-    """Big boy"""
+    """Big boy."""
     def __init__ (self, bot):
         self.bot = bot
 
@@ -72,7 +73,7 @@ class Maymay(commands.Cog):
 
     @commands.command()
     async def howgay(self, ctx, *, question = None, member: discord.Member = None):
-        """I tell you how much gay you are"""
+        """I tell you how gay you are"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
         responses = [
@@ -85,7 +86,7 @@ class Maymay(commands.Cog):
 
     @commands.command()
     async def howsimp(self, ctx, *, question = None, member: discord.Member = None):
-        """I tell you how much gay you are"""
+        """I tell you how simp you are"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
         responses = [

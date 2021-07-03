@@ -5,10 +5,11 @@ import random
 
 import discord
 from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext, cog_ext
 
 
 class Fun(commands.Cog):
-    """A bunch of shitpost commands that i made"""
+    """A bunch of fun commands i made."""
     def __init__(self, bot):
         self.bot = bot
 
@@ -51,7 +52,7 @@ class Fun(commands.Cog):
 
     @commands.command(name="chatkiller")
     async def chatkiller(self, ctx):
-        """Uploading Nation only command"""
+        """Yui's Spoopy Comrades only command."""
         await ctx.send(f"<@&714860016536125451>, hello you killed chat, congratulations.")
 
     @commands.command(name="senjan")
@@ -61,37 +62,9 @@ class Fun(commands.Cog):
         await ctx.send("Pro lengthy pp user.")
 
     @commands.command()
-    @commands.cooldown(1, 1500, commands.BucketType.user)
     @commands.is_owner()
-    async def annoy(self, ctx, user: discord.Member, *, string=None):
-        """Annoys a specific person"""
-        if not string:
-            if ctx.message.attachments:
-                string = ctx.message.attachments[0].url
-            else:
-                return await ctx.send("Provide an attachment or message.")
-
-        if string:
-            if ctx.message.attachments:
-                string = f"{string} \n{ctx.message.attachments[0].url}"
-            else:
-                pass
-
-        await ctx.send("I will now annoy them for the next 25 minutes in 5 minute intervals.")
-
-        timer = 1500
-        active = True
-        while active:
-            timer -= 300
-            try:
-                await user.send(f"Congratulations :tada: You have been chosen by {str(ctx.author)}"
-                                f" to be annoyed with this message every five minutes: {string}")
-            except discord.Forbidden:
-                return await ctx.send("It appears I have been blocked or the user has disabled DMs.")
-            await asyncio.sleep(300)
-
-            if timer == 0:
-                active = False
+    async def ric(self, ctx):
+        await ctx.send("comer merda")
 
 def setup(bot):
     bot.add_cog(Fun(bot))

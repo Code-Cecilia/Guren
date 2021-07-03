@@ -23,18 +23,18 @@ class Modlog(commands.Cog):
     async def modlog(self, ctx, channel: discord.TextChannel):
         guild_ID = ctx.guild.id
         data = utils.json_loader.read_json("server_config")
-        data[str(guild_ID)] = {"mod-logID": None, "name": None, "ownerID": None, "ownerName": None}
-        if str(ctx.guild.id) not in data:
+        data[str(guild_ID)] = {"mod-logID": None, "name": None, "guildID": ctx.guild.id}
+        if [str(ctx.guild.id)] not in data:
             utils.json_loader.write_json(data, "server_config")
-            data = utils.json_loader.read_json("server_config")
             data[str(ctx.guild.id)]["mod-logID"] = channel.id
+            data[str(ctx.guild.id)]["guildID"] = ctx.guild.id
             data[str(ctx.guild.id)]["name"] = ctx.guild.name
-            data[str(ctx.guild.id)]["ownerID"] = ctx.guild.owner.id
-            data[str(ctx.guild.id)]["ownerName"] = ctx.guild.owner.name
             utils.json_loader.write_json(data, "server_config")
             await ctx.send("Mod logs channel id stored successfully")
         else:
-            await ctx.send("Guild id already stored!")
+            await ctx.send("Mod logs were already set!")
+            return;
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
@@ -62,7 +62,7 @@ class Modlog(commands.Cog):
     async def on_message_edit(self, after, before):
         guild_ID = after.guild.id
         data = utils.json_loader.read_json("server_config")
-        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
+        modlogs = self.bot.get_channel(data[str(guild_ID)]["guild_ID"]["mod-logID"])
         if not after.author.bot:
             if before.content != after.content:
                 embed = discord.Embed(title=f"Message Edited by {after.author}", color=after.author.color, description=f"Message edited in {after.channel.mention}", timestamp=datetime.datetime.utcnow())
