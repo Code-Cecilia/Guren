@@ -157,4 +157,4 @@ Double click on botstart.bat
 
 - Note: There's still some stuff that is not working, i just uploaded earlier so i can revert things if it breaks the bot completely.
 
-- Note 2: Temporarily left this project due to private reasons. Do not use this bot as it is and if you want to update the code then pull request and please do not re-publish it.
+- Note 2: Temporarily left this project due to private reasons. Do not use this bot as it is and if you want to update the code then pull request but please do not re-publish it.
