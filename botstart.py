@@ -27,7 +27,7 @@ cwd = str(cwd)
 print(f"{cwd}\n-----")
 
 
-description = '''A clever discord bot written in python for the guild Uploading Nation'''
+description = '''A clever discord bot written in python.'''
 
 initial_extensions = ['cogs.leveling']
 
