@@ -50,7 +50,7 @@ ubuntu-advantage-tools==27.0
 ufw==0.36
 unattended-upgrades==0.1
 update-checker==0.18.0
-urllib3==1.26.4
+urllib3==1.26.5
 wavelink==0.9.6
 websocket-client==0.58.0
 websockets==8.1
