@@ -53,6 +53,6 @@ update-checker==0.18.0
 urllib3==1.26.4
 wavelink==0.9.6
 websocket-client==0.58.0
-websockets==8.1
+websockets==9.1
 yarl==1.6.3
 youtube-dl==2021.3.14
