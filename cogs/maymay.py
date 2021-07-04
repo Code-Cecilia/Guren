@@ -49,7 +49,7 @@ class Maymay(commands.Cog):
             '8=====D', '8=====D', '8====D', '8====D',
             '8======================D', '8====================================D'
         ]
-        embed = discord.Embed(color = member.color, description=f'{question} their pp size:\n{random.choice(responses)}', timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(title = "pp size machine", color = member.color, description=f'{question} pp size:\n{random.choice(responses)}', timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
@@ -74,6 +74,9 @@ class Maymay(commands.Cog):
     @commands.command()
     async def howgay(self, ctx, *, question = None, member: discord.Member = None):
         """I tell you how gay you are"""
+        if ctx.author.id == 436174748939190274:
+            await ctx.send("You are `200%` gay :heart:")
+            return
         question = ctx.author if not question else question
         member = ctx.author if not member else member
         responses = [
@@ -89,6 +92,9 @@ class Maymay(commands.Cog):
         """I tell you how simp you are"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
+        if member.id == 219410026631135232:
+            await ctx.send("My lord is not a simp. :triumph:")
+            return
         responses = [
             '1%', '9%', '17%', '26%', '35%', '0%', '40%', '53%', '69%', '73%',
             '88%', '95%', '100%', '200%'
