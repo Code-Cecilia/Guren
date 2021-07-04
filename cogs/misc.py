@@ -60,5 +60,17 @@ class Misc(commands.Cog):
                 ctx.command.qualified_name, 1, "usage_count"
             )
 
+    @cog_ext.cog_slash(
+        name="test",
+        description="testing command"
+    )
+    async def test(self, ctx: SlashContext):
+        await ctx.defer()
+        await ctx.send("tested")
+
+    @commands.command()
+    async def invite(self, ctx):
+        await ctx.send("Invite me to your server using this link: https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8")
+
 def setup(bot):
     bot.add_cog(Misc(bot))
