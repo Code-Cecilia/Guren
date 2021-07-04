@@ -35,5 +35,12 @@ class Events(commands.Cog):
         else:    
             raise error
 
+    @commands.Cog.listener(name='on_command')
+    async def print(self, ctx):
+        server = ctx.guild.name
+        user = ctx.author
+        command = ctx.command
+        print(f'{server} > {user} > {command}')
+
 def setup(bot):
     bot.add_cog(Events(bot))
