@@ -14,13 +14,6 @@ class Administration(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.group(invoke_without_command=True)
-    @commands.guild_only()
-    @commands.has_guild_permissions(manage_channels=True)
-    @commands.bot_has_guild_permissions(manage_channels=True)
-    async def new(self, ctx):
-        await ctx.send("Invalid sub-command passed.")
-
     @commands.command(aliases=["lock"])
     @commands.guild_only()
     @commands.has_guild_permissions(manage_channels=True)
