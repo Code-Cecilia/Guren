@@ -81,10 +81,15 @@ class Owner(commands.Cog):
                 await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def pp(self, ctx):
         """:flushed:"""
-        await ctx.send(f"My master, `Yuichiro#0001` has a pp with a length of 69CM, **8=====================================================================D**") 
+        if ctx.author.id == 219410026631135232:
+            await ctx.send(f"My master, `Yuichiro#0001` has a pp with a length of 69CM, **8=====================================================================D**")
+            return 0
+        if ctx.author.id == 436174748939190274:
+            await ctx.send("Your boyfriend `Yuichiro#0001` has a pp with a length of 69CM, **8=====================================================================D**")
+        else:
+            await ctx.send("You have no permission to use this command")
 
     @commands.command(
         name="blacklist", description="Blacklist a user from the bot", usage="<user>"
