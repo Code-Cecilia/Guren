@@ -35,16 +35,6 @@ class Fun(commands.Cog):
         await ctx.message.delete()
         await ctx.send(message)
 
-    @nsay.error
-    async def nsay_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("What do you want me to say for you?")
-
-    @Say.error
-    async def Say_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("What do you want me to say for you?")
-
     @commands.command(name="Yuichiro")
     async def yui(self, ctx):
         """My lord"""
