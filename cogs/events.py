@@ -12,8 +12,7 @@ class Events(commands.Cog):
 
     async def on_message(self, message):
         if message.author == self.bot.user:
-            return 
-
+            return
 
         user = message.author
         msg = message.content
@@ -25,22 +24,16 @@ class Events(commands.Cog):
         
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            m, s = divmod(error.retry_after, 60)
-            h, m = divmod(m, 60)
-            if int(h) is 0 and int(m) is 0:
-                await ctx.send(f' You must wait {int(s)} seconds to use this command!')
-            elif int(h) is 0 and int(m) is not 0:
-                await ctx.send(f' You must wait {int(m)} minutes and {int(s)} seconds to use this command!')
-            else:
-                await ctx.send(f' You must wait {int(h)} hours, {int(m)} minutes and {int(s)} seconds to use this command!')
-        elif isinstance(error, commands.CheckFailure):
+        if isinstance(error, commands.CheckFailure):
             await ctx.send("Hey! You lack permission to use this command.")     
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("A bad argument has been passed, please check the context and the needed arguments.")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("An argument is missing or invalid. Input the argument in order to run this command.")
         if isinstance(error, commands.CommandNotFound):
             print("Command not found!")
         else:    
             raise error
-
 
 def setup(bot):
     bot.add_cog(Events(bot))

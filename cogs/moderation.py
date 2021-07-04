@@ -181,40 +181,6 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f"{amount} messages deleted.")
 
-    @clear.error
-    async def clear_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to specify an amount of messages, i can't purge air...")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Give me a valid number.")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permission to use this command.")    
-
-            raise error        
-
-    @kick.error
-    async def kick_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to tell me who to kick.")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Is that a person?")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permission to use this command.")        
-
-            raise error     
-
-
-    @ban.error
-    async def ban_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to tell me who to ban.")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Is that a person?")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permission to use this command.")    
-
-            raise error
-
     @commands.command(
         name='mute',
         description="Mutes a given user for x time!",
