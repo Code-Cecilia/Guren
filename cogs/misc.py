@@ -93,11 +93,6 @@ class Misc(commands.Cog):
             await self.bot.command_usage.increment(
                 ctx.command.qualified_name, 1, "usage_count"
             )
-        
-    @cog_ext.cog_slash(name="test")
-    async def _test(self, ctx: SlashContext):
-        embed = discord.Embed(title="embed test")
-        await ctx.send(content="test", embeds=[embed])
 
 def setup(bot):
     bot.add_cog(Misc(bot))
