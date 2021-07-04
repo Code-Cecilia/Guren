@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 import asyncio
 import traceback
+import utils.json_loader
 
 class Owner(commands.Cog):
     """Owner only commands."""
