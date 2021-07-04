@@ -35,7 +35,9 @@ class Config(commands.Cog):
         )
 
     @commands.command(
-        name="deleteprefix", aliases=["dp"], description="Delete your guilds prefix!"
+        name="deleteprefix", 
+        aliases=["dp"], 
+        description="Delete your guilds prefix!"
     )
     @commands.guild_only()
     @commands.has_guild_permissions(administrator=True)
@@ -44,7 +46,10 @@ class Config(commands.Cog):
         await self.bot.config.unset({"_id": ctx.guild.id, "prefix": 1})
         await ctx.send("This guilds prefix has been set back to the default")
 
-    @commands.command(aliases=["sc"])
+    @commands.command(
+        name="setsuggestionchannel",
+        aliases=["sc"],
+        description="Set a suggestion channel")
     @commands.has_guild_permissions(manage_channels=True)
     async def setsuggestionchannel(self, ctx, channel: discord.TextChannel):
         """Set a suggestion channel."""
@@ -61,7 +66,10 @@ class Config(commands.Cog):
 
 
 
-    @commands.command(aliases=["sg"])
+    @commands.command(
+        name="suggest",
+        aliases=["sg"],
+        description="Suggest something")
     async def suggest(self, ctx, *, message):
         """Suggest something."""
         data = utils.json_loader.read_json("suggestionc")
