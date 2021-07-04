@@ -2,6 +2,8 @@ import datetime
 import discord
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext, cog_ext
+import git
+import os
 
 class Utilities(commands.Cog):
     """Usefull commands, mostly informative commands."""
@@ -65,6 +67,8 @@ class Utilities(commands.Cog):
     async def stats(self, ctx):
         """Shows bot stats."""
 
+        repo = git.Repo(os.getcwd())
+        master = repo.head.reference
         dpyVersion = discord.__version__
         serverCount = len(self.bot.guilds)
         memberCount = len(set(self.bot.get_all_members()))
@@ -72,11 +76,12 @@ class Utilities(commands.Cog):
         embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=ctx.author.colour, timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Bot Version:', value="2.0")
-        embed.add_field(name='Discord.Py Version', value=dpyVersion, inline=False)
-        embed.add_field(name='Total Guilds:', value=serverCount, inline=False)
-        embed.add_field(name='Total Users:', value=memberCount, inline=False)
-        embed.add_field(name='Bot Developer:', value="<@219410026631135232>", inline=False)
-        embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)", inline=False)
+        embed.add_field(name='Discord.Py Version', value=dpyVersion, inline=True)
+        embed.add_field(name='Total Guilds:', value=serverCount, inline=True)
+        embed.add_field(name='Total Users:', value=memberCount)
+        embed.add_field(name='Bot Developer:', value="<@219410026631135232>")
+        embed.add_field(name='Latest commit:', value=f"`{master.commit.hexsha}`\n`{master.commit.message}`")
+        embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
 
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
