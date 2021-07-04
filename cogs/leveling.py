@@ -422,7 +422,7 @@ class VoiceLeveling(commands.Cog):
                 main.commit()
                 cursor.close()
                 main.close()
-                VoiceLeveling(self).ranking(member, user)
+                await VoiceLeveling(self).ranking(member, user)
             elif user in members:
                 if sum(1 for m in members if not m.bot) >= 2:
                     return
@@ -465,7 +465,7 @@ class VoiceLeveling(commands.Cog):
                     main.commit()
                     cursor.close()
                     main.close()
-                    VoiceLeveling(self).start_time(member, before, after)
+                    await VoiceLeveling(self).start_time(member, before, after)
                 else:
                     cursor.execute(f"SELECT user_id FROM vlevel WHERE guild_id = '{member.guild.id}' and user_id = '{member.id}'")
                     result = cursor.fetchone()
