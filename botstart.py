@@ -51,9 +51,9 @@ bot = commands.Bot(
     description=description,
     owner_id=219410026631135232,
     case_insensitive=True,
-    intents=intents
+    intents=discord.Intents.all()
 )
-slash = SlashCommand(bot, sync_commands=True)
+slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 
 bot.config_token = secret_file["token"]
 logging.basicConfig(level=logging.INFO)
