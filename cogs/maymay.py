@@ -104,6 +104,16 @@ class Maymay(commands.Cog):
         await ctx.send(embed=embed)
 
 
-print(f"PRAW succesfully logged in as {reddit.user.me()}")
+    @commands.command(name='nocontext')
+    async def NoContext(self, ctx):
+        subreddit = reddit.subreddit("nocontext")
+        x = subreddit.top(limit=20)
+        title_list = []
+        for y in x:
+            title_list.append(str(y.title))
+        choice = random.choice(title_list)
+        embed = discord.Embed(title=choice, color=discord.Colour.random())
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Maymay(bot))
