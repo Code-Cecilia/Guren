@@ -266,34 +266,6 @@ class Moderation(commands.Cog):
         await member.remove_roles(role)
         await ctx.send(f"Unmuted `{member}`")
 
-
-    @mute.error
-    async def mute_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to tell me who do you want to mute.")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Is that a person?")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
-
-    @unmute.error
-    async def unmute_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to tell me who do you want to unmute.")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Is that a person?")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
-
-    @unban.error
-    async def unban_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You need to tell me who do you want to unban.")
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Is that a person?")
-        if isinstance(error, commands.CheckFailure):
-            await ctx.send(f"{ctx.author.name}, you don't have permissions to use this command.")
-
     @commands.command()
     @commands.guild_only()
     @permissions.has_permissions(ban_members=True)
