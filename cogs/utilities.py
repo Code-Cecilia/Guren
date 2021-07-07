@@ -80,7 +80,7 @@ class Utilities(commands.Cog):
         embed.add_field(name='Total Guilds:', value=serverCount, inline=True)
         embed.add_field(name='Total Users:', value=memberCount)
         embed.add_field(name='Bot Developer:', value="<@219410026631135232>")
-        embed.add_field(name='Latest commit:', value=f"`{master.commit.hexsha}`\n`{master.commit.message}`")
+        embed.add_field(name='Latest commit:', value=f"`{master.commit.hexsha[:6]}`\n`{master.commit.message}`")
         embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
 
