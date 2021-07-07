@@ -8,6 +8,10 @@ class Help(commands.Cog):
         """Main help command"""
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+
     @commands.command(pass_context=True)
     async def help(self,ctx,*cog):
         """Gets all cogs and commands of mine."""
