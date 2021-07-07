@@ -294,6 +294,10 @@ class PaginatorSource(menus.ListPageSource):
 class Music(commands.Cog, wavelink.WavelinkMixin):
     """Music Cog."""
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
