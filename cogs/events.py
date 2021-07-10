@@ -9,15 +9,6 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
-    async def on_message(self, message):
-        if message.author == self.bot.user:
-            return
-
-        user = message.author
-        msg = message.content
-        print(f"{user} said {msg}")
-
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
@@ -36,8 +27,9 @@ class Events(commands.Cog):
             raise error
 
     @commands.Cog.listener(name='on_command')
-    async def print(self, ctx):
-        server = ctx.guild.name
+    async def print(self, ctx, guild: discord.Guild = None):
+        guild = ctx.guild if not guild else guild
+        server = guild.name
         user = ctx.author
         command = ctx.command
         print(f'{server} > {user} > {command}')
