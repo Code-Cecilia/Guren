@@ -1,5 +1,7 @@
 import datetime
 import os
+import json
+import re
 
 import aiohttp
 import discord
@@ -8,6 +10,7 @@ import pendulum
 from discord.ext import commands
 from utils.util import Pag
 from discord_slash import SlashCommand, SlashContext, cog_ext
+from utils import time_custom
 
 class Misc(commands.Cog):
     """Commands that i don't know where to put."""
@@ -63,6 +66,61 @@ class Misc(commands.Cog):
     @commands.command()
     async def invite(self, ctx):
         await ctx.send("Invite me to your server using this link: https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8")
+
+
+    @commands.command(name='setoffset', description='Sets the user\'s time offset.\n'
+                                                    'Format for offset: `-2:30`, `+2:30`, or just `2:30`\n'
+                                                    '**Nerd note**: the regex for the offset is '
+                                                    r'`^[+\-]?\d+:\d+$`')
+    async def set_offset(self, ctx, offset):
+        pattern = r'^[+\-]?\d+:\d+$'
+        if not re.match(pattern, offset):  # matches the pattern, and if it fails, returns an error message
+            return await ctx.send('Improper offset format. Please read the help command for more info.')
+
+        if not os.path.exists('./bot_config/time.json'):  # create file if not exists
+            with open('./bot_config/time.json', 'w') as jsonFile:
+                print('./bot_config/time.json has been created')
+                json.dump({}, jsonFile)
+
+        with open('./bot_config/time.json', 'r') as timeFile:
+            time_data = json.load(timeFile)
+
+        time_data[ctx.author.id] = offset
+
+        with open('./bot_config/time.json', 'w') as timeFile:
+            json.dump(time_data, timeFile)
+
+        await ctx.send(f'Time offset set as {offset} successfully.')
+
+    @commands.command(name='time',
+                      description='Gets the time of the user. if user does not have a timezone set, '
+                                  'they can use an offset like "+2:30"')
+    async def get_time(self, ctx, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
+
+        user_id = str(user.id)
+
+        if not os.path.exists('./bot_config/time.json'):  # create file if not exists
+            with open('./bot_config/time.json', 'w') as jsonFile:
+                print('./bot_config/time.json has been created')
+                json.dump({}, jsonFile)
+
+        with open('./bot_config/time.json', 'r') as timeFile:
+            time_data = json.load(timeFile)
+
+        user_offset = time_data.get(user_id)
+
+        if user_offset is None:
+            return await ctx.send(
+                f'_{user.display_name}_ has not set their offset. They can do so using the `setoffset` command.')
+
+        """None of the following code is executed if user_offset is None"""
+
+        final_time_string = time_custom.time_bm(user_offset)
+
+        await ctx.send(final_time_string)
+
 
 def setup(bot):
     bot.add_cog(Misc(bot))
