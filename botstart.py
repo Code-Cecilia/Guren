@@ -1,4 +1,3 @@
-
 import asyncio
 import os
 import random
@@ -24,7 +23,6 @@ cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
 
-
 description = '''A clever discord bot written in python.'''
 
 initial_extensions = ['cogs.leveling']
@@ -47,7 +45,7 @@ async def get_prefix(bot, message):
 secret_file = utils.json_loader.read_json('secrets')
 intents = discord.Intents.all()
 bot = commands.Bot(
-    command_prefix=get_prefix, 
+    command_prefix=get_prefix,
     description=description,
     owner_id=219410026631135232,
     case_insensitive=True,
@@ -86,11 +84,12 @@ bot.colors = {
 }
 bot.color_list = [c for c in bot.colors.values()]
 
+
 @bot.event
 async def on_ready():
     print('Logged in as', bot.user.name)
     print("Bot ID:", bot.user.id)
-    print('Bot latency:', bot.latency*1000, 2)
+    print('Bot latency:', bot.latency * 1000, 2)
     print('Running discord.py version ' + discord.__version__)
     bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
     bot.db = bot.mongo["Guren"]
@@ -110,6 +109,7 @@ async def on_ready():
 
     print(bot.muted_users)
 
+
 @bot.event
 async def on_guild_join(guild):
     main = sqlite3.connect('Leveling/main.db')
@@ -117,17 +117,18 @@ async def on_guild_join(guild):
     cursor.execute(f"SELECT enabled FROM glevel WHERE guild_id = '{guild.id}'")
     result = cursor.fetchone()
     if result is None:
-        sql = ("INSERT INTO glevel(guild_id, enabled) VALUES(?,?)")
+        sql = "INSERT INTO glevel(guild_id, enabled) VALUES(?,?)"
         val = (str(guild.id), 'enabled')
         cursor.execute(sql, val)
         main.commit()
     elif str(result[0]) == 'disabled':
-        sql = ("UPDATE glevel SET enabled = ? WHERE guild_id = ?")
+        sql = "UPDATE glevel SET enabled = ? WHERE guild_id = ?"
         val = ('enabled', str(guild.id))
         cursor.execute(sql, val)
         main.commit()
     cursor.close()
     main.close()
+
 
 @bot.command(name="eval", aliases=["exec"])
 @commands.is_owner()
@@ -169,6 +170,7 @@ async def _eval(ctx, *, code):
 
     await pager.start(ctx)
 
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
@@ -177,8 +179,8 @@ async def on_message(message):
         return
 
     if message.content.startswith(f"<@!{bot.user.id}>") and \
-        len(message.content) == len(f"<@!{bot.user.id}>"
-    ):
+            len(message.content) == len(f"<@!{bot.user.id}>"
+                                        ):
         data = await bot.config.get_by_id(message.guild.id)
         if not data or "prefix" not in data:
             prefix = "g$"
@@ -187,6 +189,7 @@ async def on_message(message):
         await message.channel.send(f"My prefix here is `{prefix}`", delete_after=15)
 
     await bot.process_commands(message)
+
 
 async def chng_pr():
     await bot.wait_until_ready()
@@ -198,7 +201,8 @@ async def chng_pr():
 
         await bot.change_presence(activity=discord.Game(status))
 
-        await asyncio.sleep(60)  
+        await asyncio.sleep(60)
+
 
 if __name__ == "__main__":
     for file in os.listdir(cwd + "/cogs"):

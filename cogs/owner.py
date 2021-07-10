@@ -5,8 +5,10 @@ import asyncio
 import traceback
 import utils.json_loader
 
+
 class Owner(commands.Cog):
     """Owner only commands."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -84,10 +86,12 @@ class Owner(commands.Cog):
     async def pp(self, ctx):
         """:flushed:"""
         if ctx.author.id == 219410026631135232:
-            await ctx.send(f"My master, `Yuichiro#0001` has a pp with a length of 69CM, **8=====================================================================D**")
+            await ctx.send(f"My master, `Yuichiro#0001` has a pp with a length of 69CM, "
+                           f"**8=====================================================================D**")
             return 0
         if ctx.author.id == 436174748939190274:
-            await ctx.send("Your boyfriend `Yuichiro#0001` has a pp with a length of 69CM, **8=====================================================================D**")
+            await ctx.send("Your boyfriend `Yuichiro#0001` has a pp with a length of 69CM, "
+                           "**8=====================================================================D**")
         else:
             await ctx.send("You have no permission to use this command")
 
@@ -164,6 +168,7 @@ class Owner(commands.Cog):
 
             if timer == 0:
                 active = False
+
 
 def setup(bot):
     bot.add_cog(Owner(bot))

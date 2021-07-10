@@ -1,7 +1,6 @@
-import discord
 from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext, cog_ext
-import aiohttp
+from discord_slash import cog_ext
+
 
 class Slash(commands.Cog):
     def __init__(self, bot):
@@ -17,6 +16,7 @@ class Slash(commands.Cog):
     )
     async def ping(self, ctx):
         await ctx.send("a")
+
 
 def setup(bot):
     bot.add_cog(Slash(bot))

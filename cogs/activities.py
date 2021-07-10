@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discordTogether import DiscordTogether
 
+
 class Activities(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -14,6 +15,7 @@ class Activities(commands.Cog):
     async def start(self, ctx):
         link = await self.togetherControl.create_link(ctx.author.voice.channel.id, 'youtube')
         await ctx.send(f"Click the blue link!\n{link}")
+
 
 def setup(client):
     client.add_cog(Activities(client))

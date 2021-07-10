@@ -29,6 +29,7 @@ def convert(argument):
 
 class Giveaway(commands.Cog):
     """ A combination of giveaway commands."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -74,7 +75,7 @@ class Giveaway(commands.Cog):
                 "reaction_add",
                 timeout=60,
                 check=lambda reaction, user: user == ctx.author
-                and reaction.message.channel == ctx.channel
+                                             and reaction.message.channel == ctx.channel
             )
         except asyncio.TimeoutError:
             await ctx.send("Confirmation Failure. Please try again.")

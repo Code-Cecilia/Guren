@@ -1,27 +1,26 @@
-
 import discord
 from discord.ext import commands
 import praw
 import random
 import datetime
 
-
 reddit = praw.Reddit(client_id="nzXLSEZ7SOxHOg",
-                    client_secret="8q1JBZE5_Mo7eXogVq6C2Yz6vNA",
-                    redirect_uri="http://localhost:8080",
-                    user_agent="discordapipythonlib:com.GURENBOT:v1.0.0 (by /u/yuichiro__)",
-                    username="GurenBOT")
+                     client_secret="8q1JBZE5_Mo7eXogVq6C2Yz6vNA",
+                     redirect_uri="http://localhost:8080",
+                     user_agent="discordapipythonlib:com.GURENBOT:v1.0.0 (by /u/yuichiro__)",
+                     username="GurenBOT")
 
 
 class Maymay(commands.Cog):
     """Big boy."""
-    def __init__ (self, bot):
+
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
- 
+
     @commands.command()
     async def meme(self, ctx, member: discord.Member = None):
         """Sends a random meme"""
@@ -39,7 +38,7 @@ class Maymay(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def penis(self, ctx, *, question = None, member: discord.Member = None):
+    async def penis(self, ctx, *, question=None, member: discord.Member = None):
         """100% legit pp size machine"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
@@ -48,12 +47,14 @@ class Maymay(commands.Cog):
             '8=====D', '8=====D', '8====D', '8====D',
             '8======================D', '8====================================D'
         ]
-        embed = discord.Embed(title = "pp size machine", color = member.color, description=f'{question} pp size:\n{random.choice(responses)}', timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(title="pp size machine", color=member.color,
+                              description=f'{question} pp size:\n{random.choice(responses)}',
+                              timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def ask(self, ctx, *, question = None, member: discord.Member = None):
+    async def ask(self, ctx, *, question=None, member: discord.Member = None):
         """Ask me anything"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
@@ -66,12 +67,14 @@ class Maymay(commands.Cog):
             'My reply is no', 'My sources say no', 'Outlook aint so good my guy',
             'Very doubtful', 'HELL NAH', 'are you kidding bruh'
         ]
-        embed = discord.Embed(color = member.color, description=f'Question: {question}\nAnswer: {random.choice(responses)}', timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(color=member.color,
+                              description=f'Question: {question}\nAnswer: {random.choice(responses)}',
+                              timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def howgay(self, ctx, *, question = None, member: discord.Member = None):
+    async def howgay(self, ctx, *, question=None, member: discord.Member = None):
         """I tell you how gay you are"""
         if ctx.author.id == 436174748939190274:
             await ctx.send("You are `200%` gay :heart:")
@@ -82,12 +85,13 @@ class Maymay(commands.Cog):
             '1%', '9%', '17%', '26%', '35%', '0%', '40%', '53%', '69%', '73%',
             '88%', '95%', '100%', '200%'
         ]
-        embed = discord.Embed(color = member.color, description=f'{question} is {random.choice(responses)} gay', timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(color=member.color, description=f'{question} is {random.choice(responses)} gay',
+                              timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def howsimp(self, ctx, *, question = None, member: discord.Member = None):
+    async def howsimp(self, ctx, *, question=None, member: discord.Member = None):
         """I tell you how simp you are"""
         question = ctx.author if not question else question
         member = ctx.author if not member else member
@@ -98,10 +102,10 @@ class Maymay(commands.Cog):
             '1%', '9%', '17%', '26%', '35%', '0%', '40%', '53%', '69%', '73%',
             '88%', '95%', '100%', '200%'
         ]
-        embed = discord.Embed(color = member.color, description=f'{question} is {random.choice(responses)} simp', timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(color=member.color, description=f'{question} is {random.choice(responses)} simp',
+                              timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-
 
     @commands.command(name='nocontext')
     async def NoContext(self, ctx):
@@ -113,6 +117,7 @@ class Maymay(commands.Cog):
         choice = random.choice(title_list)
         embed = discord.Embed(title=choice, color=discord.Colour.random())
         await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Maymay(bot))

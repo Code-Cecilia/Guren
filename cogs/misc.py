@@ -12,15 +12,16 @@ from utils.util import Pag
 from discord_slash import SlashCommand, SlashContext, cog_ext
 from utils import time_custom
 
+
 class Misc(commands.Cog):
     """Commands that i don't know where to put."""
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-            
 
     @commands.command(name="ping")
     @commands.guild_only()
@@ -28,10 +29,11 @@ class Misc(commands.Cog):
         """Shows the bot ping"""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Bot's latency", colour=member.color, timestamp=datetime.datetime.utcnow())
-        embed.add_field(name="Websocket Latency", value=f"{'Pong! {0}'.format(round(self.bot.latency*1000, 2))}ms")
+        embed.add_field(name="Websocket Latency", value=f"{'Pong! {0}'.format(round(self.bot.latency * 1000, 2))}ms")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/669973381067571240/350b378596401f453fb4d5bd3411a682.webp?size=1024")
-            
+        embed.set_thumbnail(
+            url="https://cdn.discordapp.com/avatars/669973381067571240/350b378596401f453fb4d5bd3411a682.webp?size=1024")
+
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -43,11 +45,11 @@ class Misc(commands.Cog):
                 r = await response.json()
                 fact = r['text']
                 embed = discord.Embed(title=f'Random Fact', colour=ctx.author.colour, timestamp=ctx.message.created_at)
-                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
+                embed.set_thumbnail(
+                    url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
                 embed.set_footer(text="Useless Facts")
                 embed.add_field(name='***Fun Fact***', value=fact, inline=False)
                 await ctx.send(embed=embed)
-
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
@@ -62,11 +64,11 @@ class Misc(commands.Cog):
             await self.bot.command_usage.increment(
                 ctx.command.qualified_name, 1, "usage_count"
             )
-            
+
     @commands.command()
     async def invite(self, ctx):
-        await ctx.send("Invite me to your server using this link: https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8")
-
+        await ctx.send(
+            "Invite me to your server using this link: https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8")
 
     @commands.command(name='setoffset', description='Sets the user\'s time offset.\n'
                                                     'Format for offset: `-2:30`, `+2:30`, or just `2:30`\n'

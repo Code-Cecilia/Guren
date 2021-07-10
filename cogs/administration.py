@@ -5,8 +5,10 @@ from discord_slash import SlashCommand, SlashContext, cog_ext
 import random
 import datetime
 
+
 class Administration(commands.Cog):
     """Administrative Commands"""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -18,17 +20,18 @@ class Administration(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(manage_channels=True)
     @commands.bot_has_guild_permissions(manage_channels=True)
-    async def lockdown(self, ctx, channel: discord.TextChannel=None):
+    async def lockdown(self, ctx, channel: discord.TextChannel = None):
         """Puts a channel on lockdown"""
         channel = channel or ctx.channel
 
         if ctx.guild.default_role not in channel.overwrites:
             overwrites = {
-            ctx.guild.default_role: discord.PermissionOverwrite(send_messages=False)
+                ctx.guild.default_role: discord.PermissionOverwrite(send_messages=False)
             }
             await channel.edit(overwrites=overwrites)
             await ctx.send(f"I have put `{channel.name}` on lockdown.")
-        elif channel.overwrites[ctx.guild.default_role].send_messages == True or channel.overwrites[ctx.guild.default_role].send_messages == None:
+        elif channel.overwrites[ctx.guild.default_role].send_messages == True or channel.overwrites[
+            ctx.guild.default_role].send_messages is None:
             overwrites = channel.overwrites[ctx.guild.default_role]
             overwrites.send_messages = False
             await channel.set_permissions(ctx.guild.default_role, overwrite=overwrites)
@@ -38,13 +41,14 @@ class Administration(commands.Cog):
     @commands.guild_only()
     @commands.has_guild_permissions(manage_channels=True)
     @commands.bot_has_guild_permissions(manage_channels=True)
-    async def unlockdown(self, ctx, channel: discord.TextChannel=None):
+    async def unlockdown(self, ctx, channel: discord.TextChannel = None):
         """Removes a channel from lockdown"""
         channel = channel or ctx.channel
         overwrites = channel.overwrites[ctx.guild.default_role]
         overwrites.send_messages = True
         await channel.set_permissions(ctx.guild.default_role, overwrite=overwrites)
         await ctx.send(f"I have removed `{channel.name}` from lockdown-")
+
 
 def setup(bot):
     bot.add_cog(Administration(bot))

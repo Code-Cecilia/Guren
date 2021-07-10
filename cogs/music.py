@@ -10,9 +10,7 @@ import typing
 import wavelink
 from discord.ext import commands, menus
 
-
 URL_REG = re.compile(r'https?://(?:www\.)?.+')
-
 
 
 class NoChannelProvided(commands.CommandError):
@@ -28,7 +26,7 @@ class IncorrectChannelError(commands.CommandError):
 class Track(wavelink.Track):
     """Wavelink Track object with a requester attribute."""
 
-    __slots__ = ('requester', )
+    __slots__ = ('requester',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args)
@@ -342,7 +340,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
     @commands.Cog.listener()
-    async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
+    async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState,
+                                    after: discord.VoiceState):
         if member.bot:
             return
 
@@ -389,7 +388,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         if player.context:
             if player.context.channel != ctx.channel:
-                await ctx.send(f'{ctx.author.mention}, you must be in {player.context.channel.mention} for this session.')
+                await ctx.send(
+                    f'{ctx.author.mention}, you must be in {player.context.channel.mention} for this session.')
                 raise IncorrectChannelError
 
         if ctx.command.name == 'connect' and not player.context:

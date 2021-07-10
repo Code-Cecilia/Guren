@@ -5,16 +5,16 @@ import random
 
 import utils.json_loader
 
+
 class Eval(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
 
     @commands.is_owner()
     @commands.command()
     async def dump_gif(self, ctx):
         kiss = "kiss"
-        hug =  "hug"
+        hug = "hug"
         pet = "pet"
         rub = "rub"
 
@@ -24,6 +24,7 @@ class Eval(commands.Cog):
         data = utils.json_loader.read_json("gifs")
 
         print("not ready.")
+
 
 def setup(bot):
     bot.add_cog(Eval(bot))

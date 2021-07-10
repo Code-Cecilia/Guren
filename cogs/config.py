@@ -8,11 +8,12 @@ import discord
 from discord.ext import commands
 from discord import TextChannel
 
-
 import utils.json_loader
+
 
 class Config(commands.Cog):
     """Server configuration commands."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -35,8 +36,8 @@ class Config(commands.Cog):
         )
 
     @commands.command(
-        name="deleteprefix", 
-        aliases=["dp"], 
+        name="deleteprefix",
+        aliases=["dp"],
         description="Delete your guilds prefix!"
     )
     @commands.guild_only()
@@ -64,8 +65,6 @@ class Config(commands.Cog):
         utils.json_loader.write_json(data, "suggestionc")
         await ctx.send("Suggestions channel setup successfully")
 
-
-
     @commands.command(
         name="suggest",
         aliases=["sg"],
@@ -76,8 +75,9 @@ class Config(commands.Cog):
         guild_ID = ctx.guild.id
         suggestions = self.bot.get_channel(data[str(guild_ID)]["suggestionC"])
         await ctx.message.delete()
-        await ctx.send("Suggestion sent.")  
-        embed = discord.Embed(title='Suggestion', description=f'Suggested by: {ctx.author.mention}', color=discord.Color.dark_purple())
+        await ctx.send("Suggestion sent.")
+        embed = discord.Embed(title='Suggestion', description=f'Suggested by: {ctx.author.mention}',
+                              color=discord.Color.dark_purple())
         embed.set_author(name=f"{ctx.author}", icon_url=f"{ctx.author.avatar_url}")
         embed.add_field(name="Suggestion:", value=str(message))
         embed.timestamp = datetime.datetime.utcnow()
@@ -89,9 +89,12 @@ class Config(commands.Cog):
     @suggest.error
     async def suggest_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(description='❌ Please make sure to include your suggestion:\n```!suggest <suggestion>```', color=discord.Color.dark_red())
+            embed = discord.Embed(
+                description='❌ Please make sure to include your suggestion:\n```!suggest <suggestion>```',
+                color=discord.Color.dark_red())
             embed.set_author(name=f"{ctx.author}", icon_url=f"{ctx.author.avatar_url}")
             await ctx.channel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Config(bot))
