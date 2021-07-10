@@ -21,7 +21,10 @@ class Maymay(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command()
+    @commands.command(
+        name="meme",
+        description="Posts a meme from the subreddit r/memes"
+    )
     async def meme(self, ctx, member: discord.Member = None):
         """Sends a random meme"""
         member = ctx.author if not member else member
@@ -37,7 +40,10 @@ class Maymay(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name="penis",
+        description="Shows the penis size of a mentioned user or if none is mentioned it shows yours.\n 100%\ legit"
+    )
     async def penis(self, ctx, *, question=None, member: discord.Member = None):
         """100% legit pp size machine"""
         question = ctx.author if not question else question
@@ -53,7 +59,10 @@ class Maymay(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name="ask",
+        description="Ask me something"
+    )
     async def ask(self, ctx, *, question=None, member: discord.Member = None):
         """Ask me anything"""
         question = ctx.author if not question else question
@@ -73,7 +82,11 @@ class Maymay(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name="howgay",
+        aliases=["hg", "howg"],
+        description="Shows how gay a mentioned user is or how gay you are if no user is mentioned"
+    )
     async def howgay(self, ctx, *, question=None, member: discord.Member = None):
         """I tell you how gay you are"""
         if ctx.author.id == 436174748939190274:
@@ -90,7 +103,11 @@ class Maymay(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name="howsimp",
+        aliases=["hs", "hows"],
+        description="Shows how simp you are or if a user is mentioned it shows how simp they are"
+    )
     async def howsimp(self, ctx, *, question=None, member: discord.Member = None):
         """I tell you how simp you are"""
         question = ctx.author if not question else question
@@ -107,7 +124,11 @@ class Maymay(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(name='nocontext')
+    @commands.command(
+        name='nocontext',
+        aliases=['nc'],
+        description="no comments"
+        )
     async def NoContext(self, ctx):
         subreddit = reddit.subreddit("nocontext")
         x = subreddit.top(limit=20)
