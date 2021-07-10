@@ -21,7 +21,10 @@ class Misc(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command(name="ping")
+    @commands.command(
+        name="ping",
+        description="Shows the bot latency"
+        )
     @commands.guild_only()
     async def ping(self, ctx: SlashContext, member: discord.Member = None):
         """Shows the bot ping"""
@@ -34,7 +37,10 @@ class Misc(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name="fact",
+        description="Sends a random fact."
+    )
     async def fact(self, ctx):
         """Random fact"""
         url = f'https://uselessfacts.jsph.pl/random.json?language=en'
@@ -63,7 +69,11 @@ class Misc(commands.Cog):
                 ctx.command.qualified_name, 1, "usage_count"
             )
 
-    @commands.command()
+    @commands.command(
+        name="invite",
+        aliases=['botinvite', 'i'],
+        description="Sends an invite link for the bot."
+    )
     async def invite(self, ctx):
         await ctx.send(
             "Invite me to your server using this link: https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8")
