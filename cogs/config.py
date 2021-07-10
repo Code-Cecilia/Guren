@@ -1,14 +1,19 @@
 import datetime
+import os
+import random
+import traceback
 
+import json
+import asyncio
 import discord
 from discord.ext import commands
+from discord import TextChannel
+
 
 import utils.json_loader
 
-
 class Config(commands.Cog):
     """Server configuration commands."""
-
     def __init__(self, bot):
         self.bot = bot
 
@@ -31,8 +36,8 @@ class Config(commands.Cog):
         )
 
     @commands.command(
-        name="deleteprefix",
-        aliases=["dp"],
+        name="deleteprefix", 
+        aliases=["dp"], 
         description="Delete your guilds prefix!"
     )
     @commands.guild_only()
@@ -60,6 +65,42 @@ class Config(commands.Cog):
         utils.json_loader.write_json(data, "suggestionc")
         await ctx.send("Suggestions channel setup successfully")
 
+    @commands.command(name='setmuterole', description='Sets the role assigned to muted people. '
+                                                      'Use `createmuterole` for creating a muted role and '
+                                                      'automatically setting permissions to every channel.')
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def set_mute_role(self, ctx, role: discord.Role):
+        if not os.path.exists(f'bot_config/guild{ctx.guild.id}.json'):
+            with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
+                json.dump({}, jsonFile)
+
+        with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+
+        data['mute_role'] = role.id
+
+        with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
+            json.dump(data, jsonFile)
+
+        await ctx.send(f'Mute role set to **{role.name}** successfully.')
+
+    @commands.command(name='createmuterole', description='Creates a mute role, and sets messaging permissions to '
+                                                         'every channel.\n '
+                                                         'the `rolename` argument is optional. (Defaults to "Muted")')
+    @commands.has_permissions(manage_roles=True)
+    @commands.guild_only()
+    async def create_mute_role(self, ctx, rolename=None):
+        if rolename is None:
+            rolename = 'Muted'
+        guild = ctx.guild
+        mutedRole = await guild.create_role(name=rolename)  # creating the role
+        for channel in guild.channels:
+            await channel.set_permissions(mutedRole, speak=False, send_messages=False, use_slash_commands=False)
+            # setting permissions for each channel
+        await ctx.send(f'Created role **{mutedRole}** and set permissions accordingly.')
+
+
     @commands.command(
         name="suggest",
         aliases=["sg"],
@@ -69,9 +110,8 @@ class Config(commands.Cog):
         guild_ID = ctx.guild.id
         suggestions = self.bot.get_channel(data[str(guild_ID)]["suggestionC"])
         await ctx.message.delete()
-        await ctx.send("Suggestion sent.")
-        embed = discord.Embed(title='Suggestion', description=f'Suggested by: {ctx.author.mention}',
-                              color=discord.Color.dark_purple())
+        await ctx.send("Suggestion sent.")  
+        embed = discord.Embed(title='Suggestion', description=f'Suggested by: {ctx.author.mention}', color=discord.Color.dark_purple())
         embed.set_author(name=f"{ctx.author}", icon_url=f"{ctx.author.avatar_url}")
         embed.add_field(name="Suggestion:", value=str(message))
         embed.timestamp = datetime.datetime.utcnow()
@@ -83,12 +123,9 @@ class Config(commands.Cog):
     @suggest.error
     async def suggest_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(
-                description='❌ Please make sure to include your suggestion:\n```!suggest <suggestion>```',
-                color=discord.Color.dark_red())
+            embed = discord.Embed(description='❌ Please make sure to include your suggestion:\n```!suggest <suggestion>```', color=discord.Color.dark_red())
             embed.set_author(name=f"{ctx.author}", icon_url=f"{ctx.author.avatar_url}")
             await ctx.channel.send(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(Config(bot))
