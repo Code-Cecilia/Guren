@@ -529,7 +529,6 @@ class VoiceLeveling(commands.Cog):
                         main.close()
                     await VoiceLeveling(self).start_time(member, before, after)
 
-
 def setup(bot):
     bot.add_cog(TextLeveling(bot))
     bot.add_cog(VoiceLeveling(bot))
