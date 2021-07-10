@@ -101,7 +101,7 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+        print(f"{self.__class__.__name__} Cog has been loaded.\n-----")
 
     @commands.command()
     @commands.guild_only()
@@ -155,17 +155,7 @@ class Moderation(commands.Cog):
             embed.add_field(name="● Details:", value=f" - Reason: {reason}")
             embed.set_footer(icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
             await ctx.send(embed=embed)
-        print(ctx.author.name, 'used the command kick')
-        roles = [role for role in member.roles]
-        guild_ID = ctx.guild.id
-        data = utils.json_loader.read_json("server_config")
-        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
 
-        embed = discord.Embed(title=f"`{member}` was kicked from the server", color=member.color, timestamp=datetime.datetime.utcnow(), description=f"**Moderator:** {ctx.author}")
-        embed.set_thumbnail(url=f"{member.avatar_url}")
-        embed.add_field(name="Their roles:", value=" ".join([role.mention for role in roles]))
-        embed.set_footer(text=f"UUID: {member.id}")
-        await modlogs.send(embed=embed)
 
 
 
