@@ -145,7 +145,6 @@ class Moderation(commands.Cog):
     @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason="No reason"):
-        """Kicks someone"""
         try:
             await member.kick(reason=reason)
         except discord.Forbidden:    
@@ -162,7 +161,6 @@ class Moderation(commands.Cog):
     @commands.command(name="clear")
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int):
-        """Clears messages."""
         channel = ctx.channel
         try:
             await channel.purge(limit=amount+1)

@@ -10,6 +10,7 @@ from discord_slash import SlashContext
 
 from utils import time_custom
 from utils import UrbanDict
+from utils import count_lines
 
 class Misc(commands.Cog):
     """Commands that i don't know where to put."""
@@ -146,6 +147,12 @@ class Misc(commands.Cog):
         embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
         await ctx.send(embed=embed)
 
+    @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
+                                                                            'the bot currently has.')
+    async def countlines_func(self, ctx):
+        lines = count_lines.countlines('./')
+        final_str = f"I am made of {lines} lines of python code. Pretty cool, imo."
+        await ctx.send(final_str)
 
 def setup(bot):
     bot.add_cog(Misc(bot))
