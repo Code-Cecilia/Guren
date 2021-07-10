@@ -158,3 +158,8 @@ Double click on botstart.bat
 
 - Note 3: Working on the project again, if you want a stable instance up and running of the bot use my own. [Invite Link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)
  
+# Credits
+
+Thanks to these people and their contributions this project has been maintained and alive for a long time:
+
+- [Mahas1](https://github.com/orgs/Code-Cecilia/people/Mahas1)
