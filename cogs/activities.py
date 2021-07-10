@@ -12,7 +12,8 @@ class Activities(commands.Cog):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
     @commands.command(
-        description=f"Currently Only supports youtube.\nStarts a youtube together activity, must be on a voice channel!\n**Usage:** g$start"
+        description=f"Currently Only supports youtube.\nStarts a youtube together activity, "
+                    f"must be on a voice channel!\n**Usage:** g$start"
         )
     async def start(self, ctx):
         link = await self.togetherControl.create_link(ctx.author.voice.channel.id, 'youtube')

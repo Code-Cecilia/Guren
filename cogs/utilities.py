@@ -8,14 +8,14 @@ from discord.ext import commands
 
 class Utilities(commands.Cog):
     """Usefull commands, mostly informative commands."""
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
-        
-    
+
     @commands.command(name="avatar")
     @commands.guild_only()
     async def avatar(self, ctx, member: discord.Member = None):
@@ -25,8 +25,8 @@ class Utilities(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_image(url=f"{member.avatar_url}")
         await ctx.send(embed=embed)
-        print(ctx.author.name, 'used the command avatar')    
- 
+        print(ctx.author.name, 'used the command avatar')
+
     @commands.command(name="userinfo")
     @commands.guild_only()
     async def userinfo(self, ctx, member: discord.Member = None):
@@ -74,7 +74,8 @@ class Utilities(commands.Cog):
         serverCount = len(self.bot.guilds)
         memberCount = len(set(self.bot.get_all_members()))
 
-        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=ctx.author.colour, timestamp=ctx.message.created_at)
+        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=ctx.author.colour,
+                              timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Bot Version:', value="2.0")
         embed.add_field(name='Discord.Py Version', value=dpyVersion, inline=True)
@@ -87,7 +88,8 @@ class Utilities(commands.Cog):
 
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
 
-        await ctx.send(embed=embed)          
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Utilities(bot))
