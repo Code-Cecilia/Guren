@@ -43,6 +43,14 @@ async def get_prefix(bot, message):
     except:
         return commands.when_mentioned_or("g$")(bot, message)
 
+class NewHelpName(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            embed = discord.Embed(description=page, color=discord.Color.random())
+            embed.set_thumbnail(url=bot.user.avatar_url)
+            embed.set_footer(text='')
+            await destination.send(embed=embed)
 
 secret_file = utils.json_loader.read_json('secrets')
 intents = discord.Intents.all()
@@ -51,7 +59,8 @@ bot = commands.Bot(
     description=description,
     owner_id=219410026631135232,
     case_insensitive=True,
-    intents=discord.Intents.all()
+    intents=discord.Intents.all(),
+    help_command = NewHelpName()
 )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 
@@ -63,7 +72,6 @@ bot.muted_users = {}
 bot.cwd = cwd
 
 bot.version = "1.0"
-
 bot.colors = {
     "WHITE": 0xFFFFFF,
     "AQUA": 0x1ABC9C,
