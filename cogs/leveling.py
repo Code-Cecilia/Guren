@@ -21,9 +21,12 @@ class Ranks(commands.Cog, name='Ranks'):
     @commands.group(invoke_without_command=True)
     @checks.is_admin()
     async def ranks(self, ctx):
-        await ctx.send('**Ranks Commands**\n\n> `rank add`\n> `rank remove`\n> `rank list` ')
+        await ctx.send('**Ranks Commands**\n\n> `ranks add`\n> `ranks remove`\n> `ranks list` ')
 
-    @ranks.command()
+    @ranks.command(
+        name="add",
+        description="Adds a role to the leveling system."
+    )
     @checks.is_admin()
     async def add(self, ctx):
         await ctx.send('**Please insert the role name.** *(Case Sensitive)*')
@@ -50,7 +53,10 @@ class Ranks(commands.Cog, name='Ranks'):
         cursor.close()
         main.close()
 
-    @ranks.command()
+    @ranks.command(
+        name="remove",
+        description="Remove a role from the leveling system"
+    )
     @checks.is_admin()
     async def remove(self, ctx):
         await ctx.send('**Please insert the role name.** *(Case Sensitive)*')
@@ -73,7 +79,10 @@ class Ranks(commands.Cog, name='Ranks'):
         cursor.close()
         main.close()
 
-    @ranks.command(name='list')
+    @ranks.command(
+        name='list',
+        description="Shows the list of roles added to the leveling system."
+        )
     @checks.is_admin()
     async def _list(self, ctx):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
@@ -200,7 +209,11 @@ class TextLeveling(commands.Cog, name='Leveling'):
             else:
                 return
 
-    @commands.command(pass_context=True)
+    @commands.command(
+        pass_context=True,
+        name="rank",
+        description="Shows your current rank and XP"
+    )
     async def rank(self, ctx, user: discord.User = None):
         if user is None:
             main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
@@ -302,7 +315,11 @@ class TextLeveling(commands.Cog, name='Leveling'):
             cursor.close()
             main.close()
 
-    @commands.command(pass_context=True)
+    @commands.command(
+        pass_context=True,
+        name="leaderboard",
+        description="Shows the top 5 users on this server."
+        )
     async def leaderboard(self, ctx):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
