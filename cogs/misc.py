@@ -9,7 +9,7 @@ from discord.ext import commands
 from discord_slash import SlashContext
 
 from utils import time_custom
-
+from utils import UrbanDict
 
 class Misc(commands.Cog):
     """Commands that i don't know where to put."""
@@ -130,6 +130,21 @@ class Misc(commands.Cog):
         final_time_string = time_custom.time_bm(user_offset)
 
         await ctx.send(final_time_string)
+
+    @commands.command(name='define', description='Pulls a description from Urban Dictionary of the term entered as '
+                                                 'argument.\n '
+                                                 'Take caution, as sometimes it can be a bit... too accurate.')
+    async def define_from_urban(self, ctx, *, term):
+        try:
+            word, definition, likes, dislikes, example, author = await UrbanDict.define(term)
+        except:
+            await ctx.send(f'Could not load definition for **{term}**.')
+            return
+        embed = discord.Embed(title=word, description=definition, color=discord.Color.random())
+        embed.set_footer(text=f'Powered by UrbanDictionary | Author - {author}')
+        embed.add_field(name="Example", value=example, inline=False)
+        embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
