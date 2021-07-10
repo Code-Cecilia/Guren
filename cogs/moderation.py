@@ -1,17 +1,22 @@
 import asyncio
 import datetime
+import json
 import re
 from copy import deepcopy
 
 import discord
-from dateutil.relativedelta import relativedelta
+from discord import User
 from discord.ext import commands, tasks
+from dateutil.relativedelta import relativedelta
+from discord.utils import get
+
+from utils.util import Pag
 
 import utils.json_loader
 from utils import default, permissions
-from utils.util import Pag
+from dateutil.relativedelta import relativedelta
 
-time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
+time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}
 
 
@@ -53,11 +58,10 @@ class ActionReason(commands.Converter):
             reason_max = 512 - len(ret) - len(argument)
             raise commands.BadArgument(f'reason is too long ({len(argument)}/{reason_max})')
         return ret
-
+    
 
 class Moderation(commands.Cog):
     """Various Moderation Commands."""
-
     def __init__(self, bot):
         self.bot = bot
         self.mute_task = self.check_current_mutes.start()
@@ -73,7 +77,7 @@ class Moderation(commands.Cog):
         for key, value in mutes.items():
             if value['muteDuration'] is None:
                 continue
-
+        
             unmuteTime = value['mutedAt'] + relativedelta(seconds=value['muteDuration'])
 
             if currentTime >= unmuteTime:
@@ -90,14 +94,14 @@ class Moderation(commands.Cog):
                     self.bot.muted_users.pop(member.id)
                 except KeyError:
                     pass
-
+    
     @check_current_mutes.before_loop
     async def before_check_current_mutes(self):
         await self.bot.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+        print(f"{self.__class__.__name__} Cog has been loaded.\n-----")
 
     @commands.command()
     @commands.guild_only()
@@ -144,27 +148,16 @@ class Moderation(commands.Cog):
         """Kicks someone"""
         try:
             await member.kick(reason=reason)
-        except discord.Forbidden:
-            await ctx.send(f"It looks like i dont have the permission `KICK_MEMBERS` to do this. "
-                           f"Please check my permissions and try running the command again.")
+        except discord.Forbidden:    
+            await ctx.send(f"It looks like i dont have the permission `KICK_MEMBERS` to do this. Please check my permissions and try running the command again.")
         else:
-            embed = discord.Embed(title=f"`{ctx.author}` kicked {member}", colour=member.color,
-                                  timestamp=datetime.datetime.utcnow())
+            embed = discord.Embed(title=f"`{ctx.author}` kicked {member}", colour=member.color, timestamp=datetime.datetime.utcnow())
             embed.add_field(name="● Details:", value=f" - Reason: {reason}")
             embed.set_footer(icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
             await ctx.send(embed=embed)
-        print(ctx.author.name, 'used the command kick')
-        roles = [role for role in member.roles]
-        guild_ID = ctx.guild.id
-        data = utils.json_loader.read_json("server_config")
-        modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
 
-        embed = discord.Embed(title=f"`{member}` was kicked from the server", color=member.color,
-                              timestamp=datetime.datetime.utcnow(), description=f"**Moderator:** {ctx.author}")
-        embed.set_thumbnail(url=f"{member.avatar_url}")
-        embed.add_field(name="Their roles:", value=" ".join([role.mention for role in roles]))
-        embed.set_footer(text=f"UUID: {member.id}")
-        await modlogs.send(embed=embed)
+
+
 
     @commands.command(name="clear")
     @commands.has_permissions(manage_messages=True)
@@ -172,11 +165,9 @@ class Moderation(commands.Cog):
         """Clears messages."""
         channel = ctx.channel
         try:
-            await channel.purge(limit=amount + 1)
+            await channel.purge(limit=amount+1)
         except discord.Forbidden:
-            await ctx.send(
-                f"It looks like i dont have the permission `MANAGE_MESSAGES` to do this. "
-                f"Please check my permissions and try running the command again.")
+            await ctx.send(f"It looks like i dont have the permission `MANAGE_MESSAGES` to do this. Please check my permissions and try running the command again.")
         else:
             await ctx.send(f"{amount} messages deleted.")
 
@@ -186,7 +177,7 @@ class Moderation(commands.Cog):
         ussage='<user> [time]'
     )
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member: discord.Member, *, time: TimeConverter = None):
+    async def mute(self, ctx, member: discord.Member, *, time: TimeConverter=None):
         role = discord.utils.get(ctx.guild.roles, name="Muted")
         if not role:
             await ctx.send("No muted role was found! Please create one called `Muted`")
@@ -272,7 +263,7 @@ class Moderation(commands.Cog):
         """warns an user. ID, Mention or name."""
         if member.id in [ctx.author.id, self.bot.user.id]:
             return await ctx.send("You cannot warn yourself or the bot!")
-
+        
         current_warn_count = len(
             await self.bot.warns.find_many_by_custom(
                 {
@@ -281,12 +272,12 @@ class Moderation(commands.Cog):
                 }
             )
         ) + 1
-
+        
         warn_filter = {"user_id": member.id, "guild_id": member.guild.id, "number": current_warn_count}
         warn_data = {"reason": reason, "timestamp": ctx.message.created_at, "warned_by": ctx.author.id}
-
+        
         await self.bot.warns.upsert_custom(warn_filter, warn_data)
-
+        
         embed = discord.Embed(
             title="You are being warned:",
             description=f"__**Reason**__:\n{reason}",
@@ -295,13 +286,13 @@ class Moderation(commands.Cog):
         )
         embed.set_author(name=ctx.guild.name, icon_url=ctx.guild.icon_url)
         embed.set_footer(text=f"Warn: {current_warn_count}")
-
+        
         try:
             await member.send(embed=embed)
             await ctx.send("Warned that user in dm's")
         except discord.HTTPException:
             await ctx.send(member.mention, embed=embed)
-
+            
     @commands.command()
     @commands.guild_only()
     @permissions.has_permissions(ban_members=True)
@@ -309,12 +300,12 @@ class Moderation(commands.Cog):
         """Shows all warnings for a specified user. ID, Mention or Name"""
         warn_filter = {"user_id": member.id, "guild_id": member.guild.id}
         warns = await self.bot.warns.find_many_by_custom(warn_filter)
-
+        
         if not bool(warns):
             return await ctx.send(f"Couldn't find any warns for: `{member.display_name}`")
-
+        
         warns = sorted(warns, key=lambda x: x["number"])
-
+        
         pages = []
         for warn in warns:
             description = f"""
@@ -324,14 +315,13 @@ class Moderation(commands.Cog):
             Warn Number: {warn['timestamp'].strftime("%I:%M %p %B %d, %Y")}
             """
             pages.append(description)
-
+        
         await Pag(
             title=f"Warns for `{member.display_name}`",
             colour=0xCE2029,
             entries=pages,
             length=1
         ).start(ctx)
-
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

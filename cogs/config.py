@@ -65,7 +65,6 @@ class Config(commands.Cog):
         aliases=["sg"],
         description="Suggest something")
     async def suggest(self, ctx, *, message):
-        """Suggest something."""
         data = utils.json_loader.read_json("suggestionc")
         guild_ID = ctx.guild.id
         suggestions = self.bot.get_channel(data[str(guild_ID)]["suggestionC"])
