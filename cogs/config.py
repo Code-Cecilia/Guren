@@ -1,12 +1,7 @@
 import datetime
-import os
-import random
-import traceback
 
-import asyncio
 import discord
 from discord.ext import commands
-from discord import TextChannel
 
 import utils.json_loader
 

@@ -1,20 +1,15 @@
 import asyncio
 import datetime
-import json
 import re
 from copy import deepcopy
 
 import discord
-from discord import User
-from discord.ext import commands, tasks
 from dateutil.relativedelta import relativedelta
-from discord.utils import get
-
-from utils.util import Pag
+from discord.ext import commands, tasks
 
 import utils.json_loader
 from utils import default, permissions
-from dateutil.relativedelta import relativedelta
+from utils.util import Pag
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {"h": 3600, "s": 1, "m": 60, "d": 86400}

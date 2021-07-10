@@ -1,9 +1,10 @@
 import datetime
-import discord
-from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext, cog_ext
-import git
 import os
+
+import discord
+import git
+from discord.ext import commands
+
 
 class Utilities(commands.Cog):
     """Usefull commands, mostly informative commands."""

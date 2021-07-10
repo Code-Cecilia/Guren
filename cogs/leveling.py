@@ -1,20 +1,16 @@
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
-import discord
-from discord.ext import commands
-import asyncio
 import datetime
-import sqlite3
-import os
-import time
-from collections import OrderedDict, deque, Counter
 import math
 import random
-import io
+import sqlite3
 from io import BytesIO
-import requests
+
 import aiohttp
+import discord
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+from discord.ext import commands
+
 from utils import checks
 
 
