@@ -14,9 +14,13 @@ class Roleplay(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command()
+    @commands.command(
+        name="cookie",
+        aliases=['biscuit'],
+        usage="<user>",
+        description="Gives a cookie to a mentioned user"
+    )
     async def cookie(self, ctx, member: discord.Member = None):
-        """Give a cookie to someone."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Nom nom nom!",
                               description="**{1}** gave a cookie to **{0}**! :cookie:".format(member.name,
