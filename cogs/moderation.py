@@ -87,7 +87,7 @@ class Moderation(commands.Cog):
                 role = discord.utils.get(guild.roles, name="Muted")
                 if role in member.roles:
                     await member.remove_roles(role)
-                    print(f"Unmuted: {member.display.name}")
+                    print(f"Unmuted: {member.name}")
 
                 await self.bot.mutes.delete(member.id)
                 try:
