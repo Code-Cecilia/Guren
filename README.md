@@ -162,5 +162,4 @@ Double click on botstart.bat
 
 Thanks to these people and their contributions this project has been maintained and alive for a long time:
 
-- Get an account [here](https://www.mongodb.com/)
 - [Mahas1](https://github.com/orgs/Code-Cecilia/people/Mahas1)
