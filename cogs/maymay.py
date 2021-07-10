@@ -37,7 +37,6 @@ class Maymay(commands.Cog):
         embed.set_image(url=f"{submission.url}")
 
         await ctx.send(embed=embed)
-        print(f"{ctx.author} used the command meme.")
 
     @commands.command()
     async def penis(self, ctx, *, question = None, member: discord.Member = None):
