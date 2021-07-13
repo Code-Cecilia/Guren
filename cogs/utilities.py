@@ -84,6 +84,7 @@ class Utilities(commands.Cog):
         embed.add_field(name='Bot Developer:', value="<@219410026631135232>")
         embed.add_field(name='Latest commit:', value=f"`{master.commit.hexsha[:6]}`\n`{master.commit.message}`")
         embed.add_field(name="Support Server", value=f"[I live here.](https://discord.gg/8wCez2n)")
+        embed.add_field(name="Sibling", value=f"[BotMan](https://discord.com/api/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)")
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
 
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
