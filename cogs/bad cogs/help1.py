@@ -2,6 +2,7 @@ from discord.ext import commands
 
 from utils.util import Pag
 
+
 class Help(commands.Cog, name="Help command"):
     def __init__(self, bot):
         self.bot = bot
@@ -55,7 +56,7 @@ class Help(commands.Cog, name="Help command"):
             filtered_commands = await self.return_filtered_commands(entity, ctx)
 
         for i in range(0, len(filtered_commands), self.cmds_per_page):
-            next_commands = filtered_commands[i : i + self.cmds_per_page]
+            next_commands = filtered_commands[i: i + self.cmds_per_page]
             commands_entry = ""
 
             for cmd in next_commands:

@@ -5,8 +5,10 @@ import datetime
 import mcstatus
 from mcstatus import MinecraftServer
 
+
 class Minecraft(commands.Cog):
     """ Commands for the network YSP """
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,7 +25,10 @@ class Minecraft(commands.Cog):
         embed.add_field(name="Originals IP", value="hub.comrades.digital")
         embed.add_field(name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-originals.1726052)")
         embed.add_field(name="Server Stats", value="Open Beta")
-        embed.add_field(name="Misc Information", value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).", inline=False)
+        embed.add_field(name="Misc Information",
+                        value=f"The server is open to cracked and premium secured with a login plugin. "
+                              f"Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).",
+                        inline=False)
         embed.set_footer(text="YSP 2020")
         await ctx.send(embed=embed)
 
@@ -36,7 +41,9 @@ class Minecraft(commands.Cog):
         embed.add_field(name="Sky IP", value="hub.comrades.digital")
         embed.add_field(name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-sky.1745227)")
         embed.add_field(name="Server Stats", value="COMING SOON! IN DEVELOPMENT!")
-        embed.add_field(name="Misc Information", value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).", inline=False)
+        embed.add_field(name="Misc Information",
+                        value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).",
+                        inline=False)
         embed.set_footer(text="YSP 2020")
 
         await ctx.send(embed=embed)
@@ -48,7 +55,9 @@ class Minecraft(commands.Cog):
         embed = discord.Embed(title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
         embed.add_field(name="Version:", value="1.16.2 Vanilla")
         embed.add_field(name="Classic IP", value="hub.comrades.digital")
-        embed.add_field(name="Misc Information", value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).", inline=False)
+        embed.add_field(name="Misc Information",
+                        value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).",
+                        inline=False)
         embed.set_footer(text="YSP 2020")
 
         await ctx.send(embed=embed)
@@ -68,7 +77,8 @@ class Minecraft(commands.Cog):
     async def store(self, ctx, member: discord.Member = None):
         """ Originals store link """
         member = ctx.author if not member else member
-        embed = discord.Embed(title="Buy vip here", timestamp=datetime.datetime.utcnow(), color=member.color, description="Note: Only the server Originals has a webstore. The others are yet still in development!")
+        embed = discord.Embed(title="Buy vip here", timestamp=datetime.datetime.utcnow(), color=member.color,
+                              description="Note: Only the server Originals has a webstore. The others are yet still in development!")
         embed.add_field(name="Our Webstore", value=f"[YSP Originals](http://ysp-originals.tebex.io)")
         embed.set_footer(text="YSP 2020")
         await ctx.send(embed=embed)
@@ -88,12 +98,23 @@ class Minecraft(commands.Cog):
         query3 = server3.query()
         total2 = total.query()
         embed = discord.Embed(title="Network Metrics", timestamp=datetime.datetime.utcnow(), color=member.color)
-        embed.add_field(name="**Sky Status**", value="The server has `{0}/48` players online: `{1}`".format(str(len(query3.players.names)), ", ".join(query3.players.names)), inline=False)
-        embed.add_field(name="**Originals Status**", value="The server has `{0}/48` players online: `{1}`".format(str(len(query1.players.names)), ", ".join(query1.players.names)), inline=False)
-        embed.add_field(name="**Classic Status**", value="The server has `{0}/48` players online: `{1}`".format(str(len(query2.players.names)), ", ".join(query2.players.names)), inline=False)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/655111976891973648/746888357795332246/large.jpg")
+        embed.add_field(name="**Sky Status**",
+                        value="The server has `{0}/48` players online: `{1}`".format(str(len(query3.players.names)),
+                                                                                     ", ".join(query3.players.names)),
+                        inline=False)
+        embed.add_field(name="**Originals Status**",
+                        value="The server has `{0}/48` players online: `{1}`".format(str(len(query1.players.names)),
+                                                                                     ", ".join(query1.players.names)),
+                        inline=False)
+        embed.add_field(name="**Classic Status**",
+                        value="The server has `{0}/48` players online: `{1}`".format(str(len(query2.players.names)),
+                                                                                     ", ".join(query2.players.names)),
+                        inline=False)
+        embed.set_thumbnail(
+            url="https://cdn.discordapp.com/attachments/655111976891973648/746888357795332246/large.jpg")
         embed.add_field(name="Network IP", value="hub.comrades.digital")
-        server = ("YSP 2020 - Total Players: {0}/500".format(str(total2.players.online), ", ".join(str(total2.players.online))))
+        server = ("YSP 2020 - Total Players: {0}/500".format(str(total2.players.online),
+                                                             ", ".join(str(total2.players.online))))
         embed.set_footer(text=f"{server}")
 
 

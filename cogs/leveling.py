@@ -82,7 +82,7 @@ class Ranks(commands.Cog, name='Ranks'):
     @ranks.command(
         name='list',
         description="Shows the list of roles added to the leveling system."
-        )
+    )
     @checks.is_admin()
     async def _list(self, ctx):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
@@ -319,7 +319,7 @@ class TextLeveling(commands.Cog, name='Leveling'):
         pass_context=True,
         name="leaderboard",
         description="Shows the top 5 users on this server."
-        )
+    )
     async def leaderboard(self, ctx):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
@@ -528,6 +528,7 @@ class VoiceLeveling(commands.Cog):
                         cursor.close()
                         main.close()
                     await VoiceLeveling(self).start_time(member, before, after)
+
 
 def setup(bot):
     bot.add_cog(TextLeveling(bot))

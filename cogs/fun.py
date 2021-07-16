@@ -4,6 +4,7 @@ from discord.ext import commands
 
 class Fun(commands.Cog):
     """A bunch of fun commands i made."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -32,7 +33,7 @@ class Fun(commands.Cog):
     @commands.command(name="Yuichiro")
     async def yui(self, ctx):
         """My lord"""
-        await ctx.send("Yuichiro is my lord.") 
+        await ctx.send("Yuichiro is my lord.")
 
     @commands.command(name="chatkiller")
     async def chatkiller(self, ctx):
@@ -50,6 +51,6 @@ class Fun(commands.Cog):
     async def ric(self, ctx):
         await ctx.send("comer merda")
 
+
 def setup(bot):
     bot.add_cog(Fun(bot))
-

@@ -12,6 +12,7 @@ from utils import time_custom
 from utils import UrbanDict
 from utils import count_lines
 
+
 class Misc(commands.Cog):
     """Commands that i don't know where to put."""
 
@@ -25,7 +26,7 @@ class Misc(commands.Cog):
     @commands.command(
         name="ping",
         description="Shows the bot latency"
-        )
+    )
     @commands.guild_only()
     async def ping(self, ctx: SlashContext, member: discord.Member = None):
         """Shows the bot ping"""
@@ -153,6 +154,7 @@ class Misc(commands.Cog):
         lines = count_lines.countlines('./')
         final_str = f"I am made of {lines} lines of python code. Pretty cool, imo."
         await ctx.send(final_str)
+
 
 def setup(bot):
     bot.add_cog(Misc(bot))
