@@ -11,6 +11,7 @@ from discord_slash import SlashContext
 from utils import time_custom
 from utils import UrbanDict
 from utils import count_lines
+from utils import quotes
 
 
 class Misc(commands.Cog):
@@ -154,6 +155,11 @@ class Misc(commands.Cog):
         lines = count_lines.countlines('./')
         final_str = f"I am made of {lines} lines of python code. Pretty cool, imo."
         await ctx.send(final_str)
+
+    @commands.command(name='inspire', aliases=['quote'], description='Sends a random quote')
+    async def get_quote_func(self, ctx):
+        quote = quotes.get_quote()
+        await ctx.send(quote)
 
 
 def setup(bot):
