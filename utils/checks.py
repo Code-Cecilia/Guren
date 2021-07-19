@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import sqlite3
 
+
 async def check_permissions(ctx, perms, *, check=all):
     is_owner = await ctx.bot.is_owner(ctx.author)
     if is_owner:
@@ -10,10 +11,12 @@ async def check_permissions(ctx, perms, *, check=all):
     resolved = ctx.channel.permissions_for(ctx.author)
     return check(getattr(resolved, name, None) == value for name, value in perms.items())
 
+
 def has_permissions(*, check=all, **perms):
     async def pred(ctx):
         return await check_permissions(ctx, perms, check=check)
     return commands.check(pred)
+
 
 async def check_guild_permissions(ctx, perms, *, check=all):
     is_owner = await ctx.bot.is_owner(ctx.author)
@@ -26,6 +29,7 @@ async def check_guild_permissions(ctx, perms, *, check=all):
     resolved = ctx.author.guild_permissions
     return check(getattr(resolved, name, None) == value for name, value in perms.items())
 
+
 def has_guild_permissions(*, check=all, **perms):
     async def pred(ctx):
         return await check_guild_permissions(ctx, perms, check=check)
@@ -33,27 +37,34 @@ def has_guild_permissions(*, check=all, **perms):
 
 # These do not take channel overrides into account
 
+
 def is_mod():
     async def pred(ctx):
         return await check_guild_permissions(ctx, {'manage_messages': True})
     return commands.check(pred)
+
 
 def is_admin():
     async def pred(ctx):
         return await check_guild_permissions(ctx, {'administrator': True})
     return commands.check(pred)
 
+
 def mod_or_permissions(**perms):
     perms['manage_messages'] = True
+
     async def predicate(ctx):
         return await check_guild_permissions(ctx, perms, check=any)
     return commands.check(predicate)
 
+
 def admin_or_permissions(**perms):
     perms['administrator'] = True
+
     async def predicate(ctx):
         return await check_guild_permissions(ctx, perms, check=any)
     return commands.check(predicate)
+
 
 def is_in_guilds(*guild_ids):
     def predicate(ctx):
@@ -63,14 +74,17 @@ def is_in_guilds(*guild_ids):
         return guild.id in guild_ids
     return commands.check(predicate)
 
+
 def is_lounge_cpp():
     return is_in_guilds(556114920417001491)
+
 
 def has_admin_role():
     async def predicate(ctx):
         db = sqlite3.connect('main.sqlite')
         cursor = db.cursor()
-        cursor.execute("SELECT adminrole_id FROM general WHERE guild_id = '{}'".format(ctx.guild.id))
+        cursor.execute(
+            "SELECT adminrole_id FROM general WHERE guild_id = '{}'".format(ctx.guild.id))
         result = cursor.fetchone()
         if result is None:
             return await check_guild_permissions(ctx, {'administrator': True})
@@ -80,11 +94,13 @@ def has_admin_role():
             return role in ctx.author.roles or await check_guild_permissions(ctx, {'administrator': True})
     return commands.check(predicate)
 
+
 def has_mod_role():
     async def predicate(ctx):
         db = sqlite3.connect('main.sqlite')
         cursor = db.cursor()
-        cursor.execute("SELECT modrole_id FROM general WHERE guild_id = '{}'".format(ctx.guild.id))
+        cursor.execute(
+            "SELECT modrole_id FROM general WHERE guild_id = '{}'".format(ctx.guild.id))
         result = cursor.fetchone()
         if result is None:
             return await check_guild_permissions(ctx, {'manage_messages': True})

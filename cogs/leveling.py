@@ -40,7 +40,8 @@ class Ranks(commands.Cog, name='Ranks'):
         role = discord.utils.get(ctx.guild.roles, name=rolename.content)
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}' and role_id = '{role.id}'")
+        cursor.execute(
+            f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}' and role_id = '{role.id}'")
         result = cursor.fetchone()
         if result is None:
             sql = "INSERT INTO ranks(guild_id, role_id, level) VALUES(?,?,?)"
@@ -68,10 +69,12 @@ class Ranks(commands.Cog, name='Ranks'):
         role = discord.utils.get(ctx.guild.roles, name=rolename.content)
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}' and role_id = '{role.id}'")
+        cursor.execute(
+            f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}' and role_id = '{role.id}'")
         result = cursor.fetchone()
         if result is not None:
-            cursor.execute("DELETE FROM ranks WHERE guild_id = '{}' and role_id = '{}'".format(ctx.guild.id, role.id))
+            cursor.execute("DELETE FROM ranks WHERE guild_id = '{}' and role_id = '{}'".format(
+                ctx.guild.id, role.id))
             main.commit()
             await ctx.send('Role removed.')
         else:
@@ -87,7 +90,8 @@ class Ranks(commands.Cog, name='Ranks'):
     async def _list(self, ctx):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}'")
+        cursor.execute(
+            f"SELECT role_id, level FROM ranks WHERE guild_id = '{ctx.guild.id}'")
         result = cursor.fetchall()
         ranks = ''
         for result in result:
@@ -104,7 +108,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
     async def ranking(self, message):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT role_id, level FROM ranks WHERE guild_id = '{message.guild.id}'")
+        cursor.execute(
+            f"SELECT role_id, level FROM ranks WHERE guild_id = '{message.guild.id}'")
         result = cursor.fetchall()
         cursor.execute(
             f"SELECT user_id, exp, level FROM glevel WHERE guild_id = '{message.guild.id}' and user_id = '{message.author.id}'")
@@ -122,7 +127,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
     async def on_member_join(self, member):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT enabled FROM glevel WHERE guild_id = '{member.guild.id}'")
+        cursor.execute(
+            f"SELECT enabled FROM glevel WHERE guild_id = '{member.guild.id}'")
         result = cursor.fetchone()
         if result is None:
             return
@@ -135,7 +141,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
                 val = (str(member.guild.id), str(member.id), 0, 0)
                 cursor.execute(sql, val)
                 sql = "INSERT INTO tlevel(guild_id, user_id, xp_time) VALUES(?,?,?)"
-                val = (str(member.guild.id), str(member.id), datetime.datetime.utcnow())
+                val = (str(member.guild.id), str(
+                    member.id), datetime.datetime.utcnow())
                 cursor.execute(sql, val)
                 main.commit()
             if result1 is not None:
@@ -152,7 +159,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
         else:
             main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
             cursor = main.cursor()
-            cursor.execute(f"SELECT enabled FROM glevel WHERE guild_id = '{message.guild.id}'")
+            cursor.execute(
+                f"SELECT enabled FROM glevel WHERE guild_id = '{message.guild.id}'")
             result = cursor.fetchone()
             if result is None:
                 return
@@ -165,7 +173,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
                     val = (str(message.guild.id), str(message.author.id), 0, 0)
                     cursor.execute(sql, val)
                     sql = "INSERT INTO tlevel(guild_id, user_id, xp_time) VALUES(?,?,?)"
-                    val = (str(message.guild.id), str(message.author.id), datetime.datetime.utcnow())
+                    val = (str(message.guild.id), str(
+                        message.author.id), datetime.datetime.utcnow())
                     cursor.execute(sql, val)
                     main.commit()
                     await TextLeveling(self).ranking(message)
@@ -175,14 +184,16 @@ class TextLeveling(commands.Cog, name='Leveling'):
                     result2 = cursor.fetchone()
                     datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
                     time_diff = datetime.datetime.strptime(str(datetime.datetime.utcnow()), datetimeFormat) \
-                                - datetime.datetime.strptime(str(result2[0]), datetimeFormat)
+                        - datetime.datetime.strptime(str(result2[0]), datetimeFormat)
                     if time_diff.seconds >= 60:
                         exp = int(result1[1])
                         sql = "UPDATE glevel SET exp = ? WHERE guild_id = ? and user_id = ?"
-                        val = (int(exp + random.randint(15, 26)), str(message.guild.id), str(message.author.id))
+                        val = (int(exp + random.randint(15, 26)),
+                               str(message.guild.id), str(message.author.id))
                         cursor.execute(sql, val)
                         sql = "UPDATE tlevel SET xp_time = ? WHERE guild_id = ? and user_id = ?"
-                        val = (datetime.datetime.utcnow(), str(message.guild.id), str(message.author.id))
+                        val = (datetime.datetime.utcnow(), str(
+                            message.guild.id), str(message.author.id))
                         cursor.execute(sql, val)
                         main.commit()
                         cursor.execute(
@@ -191,16 +202,19 @@ class TextLeveling(commands.Cog, name='Leveling'):
                         xp_start = int(result2[1])
                         lvl_start = int(result1[2])
 
-                        xp_end = math.floor(5 * (lvl_start ^ 2) + 50 * lvl_start + 100)
+                        xp_end = math.floor(
+                            5 * (lvl_start ^ 2) + 50 * lvl_start + 100)
                         if xp_end < xp_start:
                             await message.channel.send(
                                 f'{message.author.mention} has leveled up to level {lvl_start + 1}.')
                             sql = "UPDATE glevel SET level = ? WHERE guild_id = ? and user_id = ?"
-                            val = (int(lvl_start + 1), str(message.guild.id), str(message.author.id))
+                            val = (int(lvl_start + 1),
+                                   str(message.guild.id), str(message.author.id))
                             cursor.execute(sql, val)
                             main.commit()
                             sql1 = "UPDATE glevel SET exp = ? WHERE guild_id = ? and user_id = ?"
-                            val1 = (xp_start - xp_end, str(message.guild.id), str(message.author.id))
+                            val1 = (xp_start - xp_end,
+                                    str(message.guild.id), str(message.author.id))
                             cursor.execute(sql1, val1)
                             main.commit()
                             await TextLeveling(self).ranking(message)
@@ -222,7 +236,8 @@ class TextLeveling(commands.Cog, name='Leveling'):
                 f"SELECT exp, level FROM glevel WHERE guild_id = '{ctx.guild.id}' and user_id = '{ctx.message.author.id}'")
             result = cursor.fetchone()
             if result is None:
-                img = Image.open("Leveling/rank.png")  # Replace infoimgimg.png with your background image.
+                # Replace infoimgimg.png with your background image.
+                img = Image.open("Leveling/rank.png")
                 draw = ImageDraw.Draw(img)
                 font = ImageFont.truetype("Leveling/Quotable.otf",
                                           35)  # Make sure you insert a valid font from your folder.
@@ -237,13 +252,17 @@ class TextLeveling(commands.Cog, name='Leveling'):
 
                 draw.text((242, 100), "0", (255, 255, 255), font=font)
                 draw.text((242, 180), "0", (255, 255, 255), font=font)
-                draw.text((50, 220), f"{ctx.author.name}", (255, 255, 255), font=font1)
-                draw.text((50, 240), f"#{ctx.author.discriminator}", (255, 255, 255), font=font1)
-                img.save('Leveling/infoimg2.png')  # Change Leveling/infoimg2.png if needed.
+                draw.text((50, 220), f"{ctx.author.name}",
+                          (255, 255, 255), font=font1)
+                draw.text(
+                    (50, 240), f"#{ctx.author.discriminator}", (255, 255, 255), font=font1)
+                # Change Leveling/infoimg2.png if needed.
+                img.save('Leveling/infoimg2.png')
                 ffile = discord.File("Leveling/infoimg2.png")
                 await ctx.send(file=ffile)
             elif result is not None:
-                img = Image.open("Leveling/rank.png")  # Replace infoimgimg.png with your background image.
+                # Replace infoimgimg.png with your background image.
+                img = Image.open("Leveling/rank.png")
                 draw = ImageDraw.Draw(img)
                 font = ImageFont.truetype("Leveling/Quotable.otf",
                                           35)  # Make sure you insert a valid font from your folder.
@@ -256,11 +275,16 @@ class TextLeveling(commands.Cog, name='Leveling'):
                 icon = Image.open(BytesIO(image)).convert("RGBA")
                 img.paste(icon.resize((156, 156)), (50, 60))
 
-                draw.text((242, 100), f"{str(result[1])}", (255, 255, 255), font=font)
-                draw.text((242, 180), f"{str(result[0])}", (255, 255, 255), font=font)
-                draw.text((50, 220), f"{ctx.author.name}", (255, 255, 255), font=font1)
-                draw.text((50, 240), f"#{ctx.author.discriminator}", (255, 255, 255), font=font1)
-                img.save('Leveling/infoimg2.png')  # Change Leveling/infoimg2.png if needed.
+                draw.text(
+                    (242, 100), f"{str(result[1])}", (255, 255, 255), font=font)
+                draw.text(
+                    (242, 180), f"{str(result[0])}", (255, 255, 255), font=font)
+                draw.text((50, 220), f"{ctx.author.name}",
+                          (255, 255, 255), font=font1)
+                draw.text(
+                    (50, 240), f"#{ctx.author.discriminator}", (255, 255, 255), font=font1)
+                # Change Leveling/infoimg2.png if needed.
+                img.save('Leveling/infoimg2.png')
                 ffile = discord.File("Leveling/infoimg2.png")
                 await ctx.send(file=ffile)
             cursor.close()
@@ -268,10 +292,12 @@ class TextLeveling(commands.Cog, name='Leveling'):
         else:
             main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
             cursor = main.cursor()
-            cursor.execute(f"SELECT exp, level FROM glevel WHERE guild_id = '{ctx.guild.id}' and user_id = '{user.id}'")
+            cursor.execute(
+                f"SELECT exp, level FROM glevel WHERE guild_id = '{ctx.guild.id}' and user_id = '{user.id}'")
             result = cursor.fetchone()
             if result is None:
-                img = Image.open("Leveling/rank.png")  # Replace infoimgimg.png with your background image.
+                # Replace infoimgimg.png with your background image.
+                img = Image.open("Leveling/rank.png")
                 draw = ImageDraw.Draw(img)
                 font = ImageFont.truetype("Leveling/Quotable.otf",
                                           35)  # Make sure you insert a valid font from your folder.
@@ -286,13 +312,17 @@ class TextLeveling(commands.Cog, name='Leveling'):
 
                 draw.text((242, 100), "0", (255, 255, 255), font=font)
                 draw.text((242, 180), "0", (255, 255, 255), font=font)
-                draw.text((50, 220), f"{user.name}", (255, 255, 255), font=font1)
-                draw.text((50, 240), f"#{user.discriminator}", (255, 255, 255), font=font1)
-                img.save('Leveling/infoimg2.png')  # Change Leveling/infoimg2.png if needed.
+                draw.text((50, 220), f"{user.name}",
+                          (255, 255, 255), font=font1)
+                draw.text(
+                    (50, 240), f"#{user.discriminator}", (255, 255, 255), font=font1)
+                # Change Leveling/infoimg2.png if needed.
+                img.save('Leveling/infoimg2.png')
                 ffile = discord.File("Leveling/infoimg2.png")
                 await ctx.send(file=ffile)
             elif result is not None:
-                img = Image.open("Leveling/rank.png")  # Replace infoimgimg.png with your background image.
+                # Replace infoimgimg.png with your background image.
+                img = Image.open("Leveling/rank.png")
                 draw = ImageDraw.Draw(img)
                 font = ImageFont.truetype("Leveling/Quotable.otf",
                                           35)  # Make sure you insert a valid font from your folder.
@@ -305,11 +335,16 @@ class TextLeveling(commands.Cog, name='Leveling'):
                 icon = Image.open(BytesIO(image)).convert("RGBA")
                 img.paste(icon.resize((156, 156)), (50, 60))
 
-                draw.text((242, 100), f"{str(result[1])}", (255, 255, 255), font=font)
-                draw.text((242, 180), f"{str(result[0])}", (255, 255, 255), font=font)
-                draw.text((50, 220), f"{user.name}", (255, 255, 255), font=font1)
-                draw.text((50, 240), f"#{user.discriminator}", (255, 255, 255), font=font1)
-                img.save('Leveling/infoimg2.png')  # Change Leveling/infoimg2.png if needed.
+                draw.text(
+                    (242, 100), f"{str(result[1])}", (255, 255, 255), font=font)
+                draw.text(
+                    (242, 180), f"{str(result[0])}", (255, 255, 255), font=font)
+                draw.text((50, 220), f"{user.name}",
+                          (255, 255, 255), font=font1)
+                draw.text(
+                    (50, 240), f"#{user.discriminator}", (255, 255, 255), font=font1)
+                # Change Leveling/infoimg2.png if needed.
+                img.save('Leveling/infoimg2.png')
                 ffile = discord.File("Leveling/infoimg2.png")
                 await ctx.send(file=ffile)
             cursor.close()
@@ -356,7 +391,8 @@ class VoiceLeveling(commands.Cog):
     async def ranking(self, member, user):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT role_id, level FROM ranks WHERE guild_id = '{member.guild.id}'")
+        cursor.execute(
+            f"SELECT role_id, level FROM ranks WHERE guild_id = '{member.guild.id}'")
         result = cursor.fetchall()
         cursor.execute(
             f"SELECT user_id, exp, level FROM glevel WHERE guild_id = '{member.guild.id}' and user_id = '{user.id}'")
@@ -384,7 +420,8 @@ class VoiceLeveling(commands.Cog):
                 result = cursor.fetchone()
                 if result[0] is None or str(result[0]) == 'none':
                     sql = "UPDATE vlevel SET start_time = ? WHERE guild_id = ? and user_id = ?"
-                    val = (datetime.datetime.utcnow(), str(member.guild.id), str(user.id))
+                    val = (datetime.datetime.utcnow(), str(
+                        member.guild.id), str(user.id))
                     cursor.execute(sql, val)
                     main.commit()
                 else:
@@ -392,10 +429,12 @@ class VoiceLeveling(commands.Cog):
                         cursor.close()
                         main.close()
                         await VoiceLeveling(self).stop_time(member, before, after)
-                        main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
+                        main = sqlite3.connect(
+                            '/home/bot/python/Guren/Leveling/main.db')
                         cursor = main.cursor()
                         sql = "UPDATE vlevel SET start_time = ? WHERE guild_id = ? and user_id = ?"
-                        val = (datetime.datetime.utcnow(), str(member.guild.id), str(user.id))
+                        val = (datetime.datetime.utcnow(), str(
+                            member.guild.id), str(user.id))
                         cursor.execute(sql, val)
                         main.commit()
                     else:
@@ -430,7 +469,7 @@ class VoiceLeveling(commands.Cog):
                 result2 = cursor.fetchone()
                 datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
                 time_diff = datetime.datetime.strptime(str(datetime.datetime.utcnow()), datetimeFormat) \
-                            - datetime.datetime.strptime(str(result2[0]), datetimeFormat)
+                    - datetime.datetime.strptime(str(result2[0]), datetimeFormat)
                 xp = 0
                 minutes = int(time_diff.seconds) / 60
                 for i in range(round(minutes)):
@@ -449,11 +488,13 @@ class VoiceLeveling(commands.Cog):
                 xp_end = math.floor(5 * (lvl_start ^ 2) + 50 * lvl_start + 100)
                 if xp_end < xp_start:
                     sql = "UPDATE glevel SET level = ? WHERE guild_id = ? and user_id = ?"
-                    val = (int(lvl_start + 1), str(member.guild.id), str(user.id))
+                    val = (int(lvl_start + 1),
+                           str(member.guild.id), str(user.id))
                     cursor.execute(sql, val)
                     main.commit()
                     sql1 = "UPDATE glevel SET exp = ? WHERE guild_id = ? and user_id = ?"
-                    val1 = (xp_start - xp_end, str(member.guild.id), str(user.id))
+                    val1 = (xp_start - xp_end,
+                            str(member.guild.id), str(user.id))
                     cursor.execute(sql1, val1)
                     main.commit()
 
@@ -481,7 +522,8 @@ class VoiceLeveling(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         main = sqlite3.connect('/home/bot/python/Guren/Leveling/main.db')
         cursor = main.cursor()
-        cursor.execute(f"SELECT enabled FROM glevel WHERE guild_id = '{member.guild.id}'")
+        cursor.execute(
+            f"SELECT enabled FROM glevel WHERE guild_id = '{member.guild.id}'")
         result = cursor.fetchone()
         if result is None or str(result[0]).lower() == 'disabled':
             return
@@ -501,7 +543,8 @@ class VoiceLeveling(commands.Cog):
                     main.commit()
                     now = datetime.datetime.utcnow()
                     sql = "INSERT INTO vlevel(guild_id, user_id, join_time, channel_id) VALUES(?,?,?,?)"
-                    val = (str(member.guild.id), str(member.id), now, str(after.channel.id))
+                    val = (str(member.guild.id), str(
+                        member.id), now, str(after.channel.id))
                     cursor.execute(sql, val)
                     main.commit()
                     cursor.close()
@@ -514,7 +557,8 @@ class VoiceLeveling(commands.Cog):
                     if result is None:
                         now = datetime.datetime.utcnow()
                         sql = "INSERT INTO vlevel(guild_id, user_id, join_time, channel_id) VALUES(?,?,?,?)"
-                        val = (str(member.guild.id), str(member.id), now, str(after.channel.id))
+                        val = (str(member.guild.id), str(
+                            member.id), now, str(after.channel.id))
                         cursor.execute(sql, val)
                         main.commit()
                         cursor.close()
@@ -522,7 +566,8 @@ class VoiceLeveling(commands.Cog):
                     else:
                         now = datetime.datetime.utcnow()
                         sql = "UPDATE vlevel SET join_time = ? and channel_id = ? WHERE guild_id = ? and user_id = ?"
-                        val = (now, str(after.channel.id), str(member.guild.id), str(member.id))
+                        val = (now, str(after.channel.id), str(
+                            member.guild.id), str(member.id))
                         cursor.execute(sql, val)
                         main.commit()
                         cursor.close()

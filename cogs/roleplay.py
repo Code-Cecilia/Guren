@@ -26,7 +26,8 @@ class Roleplay(commands.Cog):
                               description="**{1}** gave a cookie to **{0}**! :cookie:".format(member.name,
                                                                                               ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -34,10 +35,13 @@ class Roleplay(commands.Cog):
         """Hugs someone."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Huggies!",
-                              description="**{1}** hugs **{0}**!".format(member.name, ctx.message.author.name),
+                              description="**{1}** hugs **{0}**!".format(
+                                  member.name, ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://media1.tenor.com/images/0be55a868e05bd369606f3684d95bf1e/tenor.gif?itemid=7939558")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://media1.tenor.com/images/0be55a868e05bd369606f3684d95bf1e/tenor.gif?itemid=7939558")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -47,8 +51,10 @@ class Roleplay(commands.Cog):
         embed = discord.Embed(title="Petpet!", description="**{1}** gave **{0}** a pat on the head!".format(member.name,
                                                                                                             ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://media.giphy.com/media/TA6Fq1irTioFO/giphy.gif")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://media.giphy.com/media/TA6Fq1irTioFO/giphy.gif")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -56,10 +62,13 @@ class Roleplay(commands.Cog):
         """Kisses someone."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Kisses!",
-                              description="**{1}** gave **{0}** a kiss!".format(member.name, ctx.message.author.name),
+                              description="**{1}** gave **{0}** a kiss!".format(
+                                  member.name, ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://cdn.discordapp.com/attachments/765604084057112579/813427435054956615/tenor.gif")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://cdn.discordapp.com/attachments/765604084057112579/813427435054956615/tenor.gif")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -69,8 +78,10 @@ class Roleplay(commands.Cog):
         embed = discord.Embed(title="O-O", description="**{1}** has bitten **{0}**'s hand!".format(member.name,
                                                                                                    ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://media.giphy.com/media/YW3obh7zZ4Rj2/giphy.gif")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://media.giphy.com/media/YW3obh7zZ4Rj2/giphy.gif")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -78,10 +89,13 @@ class Roleplay(commands.Cog):
         """Vore your friends."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Nom nom!",
-                              description="**{1}** ate **{0}**!".format(member.name, ctx.message.author.name),
+                              description="**{1}** ate **{0}**!".format(
+                                  member.name, ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://cdn.discordapp.com/emojis/588077285412962304.gif?v=1")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://cdn.discordapp.com/emojis/588077285412962304.gif?v=1")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -89,10 +103,13 @@ class Roleplay(commands.Cog):
         """Slap lordofpc."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Slapped!",
-                              description="**{1}** slapped **{0}**!".format(member.name, ctx.message.author.name),
+                              description="**{1}** slapped **{0}**!".format(
+                                  member.name, ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://media.giphy.com/media/Gf3AUz3eBNbTW/giphy.gif")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://media.giphy.com/media/Gf3AUz3eBNbTW/giphy.gif")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -100,10 +117,13 @@ class Roleplay(commands.Cog):
         """Rubs someone."""
         member = ctx.author if not member else member
         embed = discord.Embed(title="Rubrub!",
-                              description="**{1}** rubbed **{0}**!".format(member.name, ctx.message.author.name),
+                              description="**{1}** rubbed **{0}**!".format(
+                                  member.name, ctx.message.author.name),
                               color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_image(url="https://media1.tenor.com/images/7e88f0b6abbd8d695ce253f37a8291d7/tenor.gif?itemid=5026974")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_image(
+            url="https://media1.tenor.com/images/7e88f0b6abbd8d695ce253f37a8291d7/tenor.gif?itemid=5026974")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -119,7 +139,8 @@ class Roleplay(commands.Cog):
                               timestamp=datetime.datetime.utcnow())
         embed.set_image(
             url="https://cdn.discordapp.com/attachments/716649261449740329/852646200645517352/c4f0d6c08257f3a75725a7583894b1b8.gif")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 

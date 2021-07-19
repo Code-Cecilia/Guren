@@ -37,7 +37,8 @@ class HelpCog(commands.Cog, name="help command"):
                 embed = discord.Embed(title=f"{commandName2.name.upper()} Command", description="",
                                       color=randint(0, 0xffffff))
                 embed.set_thumbnail(url=f'{self.bot.user.avatar_url}')
-                embed.add_field(name=f"Name", value=f"{commandName2.name}", inline=False)
+                embed.add_field(
+                    name=f"Name", value=f"{commandName2.name}", inline=False)
                 aliases = commandName2.aliases
                 aliasList = ""
                 if len(aliases) > 0:
@@ -46,7 +47,8 @@ class HelpCog(commands.Cog, name="help command"):
                     aliasList = aliasList[:-2]
                     embed.add_field(name=f"Aliases", value=aliasList)
                 else:
-                    embed.add_field(name=f"Aliases", value="None", inline=False)
+                    embed.add_field(name=f"Aliases",
+                                    value="None", inline=False)
 
                 if commandName2.usage is None:
                     embed.add_field(name=f"Usage", value=f"None", inline=False)
@@ -54,7 +56,8 @@ class HelpCog(commands.Cog, name="help command"):
                     embed.add_field(name=f"Usage",
                                     value=f"{self.bot.command_prefix}{commandName2.name} {commandName2.usage}",
                                     inline=False)
-                embed.add_field(name=f"Description", value=f"{commandName2.description}", inline=False)
+                embed.add_field(
+                    name=f"Description", value=f"{commandName2.description}", inline=False)
                 await ctx.channel.send(embed=embed)
         else:
             embed = discord.Embed(title=f"Help page",

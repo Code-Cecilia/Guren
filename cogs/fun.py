@@ -17,7 +17,8 @@ class Fun(commands.Cog):
     async def Say(self, ctx, *, message):
         """I say something"""
         await ctx.message.delete()
-        embed = discord.Embed(color=ctx.author.color, timestamp=ctx.message.created_at)
+        embed = discord.Embed(color=ctx.author.color,
+                              timestamp=ctx.message.created_at)
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(name=f"{ctx.message.author} said:", value=str(message))

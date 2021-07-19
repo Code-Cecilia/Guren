@@ -24,9 +24,12 @@ class Help(commands.Cog):
                                      timestamp=datetime.datetime.utcnow(), color=ctx.author.color)
                 cogs_desc = ''
                 for x in self.bot.cogs:
-                    cogs_desc += ('{} - {}'.format(x, self.bot.cogs[x].__doc__) + '\n')
-                halp.add_field(name='Available categories:', value=cogs_desc[0:len(cogs_desc) - 1], inline=False)
-                halp.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+                    cogs_desc += ('{} - {}'.format(x,
+                                  self.bot.cogs[x].__doc__) + '\n')
+                halp.add_field(name='Available categories:',
+                               value=cogs_desc[0:len(cogs_desc) - 1], inline=False)
+                halp.set_footer(
+                    text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
                 halp.set_thumbnail(url=self.bot.user.avatar_url)
                 cmds_desc = ''
                 for y in self.bot.walk_commands():
@@ -39,7 +42,8 @@ class Help(commands.Cog):
                 if len(cog) > 1:
                     halp = discord.Embed(title='Error!', description='That is way too many cogs!',
                                          color=ctx.author.color())
-                    halp.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+                    halp.set_footer(
+                        text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
                     halp.set_thumbnail(url=self.bot.user.avatar_url)
                     await ctx.message.channel.send('', embed=halp)
                 else:
@@ -52,16 +56,19 @@ class Help(commands.Cog):
                                                      description=self.bot.cogs[cog[0]].__doc__, color=ctx.author.color)
                                 for c in self.bot.get_cog(y).get_commands():
                                     if not c.hidden:
-                                        halp.add_field(name=c.name, value=c.help, inline=False)
+                                        halp.add_field(
+                                            name=c.name, value=c.help, inline=False)
                                         halp.set_footer(text=f"Requested by {ctx.author}",
                                                         icon_url=ctx.author.avatar_url)
-                                        halp.set_thumbnail(url=self.bot.user.avatar_url)
+                                        halp.set_thumbnail(
+                                            url=self.bot.user.avatar_url)
                                 found = True
                     if not found:
                         """Reminds you if that cog doesn't exist."""
                         halp = discord.Embed(title='Error!', description='How do you even use "' + cog[0] + '"?',
                                              color=ctx.author.color)
-                        halp.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+                        halp.set_footer(
+                            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
                         halp.set_thumbnail(url=self.bot.user.avatar_url)
                     else:
                         await ctx.message.add_reaction(emoji='✅')

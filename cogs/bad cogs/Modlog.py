@@ -24,7 +24,8 @@ class Modlog(commands.Cog):
     async def modlog(self, ctx, channel: discord.TextChannel):
         guild_ID = ctx.guild.id
         data = utils.json_loader.read_json("server_config")
-        data[str(guild_ID)] = {"mod-logID": None, "name": None, "guildID": ctx.guild.id}
+        data[str(guild_ID)] = {"mod-logID": None,
+                               "name": None, "guildID": ctx.guild.id}
         if [str(ctx.guild.id)] not in data:
             utils.json_loader.write_json(data, "server_config")
             data[str(ctx.guild.id)]["mod-logID"] = channel.id
@@ -34,7 +35,7 @@ class Modlog(commands.Cog):
             await ctx.send("Mod logs channel id stored successfully")
         else:
             await ctx.send("Mod logs were already set!")
-            return;
+            return
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
@@ -57,7 +58,8 @@ class Modlog(commands.Cog):
         embed = discord.Embed(title=f"Member {member} left from the server.", color=member.color,
                               timestamp=datetime.datetime.utcnow(),
                               description=f"**Their account was created at:** {member.created_at}")
-        embed.add_field(name="Their roles:", value=" ".join([role.mention for role in roles]))
+        embed.add_field(name="Their roles:", value=" ".join(
+            [role.mention for role in roles]))
         embed.set_footer(text=f"UUID: {member.id}")
         embed.set_thumbnail(url=member.avatar_url)
         await modlogs.send(embed=embed)
@@ -66,7 +68,8 @@ class Modlog(commands.Cog):
     async def on_message_edit(self, after, before):
         guild_ID = after.guild.id
         data = utils.json_loader.read_json("server_config")
-        modlogs = self.bot.get_channel(data[str(guild_ID)]["guild_ID"]["mod-logID"])
+        modlogs = self.bot.get_channel(
+            data[str(guild_ID)]["guild_ID"]["mod-logID"])
         if not after.author.bot:
             if before.content != after.content:
                 embed = discord.Embed(title=f"Message Edited by {after.author}", color=after.author.color,
@@ -75,7 +78,8 @@ class Modlog(commands.Cog):
                 fields = [("Before", before.content, False)]
                 embed.set_thumbnail(url=f"{after.author.avatar_url}")
                 embed.set_footer(text=f"UUID: {after.id}")
-                embed.add_field(name="After", value=after.content, inline=False)
+                embed.add_field(
+                    name="After", value=after.content, inline=False)
                 for name, value, inline in fields:
                     embed.add_field(name=name, value=value, inline=inline)
                 await modlogs.send(embed=embed)
@@ -129,9 +133,11 @@ class Modlog(commands.Cog):
         member = user
         guild_ID = member.guild.id
         modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
-        embed = discord.Embed(title="**Member Banned**", color=member.color, timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(title="**Member Banned**",
+                              color=member.color, timestamp=datetime.datetime.utcnow())
         embed.set_thumbnail(url=f"{member.avatar_url}")
-        embed.add_field(name=f"{member} was banned from the server", value=f"**Moderator**: {message.author}")
+        embed.add_field(name=f"{member} was banned from the server",
+                        value=f"**Moderator**: {message.author}")
         embed.set_footer(text=f"UUID: {member.id}")
         await modlogs.send(embed=embed)
 
@@ -142,9 +148,11 @@ class Modlog(commands.Cog):
         member = user
         guild_ID = guild.id
         modlogs = self.bot.get_channel(data[str(guild_ID)]["mod-logID"])
-        embed = discord.Embed(title="**Member Unbanned**", color=member.color, timestamp=datetime.datetime.utcnow())
+        embed = discord.Embed(title="**Member Unbanned**",
+                              color=member.color, timestamp=datetime.datetime.utcnow())
         embed.set_thumbnail(url=f"{member.avatar_url}")
-        embed.add_field(name=f"{member} was unbanned from the server", value=f"**Moderator**: {message.author}")
+        embed.add_field(name=f"{member} was unbanned from the server",
+                        value=f"**Moderator**: {message.author}")
         embed.set_footer(text=f"UUID: {member.id}")
         await modlogs.send(embed=embed)
 

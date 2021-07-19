@@ -56,13 +56,15 @@ class Levels(commands.Cog):
         self.users[author_id]['exp'] += 1
 
         if self.lvl_up(author_id):
-            embed = discord.Embed(color=message.author.color, timestamp=message.created_at)
+            embed = discord.Embed(color=message.author.color,
+                                  timestamp=message.created_at)
 
             embed.set_thumbnail(url=message.author.avatar_url)
             embed.set_author(name=f"LEVELUP",
                              icon_url="https://cdn.discordapp.com/attachments/717128065653932053/718842463250284605/ezgif.com-resize_1.gif")
 
-            embed.add_field(name=f"{message.author} ranked up to", value=f"Level: `{self.users[author_id]['level']}`")
+            embed.add_field(name=f"{message.author} ranked up to",
+                            value=f"Level: `{self.users[author_id]['level']}`")
 
             embed.set_footer(text=f"Leveling system by Guren Ichinose#6762",
                              icon_url="https://cdn.discordapp.com/avatars/669973381067571240/350b378596401f453fb4d5bd3411a682.webp?size=1024")
@@ -77,11 +79,13 @@ class Levels(commands.Cog):
         if not member_id in self.users:
             await ctx.send("Member doesn't have a level")
         else:
-            embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
+            embed = discord.Embed(color=member.color,
+                                  timestamp=ctx.message.created_at)
 
             embed.set_author(name=f"{member.name}'s status ")
             embed.set_thumbnail(url=ctx.author.avatar_url)
-            embed.add_field(name="Level:", value=self.users[member_id]['level'])
+            embed.add_field(
+                name="Level:", value=self.users[member_id]['level'])
             embed.add_field(name="Xp:", value=self.users[member_id]['exp'])
             embed.add_field(name="Rank:", value="Feature coming soon.")
             embed.set_footer(text=f"Leveling system by Guren Ichinose#6762",
@@ -93,8 +97,10 @@ class Levels(commands.Cog):
     @commands.is_owner()
     async def leaderboard(self, ctx):
         """Displays the top 5 users"""
-        leaderboard = sorted(self.users, key=lambda x: self.users[x]["exp"], reverse=True)[:5]
-        level = sorted(self.users, key=lambda x: self.users[x]["level"], reverse=True)[:5]
+        leaderboard = sorted(
+            self.users, key=lambda x: self.users[x]["exp"], reverse=True)[:5]
+        level = sorted(
+            self.users, key=lambda x: self.users[x]["level"], reverse=True)[:5]
         await ctx.send(f"\n".join(leaderboard))
         await ctx.send(f"\n".join(level))
 

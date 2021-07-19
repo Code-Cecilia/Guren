@@ -8,6 +8,7 @@ def get_path():
     cwd = str(cwd)
     return cwd
 
+
 def read_json(filename):
     cwd = get_path()
     with open(cwd + "/bot_config/" + filename + ".json", "r") as file:

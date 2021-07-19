@@ -9,7 +9,8 @@ __all__ = ('Session', 'Paginator', 'button', 'inverse_button',)
 
 
 class Button:
-    __slots__ = ('_callback', '_inverse_callback', 'emoji', 'position', 'try_remove')
+    __slots__ = ('_callback', '_inverse_callback',
+                 'emoji', 'position', 'try_remove')
 
     def __init__(self, **kwargs):
         self._callback = kwargs.get('callback')
@@ -102,8 +103,10 @@ class Session:
 
     async def _session_loop(self, ctx):
         while True:
-            _add = asyncio.ensure_future(ctx.bot.wait_for('raw_reaction_add', check=lambda _: self.check(_)(ctx)))
-            _remove = asyncio.ensure_future(ctx.bot.wait_for('raw_reaction_remove', check=lambda _: self.check(_)(ctx)))
+            _add = asyncio.ensure_future(ctx.bot.wait_for(
+                'raw_reaction_add', check=lambda _: self.check(_)(ctx)))
+            _remove = asyncio.ensure_future(ctx.bot.wait_for(
+                'raw_reaction_remove', check=lambda _: self.check(_)(ctx)))
 
             done, pending = await asyncio.wait(
                 (_add, _remove),
@@ -234,7 +237,8 @@ class Paginator(Session):
                           (2, '⏹'): Button(emoji='⏹', position=2, callback=partial(self._default_indexer, 'stop')),
                           (3, '▶'): Button(emoji='▶', position=3, callback=partial(self._default_indexer, +1)),
                           (4, '⏭'): Button(emoji='⏭', position=4, callback=partial(self._default_indexer, 'end'))}
-        self._default_stop = {(0, '⏹'): Button(emoji='⏹', position=0, callback=partial(self._default_indexer, 'stop'))}
+        self._default_stop = {(0, '⏹'): Button(
+            emoji='⏹', position=0, callback=partial(self._default_indexer, 'stop'))}
 
         self.buttons = {}
 
@@ -272,13 +276,15 @@ class Paginator(Session):
         """Start our Paginator session."""
         if not self.use_defaults:
             if not self._buttons:
-                raise AttributeError('Session has no buttons.')  # Raise a custom exception at some point.
+                # Raise a custom exception at some point.
+                raise AttributeError('Session has no buttons.')
 
         await self._paginate(ctx)
 
     async def _paginate(self, ctx: commands.Context):
         if not self.entries and not self.extra_pages:
-            raise AttributeError('You must provide atleast one entry or page for pagination.')  # ^^
+            raise AttributeError(
+                'You must provide atleast one entry or page for pagination.')  # ^^
 
         if self.entries:
             self.entries = [self.formatting(entry) for entry in self.entries]
@@ -290,7 +296,8 @@ class Paginator(Session):
             if not self.use_embed:
                 self._pages.append(self.joiner.join(chunk))
             else:
-                embed = discord.Embed(title=self.title, description=self.joiner.join(chunk), colour=self.colour)
+                embed = discord.Embed(
+                    title=self.title, description=self.joiner.join(chunk), colour=self.colour)
 
                 if self.thumbnail:
                     embed.set_thumbnail(url=self.thumbnail)
@@ -371,7 +378,8 @@ def button(emoji: str, *, try_remove=True, position: int = 666):
 
             return func
 
-        func.__button__ = Button(emoji=emoji, callback=func, position=position, try_remove=try_remove)
+        func.__button__ = Button(
+            emoji=emoji, callback=func, position=position, try_remove=try_remove)
         return func
 
     return deco
@@ -406,7 +414,8 @@ def inverse_button(emoji: str = None, *, try_remove=False, position: int = 666):
 
             return func
 
-        func.__button__ = Button(emoji=emoji, inverse_callback=func, position=position, try_remove=try_remove)
+        func.__button__ = Button(
+            emoji=emoji, inverse_callback=func, position=position, try_remove=try_remove)
         return func
 
     return deco
