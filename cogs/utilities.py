@@ -101,7 +101,11 @@ class Utilities(commands.Cog):
         embed.add_field(name="Support Server",
                         value=f"[I live here.](https://discord.gg/8wCez2n)")
         embed.add_field(
-            name="Sibling", value=f"[BotMan](https://discord.com/api/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)")
+            name="Sibling",
+            value=f"[BotMan](https://discord.com/api/oauth2/authorize?client_id=845225811152732179&permissions"
+                  f"=4294836215&scope=bot)")
+        embed.add_field(name='Invite me!', value=f"[Link to invite](https://discord.com/oauth2/authorize"
+                                                 f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)")
         embed.set_footer(
             text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
 
