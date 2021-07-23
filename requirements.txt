@@ -125,7 +125,7 @@ termcolor==1.1.0
 timeago==1.0.15
 toml==0.10.2
 tqdm==4.61.2
-Twisted==18.9.0
+Twisted==20.3.0
 typing==3.7.4.3
 typing-extensions==3.10.0.0
 typing-inspect==0.7.1
