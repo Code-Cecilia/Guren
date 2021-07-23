@@ -9,9 +9,20 @@ import re
 import typing
 import wavelink
 from discord.ext import commands, menus
+import spotdl
+from spotdl.download.downloader import DownloadManager
+from spotdl.search.spotifyClient import SpotifyClient
+import spotdl.search.songGatherer as songGatherer
+import numpy as np
+
+SpotifyClient.init(
+        client_id="0e745d82093341f684d5127bdc3c842e",
+        client_secret="b8189a5445514fdfbed7cf8f23336356",
+        user_auth=False,
+    )
+
 
 URL_REG = re.compile(r'https?://(?:www\.)?.+')
-
 
 class NoChannelProvided(commands.CommandError):
     """Error raised when no suitable voice channel was supplied."""
@@ -319,12 +330,12 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {'MAIN': {'host': '0.0.0.0',
-                          'port': 2333,
-                          'rest_uri': 'http://0.0.0.0:2333',
-                          'password': 'bot1',
+        nodes = {'MAIN': {'host': 'lavalink-auraserver.herokuapp.com',
+                          'port': 80,
+                          'rest_uri': 'http://lavalink-auraserver.herokuapp.com:80',
+                          'password': 'youshallnotpass',
                           'identifier': 'MAIN',
-                          'region': 'us_central'
+                          'region': 'eu_central'
                           }}
 
         for n in nodes.values():
@@ -463,8 +474,13 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         query = query.strip('<>')
         if not URL_REG.match(query):
             query = f'ytsearch:{query}'
-
         tracks = await self.bot.wavelink.get_tracks(query)
+        if not tracks:
+            songList = songGatherer.from_query(query, "mp3")
+            link = songList[0].get_youtube_link()
+            query = f'ytsearch:{link}'
+        tracks = await self.bot.wavelink.get_tracks(query)
+
         if not tracks:
             return await ctx.send('No songs were found with that query. Please try again.', delete_after=15)
 
