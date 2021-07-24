@@ -124,3 +124,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 cogs/bad cogs/reactions.py.txt
+.vscode/settings.json
+cogs/music.py
+bot_config/time.json
+bot_config/secrets.json
+.gitignore
+bot_config/
+Leveling/main.db
