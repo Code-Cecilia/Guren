@@ -16,7 +16,8 @@ class Eval(commands.Cog):
         rub = "rub"
 
         data = utils.json_loader.read_json("gifs")
-        data[str(kiss, hug, pet, rub)] = {"kiss": None, "hug": None, "pet": None, "rub": None}
+        data[str(kiss, hug, pet, rub)] = {
+            "kiss": None, "hug": None, "pet": None, "rub": None}
         utils.json_loader.write_json(data, "gifs")
         data = utils.json_loader.read_json("gifs")
 

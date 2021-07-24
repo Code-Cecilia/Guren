@@ -27,7 +27,8 @@ class MemberID(commands.Converter):
             try:
                 return int(argument, base=10)
             except ValueError:
-                raise commands.BadArgument(f"{argument} is not a valid member or member ID.") from None
+                raise commands.BadArgument(
+                    f"{argument} is not a valid member or member ID.") from None
         else:
             return m.id
 
@@ -38,12 +39,14 @@ class ActionReason(commands.Converter):
 
         if len(ret) > 512:
             reason_max = 512 - len(ret) - len(argument)
-            raise commands.BadArgument(f'reason is too long ({len(argument)}/{reason_max})')
+            raise commands.BadArgument(
+                f'reason is too long ({len(argument)}/{reason_max})')
         return ret
-    
+
 
 class Moderation(commands.Cog):
     """Various Moderation Commands."""
+
     def __init__(self, bot):
         self.bot = bot
         self.mute_task = self.check_current_mutes.start()
@@ -59,8 +62,9 @@ class Moderation(commands.Cog):
         for key, value in mutes.items():
             if value['muteDuration'] is None:
                 continue
-        
-            unmuteTime = value['mutedAt'] + relativedelta(seconds=value['muteDuration'])
+
+            unmuteTime = value['mutedAt'] + \
+                relativedelta(seconds=value['muteDuration'])
 
             if currentTime >= unmuteTime:
                 guild = self.bot.get_guild(value['guildId'])
@@ -76,7 +80,7 @@ class Moderation(commands.Cog):
                     self.bot.muted_users.pop(member.id)
                 except KeyError:
                     pass
-    
+
     @check_current_mutes.before_loop
     async def before_check_current_mutes(self):
         await self.bot.wait_until_ready()
@@ -129,12 +133,14 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, member: discord.Member, *, reason="No reason"):
         try:
             await member.kick(reason=reason)
-        except discord.Forbidden:    
+        except discord.Forbidden:
             await ctx.send(f"It looks like i dont have the permission `KICK_MEMBERS` to do this. Please check my permissions and try running the command again.")
         else:
-            embed = discord.Embed(title=f"`{ctx.author}` kicked {member}", colour=member.color, timestamp=datetime.datetime.utcnow())
+            embed = discord.Embed(title=f"`{ctx.author}` kicked {member}",
+                                  colour=member.color, timestamp=datetime.datetime.utcnow())
             embed.add_field(name="● Details:", value=f" - Reason: {reason}")
-            embed.set_footer(icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
+            embed.set_footer(
+                icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.top_role.name} ")
             await ctx.send(embed=embed)
 
     @commands.command(name='mute', description='Mutes the person mentioned. Time period is optional.')
@@ -144,13 +150,15 @@ class Moderation(commands.Cog):
         with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         mute_role_id = data.get('mute_role')
-        mute_role = get(ctx.guild.roles, id=int(mute_role_id))  # get the actual mute role from the role's ID
+        # get the actual mute role from the role's ID
+        mute_role = get(ctx.guild.roles, id=int(mute_role_id))
         await user.add_roles(mute_role)  # add the mute role
 
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
             await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
-            await asyncio.sleep(time_calc.get_time(time_period))  # sleep for specified time, then remove the muted role
+            # sleep for specified time, then remove the muted role
+            await asyncio.sleep(time_calc.get_time(time_period))
             await user.remove_roles(mute_role)
             await ctx.send(f'{user.display_name} has been unmuted.')
         else:
@@ -183,7 +191,9 @@ class Moderation(commands.Cog):
         if not os.path.exists(f'bot_config/mute_files/guild{ctx.guild.id}.json'):
             with open(f'bot_config/mute_files/guild{ctx.guild.id}.json') as createFile:
                 json.dump({}, createFile)
-                print(f'Created file guild{ctx.guild.id}.json in bot_config/mute_files...')  # create file if not present
+                # create file if not present
+                print(
+                    f'Created file guild{ctx.guild.id}.json in bot_config/mute_files...')
 
         with open(f'bot_config/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)
@@ -218,7 +228,9 @@ class Moderation(commands.Cog):
         if not os.path.exists(f'bot_config/guild{ctx.guild.id}.json'):
             with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile)
-                print(f'Created file guild{ctx.guild.id}.json in bot_config...')  # create file if not present
+                # create file if not present
+                print(
+                    f'Created file guild{ctx.guild.id}.json in bot_config...')
 
         with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -256,7 +268,6 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f"{amount} messages deleted.")
 
-
     @commands.command()
     @commands.guild_only()
     @permissions.has_permissions(ban_members=True)
@@ -264,7 +275,7 @@ class Moderation(commands.Cog):
         """warns an user. ID, Mention or name."""
         if member.id in [ctx.author.id, self.bot.user.id]:
             return await ctx.send("You cannot warn yourself or the bot!")
-        
+
         current_warn_count = len(
             await self.bot.warns.find_many_by_custom(
                 {
@@ -273,12 +284,14 @@ class Moderation(commands.Cog):
                 }
             )
         ) + 1
-        
-        warn_filter = {"user_id": member.id, "guild_id": member.guild.id, "number": current_warn_count}
-        warn_data = {"reason": reason, "timestamp": ctx.message.created_at, "warned_by": ctx.author.id}
-        
+
+        warn_filter = {"user_id": member.id,
+                       "guild_id": member.guild.id, "number": current_warn_count}
+        warn_data = {"reason": reason,
+                     "timestamp": ctx.message.created_at, "warned_by": ctx.author.id}
+
         await self.bot.warns.upsert_custom(warn_filter, warn_data)
-        
+
         embed = discord.Embed(
             title="You are being warned:",
             description=f"__**Reason**__:\n{reason}",
@@ -287,13 +300,13 @@ class Moderation(commands.Cog):
         )
         embed.set_author(name=ctx.guild.name, icon_url=ctx.guild.icon_url)
         embed.set_footer(text=f"Warn: {current_warn_count}")
-        
+
         try:
             await member.send(embed=embed)
             await ctx.send("Warned that user in dm's")
         except discord.HTTPException:
             await ctx.send(member.mention, embed=embed)
-            
+
     @commands.command()
     @commands.guild_only()
     @permissions.has_permissions(ban_members=True)
@@ -301,12 +314,12 @@ class Moderation(commands.Cog):
         """Shows all warnings for a specified user. ID, Mention or Name"""
         warn_filter = {"user_id": member.id, "guild_id": member.guild.id}
         warns = await self.bot.warns.find_many_by_custom(warn_filter)
-        
+
         if not bool(warns):
             return await ctx.send(f"Couldn't find any warns for: `{member.display_name}`")
-        
+
         warns = sorted(warns, key=lambda x: x["number"])
-        
+
         pages = []
         for warn in warns:
             description = f"""
@@ -316,13 +329,14 @@ class Moderation(commands.Cog):
             Warn Number: {warn['timestamp'].strftime("%I:%M %p %B %d, %Y")}
             """
             pages.append(description)
-        
+
         await Pag(
             title=f"Warns for `{member.display_name}`",
             colour=0xCE2029,
             entries=pages,
             length=1
         ).start(ctx)
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

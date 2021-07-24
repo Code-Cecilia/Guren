@@ -1,4 +1,4 @@
-  
+
 def get_time(time):
     if time is not None:
         if time[-1] == 'h':

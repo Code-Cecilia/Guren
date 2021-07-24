@@ -41,7 +41,8 @@ class Reactions(commands.Cog, name="ReactionRoles"):
 
         desc = ""
         reaction_roles = await self.bot.reaction_roles.get_all()
-        reaction_roles = list(filter(lambda r: r['guild_id'] == guild_id, reaction_roles))
+        reaction_roles = list(
+            filter(lambda r: r['guild_id'] == guild_id, reaction_roles))
         for item in reaction_roles:
             role = guild.get_role(item["role"])
             desc += f"{item['_id']}: {role.mention}\n"
@@ -65,7 +66,7 @@ class Reactions(commands.Cog, name="ReactionRoles"):
 
     @reactionroles.command(name="channel")
     @commands.guild_only()
-    #@commands.has_guild_permissions(manage_channels=True)
+    # @commands.has_guild_permissions(manage_channels=True)
     async def rr_channel(self, ctx, channel: discord.TextChannel = None):
         """Set the reaction roles channel."""
         if channel is None:
@@ -82,7 +83,8 @@ class Reactions(commands.Cog, name="ReactionRoles"):
 
         desc = ""
         reaction_roles = await self.bot.reaction_roles.get_all()
-        reaction_roles = list(filter(lambda r: r['guild_id'] == ctx.guild.id, reaction_roles))
+        reaction_roles = list(
+            filter(lambda r: r['guild_id'] == ctx.guild.id, reaction_roles))
         for item in reaction_roles:
             role = ctx.guild.get_role(item["role"])
             desc += f"{item['_id']}: {role.mention}\n"
@@ -104,7 +106,7 @@ class Reactions(commands.Cog, name="ReactionRoles"):
 
     @reactionroles.command(name="toggle")
     @commands.guild_only()
-    #@commands.has_guild_permissions(administrator=True)
+    # @commands.has_guild_permissions(administrator=True)
     @is_setup()
     async def rr_toggle(self, ctx):
         """Toggle reaction roles for this guild."""

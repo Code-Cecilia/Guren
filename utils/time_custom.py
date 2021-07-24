@@ -1,5 +1,6 @@
 import datetime
 
+
 def pretty_time(time, time_offset):
     if time.hour > 12:
         am_pm = 'PM'

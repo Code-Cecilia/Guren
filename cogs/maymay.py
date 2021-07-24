@@ -34,8 +34,10 @@ class Maymay(commands.Cog):
         for i in range(0, post_to_pick):
             submission = next(x for x in memes_submissions if not x.stickied)
 
-        embed = discord.Embed(color=member.color, timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed = discord.Embed(color=member.color,
+                              timestamp=datetime.datetime.utcnow())
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_image(url=f"{submission.url}")
 
         await ctx.send(embed=embed)
@@ -56,7 +58,8 @@ class Maymay(commands.Cog):
         embed = discord.Embed(title="pp size machine", color=member.color,
                               description=f'{question} pp size:\n{random.choice(responses)}',
                               timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(
@@ -79,7 +82,8 @@ class Maymay(commands.Cog):
         embed = discord.Embed(color=member.color,
                               description=f'Question: {question}\nAnswer: {random.choice(responses)}',
                               timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(
@@ -100,7 +104,8 @@ class Maymay(commands.Cog):
         ]
         embed = discord.Embed(color=member.color, description=f'{question} is {random.choice(responses)} gay',
                               timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(
@@ -121,14 +126,15 @@ class Maymay(commands.Cog):
         ]
         embed = discord.Embed(color=member.color, description=f'{question} is {random.choice(responses)} simp',
                               timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(
         name='nocontext',
         aliases=['nc'],
         description="no comments"
-        )
+    )
     async def NoContext(self, ctx):
         subreddit = reddit.subreddit("nocontext")
         x = subreddit.top(limit=20)

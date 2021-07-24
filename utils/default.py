@@ -20,7 +20,8 @@ def get(file):
 
 def traceback_maker(err, advance: bool = True):
     _traceback = ''.join(traceback.format_tb(err.__traceback__))
-    error = ('```py\n{1}{0}: {2}\n```').format(type(err).__name__, _traceback, err)
+    error = ('```py\n{1}{0}: {2}\n```').format(
+        type(err).__name__, _traceback, err)
     return error if advance else f"{type(err).__name__}: {err}"
 
 
@@ -58,7 +59,8 @@ async def prettyResults(ctx, filename: str = "Results", resultmsg: str = "Here's
     if not loop:
         return await ctx.send("The result was empty...")
 
-    pretty = "\r\n".join([f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)])
+    pretty = "\r\n".join(
+        [f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)])
 
     if len(loop) < 15:
         return await ctx.send(f"{resultmsg}```ini\n{pretty}```")

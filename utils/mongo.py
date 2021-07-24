@@ -73,12 +73,12 @@ class Document:
             raise TypeError("Expected Dictionary.")
 
         return await self.db.find_one(filter)
-    
+
     async def find_many_by_custom(self, filter):
         """Find all matching filter"""
         if not isinstance(filter, collections.abc.Mapping):
             raise TypeError("Expected Dictionary.")
-        
+
         return await self.db.find(filter).to_list(None)
 
     async def delete_by_id(self, id):
@@ -152,10 +152,10 @@ class Document:
         id = dict["_id"]
         dict.pop("_id")
         await self.db.update_one({"_id": id}, {f"${option}": dict}, *args, **kwargs)
-        
+
     async def upsert_custom(self, filter_data, update_data, option="set", *args, **kwargs):
         await self.update_by_custom(filter_data, update_data, option, upsert=True, *args, **kwargs)
-        
+
     async def update_by_custom(self, filter_data, update_data, option="set", *args, **kwargs):
         """Update the db with a custom filter, not just id"""
         if not isinstance(filter_data, collections.abc.Mapping) or not isinstance(update_data, collections.abc.Mapping):
@@ -164,10 +164,10 @@ class Document:
         if not bool(await self.find_by_custom(filter_data)):
             # Insert
             return await self.insert({**filter_data, **update_data})
-        
+
         # Update
         await self.db.update_one(filter_data, {f"${option}": update_data}, *args, **kwargs)
-        
+
     async def unset(self, dict):
         """
         For when you want to remove a field from

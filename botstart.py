@@ -41,14 +41,17 @@ async def get_prefix(bot, message):
     except:
         return commands.when_mentioned_or("g$")(bot, message)
 
+
 class NewHelpName(commands.MinimalHelpCommand):
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
-            embed = discord.Embed(description=page, color=discord.Color.random())
+            embed = discord.Embed(
+                description=page, color=discord.Color.random())
             embed.set_thumbnail(url=bot.user.avatar_url)
             embed.set_footer(text='')
             await destination.send(embed=embed)
+
 
 secret_file = utils.json_loader.read_json('secrets')
 intents = discord.Intents.all()
@@ -58,7 +61,7 @@ bot = commands.Bot(
     owner_id=219410026631135232,
     case_insensitive=True,
     intents=discord.Intents.all(),
-    help_command = NewHelpName()
+    help_command=NewHelpName()
 )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 
@@ -202,7 +205,8 @@ async def on_message(message):
 async def chng_pr():
     await bot.wait_until_ready()
 
-    statuses = ["g$help", "with Yuichiro!", "with epic lines of code", "getting fancy"]
+    statuses = ["g$help", "with Yuichiro!",
+                "with epic lines of code", "getting fancy"]
 
     while not bot.is_closed():
         status = random.choice(statuses)

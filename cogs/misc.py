@@ -32,9 +32,12 @@ class Misc(commands.Cog):
     async def ping(self, ctx: SlashContext, member: discord.Member = None):
         """Shows the bot ping"""
         member = ctx.author if not member else member
-        embed = discord.Embed(title="Bot's latency", colour=member.color, timestamp=datetime.datetime.utcnow())
-        embed.add_field(name="Websocket Latency", value=f"{'Pong! {0}'.format(round(self.bot.latency * 1000, 2))}ms")
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed = discord.Embed(
+            title="Bot's latency", colour=member.color, timestamp=datetime.datetime.utcnow())
+        embed.add_field(name="Websocket Latency",
+                        value=f"{'Pong! {0}'.format(round(self.bot.latency * 1000, 2))}ms")
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/avatars/669973381067571240/350b378596401f453fb4d5bd3411a682.webp?size=1024")
 
@@ -51,11 +54,13 @@ class Misc(commands.Cog):
             async with session.get(url) as response:
                 r = await response.json()
                 fact = r['text']
-                embed = discord.Embed(title=f'Random Fact', colour=ctx.author.colour, timestamp=ctx.message.created_at)
+                embed = discord.Embed(
+                    title=f'Random Fact', colour=ctx.author.colour, timestamp=ctx.message.created_at)
                 embed.set_thumbnail(
                     url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
                 embed.set_footer(text="Useless Facts")
-                embed.add_field(name='***Fun Fact***', value=fact, inline=False)
+                embed.add_field(name='***Fun Fact***',
+                                value=fact, inline=False)
                 await ctx.send(embed=embed)
 
     @commands.Cog.listener()
@@ -87,7 +92,8 @@ class Misc(commands.Cog):
                                                     r'`^[+\-]?\d+:\d+$`')
     async def set_offset(self, ctx, offset):
         pattern = r'^[+\-]?\d+:\d+$'
-        if not re.match(pattern, offset):  # matches the pattern, and if it fails, returns an error message
+        # matches the pattern, and if it fails, returns an error message
+        if not re.match(pattern, offset):
             return await ctx.send('Improper offset format. Please read the help command for more info.')
 
         if not os.path.exists('./bot_config/time.json'):  # create file if not exists
@@ -143,10 +149,13 @@ class Misc(commands.Cog):
         except:
             await ctx.send(f'Could not load definition for **{term}**.')
             return
-        embed = discord.Embed(title=word, description=definition, color=discord.Color.random())
-        embed.set_footer(text=f'Powered by UrbanDictionary | Author - {author}')
+        embed = discord.Embed(
+            title=word, description=definition, color=discord.Color.random())
+        embed.set_footer(
+            text=f'Powered by UrbanDictionary | Author - {author}')
         embed.add_field(name="Example", value=example, inline=False)
-        embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
+        embed.add_field(
+            name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
         await ctx.send(embed=embed)
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '

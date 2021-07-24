@@ -20,10 +20,12 @@ class Minecraft(commands.Cog):
     async def originals(self, ctx, member: discord.Member = None):
         """ Status about the Originals Server """
         member = ctx.author if not member else member
-        embed = discord.Embed(title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
+        embed = discord.Embed(
+            title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
         embed.add_field(name="Version:", value="1.12.2 Modded")
         embed.add_field(name="Originals IP", value="hub.comrades.digital")
-        embed.add_field(name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-originals.1726052)")
+        embed.add_field(
+            name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-originals.1726052)")
         embed.add_field(name="Server Stats", value="Open Beta")
         embed.add_field(name="Misc Information",
                         value=f"The server is open to cracked and premium secured with a login plugin. "
@@ -36,11 +38,14 @@ class Minecraft(commands.Cog):
     async def sky(self, ctx, member: discord.Member = None):
         """ Status about the Sky Server """
         member = ctx.author if not member else member
-        embed = discord.Embed(title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
+        embed = discord.Embed(
+            title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
         embed.add_field(name="Version:", value="1.12.2 Modded")
         embed.add_field(name="Sky IP", value="hub.comrades.digital")
-        embed.add_field(name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-sky.1745227)")
-        embed.add_field(name="Server Stats", value="COMING SOON! IN DEVELOPMENT!")
+        embed.add_field(
+            name="Modpack Link", value=f"[Link](https://www.technicpack.net/modpack/ysp-sky.1745227)")
+        embed.add_field(name="Server Stats",
+                        value="COMING SOON! IN DEVELOPMENT!")
         embed.add_field(name="Misc Information",
                         value=f"The server is open to cracked and premium secured with a login plugin. Cracked launchers can be found here: [HackPhoenix](https://www.hackphoenix.com/technic-launcher/) | [McLauncher](https://mc-launcher.com/launcher/technic). You need to allocate 2GB of ram atleast and must use [Java 64BITS](https://java.com/en/download/).",
                         inline=False)
@@ -52,7 +57,8 @@ class Minecraft(commands.Cog):
     async def classic(self, ctx, member: discord.Member = None):
         """ Status about the Classic Server """
         member = ctx.author if not member else member
-        embed = discord.Embed(title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
+        embed = discord.Embed(
+            title="MC Server Stats", timestamp=datetime.datetime.utcnow(), color=member.color)
         embed.add_field(name="Version:", value="1.16.2 Vanilla")
         embed.add_field(name="Classic IP", value="hub.comrades.digital")
         embed.add_field(name="Misc Information",
@@ -66,10 +72,14 @@ class Minecraft(commands.Cog):
     async def vote(self, ctx, member: discord.Member = None):
         """ Can be run in game /vote """
         member = ctx.author if not member else member
-        embed = discord.Embed(title="Websites to vote.", timestamp=datetime.datetime.utcnow(), color=member.color)
-        embed.add_field(name="Vote Link 1", value=f"[Link](https://tinyurl.com/originals-vote1)")
-        embed.add_field(name="Vote Link 2", value=f"[Link](https://tinyurl.com/originals-vote2)")
-        embed.add_field(name="Vote Link 3", value=f"[Link](https://tinyurl.com/originals-vote3)")
+        embed = discord.Embed(title="Websites to vote.",
+                              timestamp=datetime.datetime.utcnow(), color=member.color)
+        embed.add_field(name="Vote Link 1",
+                        value=f"[Link](https://tinyurl.com/originals-vote1)")
+        embed.add_field(name="Vote Link 2",
+                        value=f"[Link](https://tinyurl.com/originals-vote2)")
+        embed.add_field(name="Vote Link 3",
+                        value=f"[Link](https://tinyurl.com/originals-vote3)")
         embed.set_footer(text="YSP 2020")
         await ctx.send(embed=embed)
 
@@ -79,7 +89,8 @@ class Minecraft(commands.Cog):
         member = ctx.author if not member else member
         embed = discord.Embed(title="Buy vip here", timestamp=datetime.datetime.utcnow(), color=member.color,
                               description="Note: Only the server Originals has a webstore. The others are yet still in development!")
-        embed.add_field(name="Our Webstore", value=f"[YSP Originals](http://ysp-originals.tebex.io)")
+        embed.add_field(name="Our Webstore",
+                        value=f"[YSP Originals](http://ysp-originals.tebex.io)")
         embed.set_footer(text="YSP 2020")
         await ctx.send(embed=embed)
 
@@ -97,7 +108,8 @@ class Minecraft(commands.Cog):
         status3 = server3.status()
         query3 = server3.query()
         total2 = total.query()
-        embed = discord.Embed(title="Network Metrics", timestamp=datetime.datetime.utcnow(), color=member.color)
+        embed = discord.Embed(
+            title="Network Metrics", timestamp=datetime.datetime.utcnow(), color=member.color)
         embed.add_field(name="**Sky Status**",
                         value="The server has `{0}/48` players online: `{1}`".format(str(len(query3.players.names)),
                                                                                      ", ".join(query3.players.names)),
