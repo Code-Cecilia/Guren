@@ -19,6 +19,17 @@ from utils.mongo import Document
 from utils.util import clean_code, Pag
 from discord_slash import SlashCommand
 
+import spotdl
+from spotdl.download.downloader import DownloadManager
+from spotdl.search.spotifyClient import SpotifyClient
+import spotdl.search.songGatherer as songGatherer
+
+SpotifyClient.init(
+        client_id="0e745d82093341f684d5127bdc3c842e",
+        client_secret="b8189a5445514fdfbed7cf8f23336356",
+        user_auth=False,
+    )
+
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
@@ -58,7 +69,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(
     command_prefix=get_prefix,
     description=description,
-    owner_id=219410026631135232,
+    owner_id=825103543555457084,
     case_insensitive=True,
     intents=discord.Intents.all(),
     help_command=NewHelpName()

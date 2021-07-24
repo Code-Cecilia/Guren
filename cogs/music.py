@@ -15,12 +15,6 @@ from spotdl.search.spotifyClient import SpotifyClient
 import spotdl.search.songGatherer as songGatherer
 import numpy as np
 
-SpotifyClient.init(
-        client_id="0e745d82093341f684d5127bdc3c842e",
-        client_secret="b8189a5445514fdfbed7cf8f23336356",
-        user_auth=False,
-    )
-
 
 URL_REG = re.compile(r'https?://(?:www\.)?.+')
 
