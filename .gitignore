@@ -131,3 +131,6 @@ bot_config/secrets.json
 .gitignore
 bot_config/
 Leveling/main.db
+bot_config/secrets.json
+=
+r.txt
