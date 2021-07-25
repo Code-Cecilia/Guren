@@ -30,6 +30,11 @@ humanize==3.2.0
 idna==2.10
 import-expression==1.1.4
 instant-api-client==0.1.2
+<<<<<<< HEAD
+=======
+isodate==0.6.0
+Jinja2==2.11.3
+>>>>>>> 6adc3330a78fdc353856d3df585f06691d47f25c
 jishaku==1.20.0.220
 keyring==10.6.0
 keyrings.alt==3.0
