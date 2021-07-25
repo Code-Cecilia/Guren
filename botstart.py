@@ -24,11 +24,14 @@ from spotdl.download.downloader import DownloadManager
 from spotdl.search.spotifyClient import SpotifyClient
 import spotdl.search.songGatherer as songGatherer
 
-SpotifyClient.init(
-        client_id="0e745d82093341f684d5127bdc3c842e",
-        client_secret="b8189a5445514fdfbed7cf8f23336356",
-        user_auth=False,
-    )
+try:
+    SpotifyClient.init(
+            client_id="854b92f0ab484611b4894281f83fce3d",
+            client_secret="90d5efe311c141c68b3ad9344379e8c0",
+            user_auth=False
+        )
+except:
+    pass
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -69,7 +72,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(
     command_prefix=get_prefix,
     description=description,
-    owner_id=825103543555457084,
+    owner_id=219410026631135232,
     case_insensitive=True,
     intents=discord.Intents.all(),
     help_command=NewHelpName()
