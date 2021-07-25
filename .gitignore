@@ -131,10 +131,10 @@ bot_config/secrets.json
 .gitignore
 bot_config/
 Leveling/main.db
-bot_config/secrets.json
+*bot_config/secrets.json
 =
 r.txt
 Leveling/infoimg2.png
-bot_config/secrets.json
+*bot_config/secrets.json
 cogs/music.py
-bot_config/secrets.json
+*bot_config/secrets.json
