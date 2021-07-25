@@ -19,6 +19,11 @@ from utils.mongo import Document
 from utils.util import clean_code, Pag
 from discord_slash import SlashCommand
 
+import spotdl
+from spotdl.download.downloader import DownloadManager
+from spotdl.search.spotifyClient import SpotifyClient
+import spotdl.search.songGatherer as songGatherer
+
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
@@ -26,6 +31,16 @@ print(f"{cwd}\n-----")
 description = '''A clever discord bot written in python.'''
 
 initial_extensions = ['cogs.leveling']
+
+try:
+    SpotifyClient.init(
+            client_id="854b92f0ab484611b4894281f83fce3d",
+            client_secret="90d5efe311c141c68b3ad9344379e8c0",
+            user_auth=False
+        )
+except:
+    pass
+
 
 class NewHelpName(commands.MinimalHelpCommand):
     async def send_pages(self):
