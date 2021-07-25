@@ -10,8 +10,6 @@ from discord.ext import commands
 from discord import TextChannel
 
 
-import utils.json_loader
-
 
 class Config(commands.Cog):
     """Server configuration commands."""
@@ -23,31 +21,18 @@ class Config(commands.Cog):
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
-    @commands.command(
-        name="prefix",
-        aliases=["changeprefix", "setprefix"],
-        description="Change your guilds prefix!",
-        usage="[prefix]",
-    )
-    @commands.has_guild_permissions(manage_guild=True)
-    async def prefix(self, ctx, *, prefix="py."):
-        """Change your guild prefix"""
-        await self.bot.config.upsert({"_id": ctx.guild.id, "prefix": prefix})
-        await ctx.send(
-            f"The guild prefix has been set to `{prefix}`. Use `{prefix}prefix [prefix]` to change it again!"
-        )
-
-    @commands.command(
-        name="deleteprefix",
-        aliases=["dp"],
-        description="Delete your guilds prefix!"
-    )
+    @commands.command(name='changeprefix', aliases=['setprefix'], description='Sets the server-specific prefix')
+    @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    @commands.has_guild_permissions(administrator=True)
-    async def deleteprefix(self, ctx):
-        """Delete the current guild prefix"""
-        await self.bot.config.unset({"_id": ctx.guild.id, "prefix": 1})
-        await ctx.send("This guilds prefix has been set back to the default")
+    async def change_prefix_func(self, ctx, prefix):
+        with open('./bot_config/prefixes.json', 'r') as f:
+            data = json.load(f)
+
+        data[str(ctx.guild.id)] = prefix
+
+        with open('./bot_config/prefixes.json', 'w') as f:
+            json.dump(data, f, indent=4)
+        await ctx.send(f'The prefix for this server has changed to {prefix}')
 
     @commands.command(
         name="setsuggestionchannel",
@@ -57,15 +42,15 @@ class Config(commands.Cog):
     async def setsuggestionchannel(self, ctx, channel: discord.TextChannel):
         """Set a suggestion channel."""
         guild_ID = ctx.guild.id
-        data = utils.json_loader.read_json("suggestionc")
-        data[str(guild_ID)] = {"suggestionC": None, "ownerID": None}
-        utils.json_loader.write_json(data, "suggestionc")
-        await ctx.send("Guild ID stored successfully")
-        data = utils.json_loader.read_json("suggestionc")
-        data[str(ctx.guild.id)]["ownerID"] = ctx.guild.owner.id
-        data[str(ctx.guild.id)]["suggestionC"] = channel.id
-        utils.json_loader.write_json(data, "suggestionc")
-        await ctx.send("Suggestions channel setup successfully")
+        with open('./bot_config/suggestionc.json', 'r') as f:
+            data = json.load(f)
+        
+        data[str(ctx.guild.id)] = {'suggestionC:': channel.id}
+        
+        with open('./bot_config/suggestionc.json', 'w') as jsonFile:
+            json.dump(data, jsonFile)
+        
+        await ctx.send("Channel setup successfully")
 
     @commands.command(name='setmuterole', description='Sets the role assigned to muted people. '
                                                       'Use `createmuterole` for creating a muted role and '
@@ -107,7 +92,9 @@ class Config(commands.Cog):
         aliases=["sg"],
         description="Suggest something")
     async def suggest(self, ctx, *, message):
-        data = utils.json_loader.read_json("suggestionc")
+        #data = utils.json_loader.read_json("suggestionc")
+        with open('./bot_config/suggestionc', 'r') as f:
+            data = json.load(f) # idk really what to do here for it to read ree
         guild_ID = ctx.guild.id
         suggestions = self.bot.get_channel(data[str(guild_ID)]["suggestionC"])
         await ctx.message.delete()
@@ -122,15 +109,6 @@ class Config(commands.Cog):
         poo = await suggestions.send(embed=embed)
         await poo.add_reaction("☑️")
         await poo.add_reaction("✖️")
-
-    @suggest.error
-    async def suggest_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(
-                description='❌ Please make sure to include your suggestion:\n```!suggest <suggestion>```', color=discord.Color.dark_red())
-            embed.set_author(name=f"{ctx.author}",
-                             icon_url=f"{ctx.author.avatar_url}")
-            await ctx.channel.send(embed=embed)
 
 
 def setup(bot):
