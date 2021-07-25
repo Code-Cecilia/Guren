@@ -27,6 +27,15 @@ description = '''A clever discord bot written in python.'''
 
 initial_extensions = ['cogs.leveling']
 
+class NewHelpName(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            embed = discord.Embed(
+                description=page, color=discord.Color.random())
+            embed.set_thumbnail(url=bot.user.avatar_url)
+            embed.set_footer(text='')
+            await destination.send(embed=embed)
 
 async def get_prefix(bot, message):
     if not message.guild:
@@ -40,18 +49,6 @@ async def get_prefix(bot, message):
         return commands.when_mentioned_or(data["prefix"])(bot, message)
     except:
         return commands.when_mentioned_or("g$")(bot, message)
-
-
-class NewHelpName(commands.MinimalHelpCommand):
-    async def send_pages(self):
-        destination = self.get_destination()
-        for page in self.paginator.pages:
-            embed = discord.Embed(
-                description=page, color=discord.Color.random())
-            embed.set_thumbnail(url=bot.user.avatar_url)
-            embed.set_footer(text='')
-            await destination.send(embed=embed)
-
 
 secret_file = utils.json_loader.read_json('secrets')
 intents = discord.Intents.all()
@@ -69,31 +66,8 @@ bot.config_token = secret_file["token"]
 logging.basicConfig(level=logging.INFO)
 bot.blacklisted_users = []
 bot.connection_url = secret_file["mongo"]
-bot.muted_users = {}
 bot.cwd = cwd
-
-bot.version = "1.0"
-bot.colors = {
-    "WHITE": 0xFFFFFF,
-    "AQUA": 0x1ABC9C,
-    "GREEN": 0x2ECC71,
-    "BLUE": 0x3498DB,
-    "PURPLE": 0x9B59B6,
-    "LUMINOUS_VIVID_PINK": 0xE91E63,
-    "GOLD": 0xF1C40F,
-    "ORANGE": 0xE67E22,
-    "RED": 0xE74C3C,
-    "NAVY": 0x34495E,
-    "DARK_AQUA": 0x11806A,
-    "DARK_GREEN": 0x1F8B4C,
-    "DARK_BLUE": 0x206694,
-    "DARK_PURPLE": 0x71368A,
-    "DARK_VIVID_PINK": 0xAD1457,
-    "DARK_GOLD": 0xC27C0E,
-    "DARK_ORANGE": 0xA84300,
-    "DARK_RED": 0x992D22
-}
-bot.color_list = [c for c in bot.colors.values()]
+bot.version = "2.0"
 
 
 @bot.event
@@ -106,9 +80,6 @@ async def on_ready():
     bot.db = bot.mongo["Guren"]
     bot.config = Document(bot.db, "config")
     bot.warns = Document(bot.db, "warns")
-    bot.mutes = Document(bot.db, "mutes")
-    bot.command_usage = Document(bot.db, "command_usage")
-    bot.reaction_roles = Document(bot.db, "reaction_roles")
 
     print("Initialized Database\n-----")
     for document in await bot.config.get_all():
