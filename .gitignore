@@ -128,7 +128,7 @@ cogs/bad cogs/reactions.py.txt
 cogs/music.py
 bot_config/time.json
 bot_config/secrets.json
-bot_config/
+bot_config
 Leveling/main.db
 *bot_config/secrets.json
 =
