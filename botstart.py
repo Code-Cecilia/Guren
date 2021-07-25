@@ -2,45 +2,33 @@ import asyncio
 import os
 import random
 import logging
-import contextlib
 import sqlite3
 
 import discord
 from discord.ext import commands
 from pathlib import Path
-import motor.motor_asyncio
-import io
-import textwrap
-import traceback
 from traceback import format_exception
 
-import utils.json_loader
-from utils.mongo import Document
 from utils.util import clean_code, Pag
 from discord_slash import SlashCommand
 
-import spotdl
+import json
 from spotdl.download.downloader import DownloadManager
 from spotdl.search.spotifyClient import SpotifyClient
 import spotdl.search.songGatherer as songGatherer
+
+intents = discord.Intents.all()
+initial_extensions = ['cogs.leveling']
+with open('./bot_config/secrets.json', 'r') as configFile:
+    data = json.load(configFile)
+    token = data.get("token") 
+
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
 
 description = '''A clever discord bot written in python.'''
-
-initial_extensions = ['cogs.leveling']
-
-try:
-    SpotifyClient.init(
-            client_id="",
-            client_secret="",
-            user_auth=False
-        )
-except:
-    pass
-
 
 class NewHelpName(commands.MinimalHelpCommand):
     async def send_pages(self):
@@ -51,22 +39,28 @@ class NewHelpName(commands.MinimalHelpCommand):
             embed.set_thumbnail(url=bot.user.avatar_url)
             embed.set_footer(text='')
             await destination.send(embed=embed)
+try:
+    SpotifyClient.init(
+            client_id="854b92f0ab484611b4894281f83fce3d",
+            client_secret="3da63e3827b24e51950bbedad7c1acbf",
+            user_auth=False
+        )
+except:
+    pass
 
-async def get_prefix(bot, message):
-    if not message.guild:
-        return commands.when_mentioned_or("g$")(bot, message)
+def get_prefix(bot, message):
+    with open('./bot_config/prefixes.json', 'r') as prefixFile:
+        prefixes = json.load(prefixFile)
+        try:
+            prefix_server = prefixes.get(str(message.guild.id))
+        except AttributeError:  # direct messages dont have a message.guild
+            return 'g$'
 
-    try:
-        data = await bot.config.find(message.guild.id)
+        if prefix_server is None:
+            prefix_server = "g$"  # default prefix
 
-        if not data or "prefix" not in data:
-            return commands.when_mentioned_or("g$")(bot, message)
-        return commands.when_mentioned_or(data["prefix"])(bot, message)
-    except:
-        return commands.when_mentioned_or("g$")(bot, message)
+        return prefix_server
 
-secret_file = utils.json_loader.read_json('secrets')
-intents = discord.Intents.all()
 bot = commands.Bot(
     command_prefix=get_prefix,
     description=description,
@@ -75,12 +69,10 @@ bot = commands.Bot(
     intents=discord.Intents.all(),
     help_command=NewHelpName()
 )
-slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 
-bot.config_token = secret_file["token"]
+slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
+bot.config_token = data["token"]
 logging.basicConfig(level=logging.INFO)
-bot.blacklisted_users = []
-bot.connection_url = secret_file["mongo"]
 bot.cwd = cwd
 bot.version = "2.0"
 
@@ -91,21 +83,6 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency * 1000, 2)
     print('Running discord.py version ' + discord.__version__)
-    bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
-    bot.db = bot.mongo["Guren"]
-    bot.config = Document(bot.db, "config")
-    bot.warns = Document(bot.db, "warns")
-
-    print("Initialized Database\n-----")
-    for document in await bot.config.get_all():
-        print(document)
-
-    currentMutes = await bot.mutes.get_all()
-    for mute in currentMutes:
-        bot.muted_users[mute["_id"]] = mute
-
-    print(bot.muted_users)
-
 
 @bot.event
 async def on_guild_join(guild):
@@ -125,67 +102,6 @@ async def on_guild_join(guild):
         main.commit()
     cursor.close()
     main.close()
-
-
-@bot.command(name="eval", aliases=["exec"])
-@commands.is_owner()
-async def _eval(ctx, *, code):
-    """Owner only command"""
-    code = clean_code(code)
-
-    local_variables = {
-        "discord": discord,
-        "commands": commands,
-        "bot": bot,
-        "ctx": ctx,
-        "channel": ctx.channel,
-        "author": ctx.author,
-        "guild": ctx.guild,
-        "message": ctx.message
-    }
-
-    stdout = io.StringIO()
-
-    try:
-        with contextlib.redirect_stdout(stdout):
-            exec(
-                f"async def func():\n{textwrap.indent(code, '    ')}", local_variables,
-            )
-
-            obj = await local_variables["func"]()
-            result = f"{stdout.getvalue()}\n-- {obj}\n"
-    except Exception as e:
-        result = "".join(format_exception(e, e, e.__traceback__))
-
-    pager = Pag(
-        timeout=100,
-        entries=[result[i: i + 2000] for i in range(0, len(result), 2000)],
-        length=1,
-        prefix="```py\n",
-        suffix="```"
-    )
-
-    await pager.start(ctx)
-
-
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-    if message.author.id in bot.blacklisted_users:
-        return
-
-    if message.content.startswith(f"<@!{bot.user.id}>") and \
-            len(message.content) == len(f"<@!{bot.user.id}>"
-                                        ):
-        data = await bot.config.get_by_id(message.guild.id)
-        if not data or "prefix" not in data:
-            prefix = "g$"
-        else:
-            prefix = data["prefix"]
-        await message.channel.send(f"My prefix here is `{prefix}`", delete_after=15)
-
-    await bot.process_commands(message)
 
 
 async def chng_pr():
