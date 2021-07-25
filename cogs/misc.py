@@ -63,20 +63,6 @@ class Misc(commands.Cog):
                                 value=fact, inline=False)
                 await ctx.send(embed=embed)
 
-    @commands.Cog.listener()
-    async def on_command_completion(self, ctx):
-        if ctx.command.qualified_name == "logout":
-            return
-
-        if await self.bot.command_usage.find(ctx.command.qualified_name) is None:
-            await self.bot.command_usage.upsert(
-                {"_id": ctx.command.qualified_name, "usage_count": 1}
-            )
-        else:
-            await self.bot.command_usage.increment(
-                ctx.command.qualified_name, 1, "usage_count"
-            )
-
     @commands.command(
         name="invite",
         aliases=['botinvite', 'i'],
