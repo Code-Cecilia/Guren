@@ -128,7 +128,6 @@ cogs/bad cogs/reactions.py.txt
 cogs/music.py
 bot_config/time.json
 bot_config/secrets.json
-.gitignore
 bot_config/
 Leveling/main.db
 *bot_config/secrets.json
@@ -138,3 +137,4 @@ Leveling/infoimg2.png
 *bot_config/secrets.json
 cogs/music.py
 *bot_config/secrets.json
+bot_config/secrets.json
