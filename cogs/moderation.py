@@ -13,8 +13,6 @@ from discord.utils import get
 
 from utils.util import Pag
 from utils import time_calc, misc_checks
-
-import utils.json_loader
 from utils import default, permissions
 from dateutil.relativedelta import relativedelta
 
@@ -49,41 +47,6 @@ class Moderation(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.mute_task = self.check_current_mutes.start()
-
-    def cog_unload(self):
-        self.mute_task.cancel()
-
-    @tasks.loop(minutes=5)
-    async def check_current_mutes(self):
-        guild = self.bot.get_guild
-        currentTime = datetime.datetime.now()
-        mutes = deepcopy(self.bot.muted_users)
-        for key, value in mutes.items():
-            if value['muteDuration'] is None:
-                continue
-
-            unmuteTime = value['mutedAt'] + \
-                relativedelta(seconds=value['muteDuration'])
-
-            if currentTime >= unmuteTime:
-                guild = self.bot.get_guild(value['guildId'])
-                member = guild.get_member(value['_id'])
-
-                role = discord.utils.get(guild.roles, name="Muted")
-                if role in member.roles:
-                    await member.remove_roles(role)
-                    print(f"Unmuted: {member.name}")
-
-                await self.bot.mutes.delete(member.id)
-                try:
-                    self.bot.muted_users.pop(member.id)
-                except KeyError:
-                    pass
-
-    @check_current_mutes.before_loop
-    async def before_check_current_mutes(self):
-        await self.bot.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_ready(self):
