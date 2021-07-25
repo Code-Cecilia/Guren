@@ -34,8 +34,8 @@ initial_extensions = ['cogs.leveling']
 
 try:
     SpotifyClient.init(
-            client_id="854b92f0ab484611b4894281f83fce3d",
-            client_secret="90d5efe311c141c68b3ad9344379e8c0",
+            client_id="",
+            client_secret="",
             user_auth=False
         )
 except:
