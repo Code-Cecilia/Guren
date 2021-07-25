@@ -3,7 +3,6 @@ from discord.ext import commands
 import os
 import asyncio
 import traceback
-import utils.json_loader
 
 
 class Owner(commands.Cog):
@@ -94,37 +93,6 @@ class Owner(commands.Cog):
                            "**8=====================================================================D**")
         else:
             await ctx.send("You have no permission to use this command")
-
-    @commands.command(
-        name="blacklist", description="Blacklist a user from the bot", usage="<user>"
-    )
-    @commands.is_owner()
-    async def blacklist(self, ctx, user: discord.Member):
-        if ctx.message.author.id == user.id:
-            await ctx.send("Hey, you cannot blacklist yourself!")
-            return
-
-        self.bot.blacklisted_users.append(user.id)
-        data = utils.json_loader.read_json("blacklist")
-        data["blacklistedUsers"].append(user.id)
-        utils.json_loader.write_json(data, "blacklist")
-        await ctx.send(f"Hey, I have blacklisted {user.name} for you.")
-
-    @commands.command(
-        name="unblacklist",
-        description="Unblacklist a user from the bot",
-        usage="<user>",
-    )
-    @commands.is_owner()
-    async def unblacklist(self, ctx, user: discord.Member):
-        """
-        Unblacklist someone from the bot
-        """
-        self.bot.blacklisted_users.remove(user.id)
-        data = utils.json_loader.read_json("blacklist")
-        data["blacklistedUsers"].remove(user.id)
-        utils.json_loader.write_json(data, "blacklist")
-        await ctx.send(f"Hey, I have unblacklisted {user.name} for you.")
 
     @commands.command(
         name="logout",
