@@ -9,7 +9,9 @@ import discord
 from discord.ext import commands
 from discord import TextChannel
 
-
+with open('bot_config/config.json') as configFile:
+    configs = json.load(configFile)
+    prefix = configs.get("prefix")
 
 class Config(commands.Cog):
     """Server configuration commands."""
@@ -20,6 +22,48 @@ class Config(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
+
+    @commands.command(name='setup', description='Used to set the bot up, for welcome messages, mute roles, etc.\n'
+                                                'Recommended to set the bot up as early as possible when it joins a '
+                                                'server.')
+    @commands.guild_only()
+    async def setup_welcome(self, ctx):
+        embed = discord.Embed(title='You can setup preferences for your server with these commands.',
+                              timestamp=ctx.message.created_at,
+                              color=discord.Color.random())
+
+        embed.add_field(name='Set channel for welcome messages',
+                        value=f'`{prefix}setwelcomechannel [channel]`\nExample: `{prefix}setwelcomechannel #welcome`\n'
+                              f'__**What you\'d see:**__\n'
+                              f'{ctx.author.mention} has joined **{ctx.guild.name}**! Say hi!\n'
+                              f'{ctx.author.mention} has left **{ctx.guild.name}**. Until Next time!',
+                        inline=False)
+
+        embed.add_field(name='Set the mute role for this server',
+                        value=f'`{prefix}setmuterole [role]`\nExample: `{prefix}setmuterole muted` '
+                              f'(muted must be an actual role).\n'
+                              f'You can create a mute role by `{prefix}createmuterole [role name]`',
+                        inline=False)
+
+        embed.add_field(name='Set the default Member role for this server',
+                        value=f'`{prefix}setmemberrole [role]`\nExample: `{prefix}setmemberrole Member`'
+                              f' (Member must be an actual role).\n'
+                              f'If you want to turn off AutoRole, make a role, assign the member role to that role, and delete the role',
+                        inline=False)
+
+        embed.add_field(name='Set the default channel for BotChat.',
+                        value=f'`{prefix}setbotchatchannel [channel]`\nExample: `{prefix}setbotchatchannel #botchat`'
+                              f' (`channel` must be an actual channel).\n'
+                              f'If you want to turn off botchat, make a channel, assign botchat to that channel, and delete the channel.',
+                        inline=False)
+
+        embed.add_field(name='Set a custom prefix for this server.',
+                        value=f'`{prefix}setprefix [prefix]`',
+                        inline=False)
+
+        embed.set_footer(text=f'Command requested by {ctx.author.name}')
+        await ctx.send(embed=embed)
+
 
     @commands.command(name='changeprefix', aliases=['setprefix'], description='Sets the server-specific prefix')
     @commands.has_permissions(administrator=True)
@@ -58,16 +102,16 @@ class Config(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def set_mute_role(self, ctx, role: discord.Role):
-        if not os.path.exists(f'bot_config/guild{ctx.guild.id}.json'):
+        if not os.path.exists(f'bot_config/guilds/guild{ctx.guild.id}.json'):
             with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
 
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
 
         data['mute_role'] = role.id
 
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile)
 
         await ctx.send(f'Mute role set to **{role.name}** successfully.')
@@ -110,6 +154,46 @@ class Config(commands.Cog):
         await poo.add_reaction("☑️")
         await poo.add_reaction("✖️")
 
+
+    @commands.command(name='setwelcomechannel', description="Used to set the channel welcome messages arrive. "
+                                                            "See description of the `setup` command for more info.")
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def set_welcome_channel(self, ctx, channel: discord.TextChannel):
+        channel_id = channel.id
+        if not os.path.exists(f'./bot_config/guilds/guild{ctx.guild.id}.json'):
+            with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
+                json.dump({}, jsonFile, indent=4)
+
+        with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+
+        data['welcome_channel'] = channel_id
+
+        with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
+            json.dump(data, jsonFile, indent=3)
+
+        await ctx.send(f'Welcome channel set to {channel.mention} successfully.')
+
+    @commands.command(name='setmemberrole', description='Used to set the role which is given to every member upon '
+                                                        'joining. '
+                                                        'Check description of `setup` command for more info.')
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def set_member_role(self, ctx, role: discord.Role):
+        if not os.path.exists(f'./bot_config/guilds/guild{ctx.guild.id}.json'):
+            with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
+                json.dump({}, jsonFile, indent=4)
+
+        with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+
+        data['member_role'] = role.id
+
+        with open(f'./bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
+            json.dump(data, jsonFile, indent=3)
+
+        await ctx.send(f'Member role set to **{role.name}** successfully.')
 
 def setup(bot):
     bot.add_cog(Config(bot))
