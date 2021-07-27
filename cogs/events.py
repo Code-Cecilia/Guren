@@ -23,7 +23,7 @@ class Events(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("An argument is missing or invalid. Input the argument in order to run this command.")
         if isinstance(error, commands.CommandNotFound):
-            print("Command not found!")
+            await ctx.send("Command not found!")
         else:
             raise error
 

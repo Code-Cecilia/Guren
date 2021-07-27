@@ -188,14 +188,14 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unmute_func(self, ctx, user: discord.Member):
-        if not os.path.exists(f'bot_config/guild{ctx.guild.id}.json'):
-            with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as createFile:
+        if not os.path.exists(f'bot_config/guilds/guild{ctx.guild.id}.json'):
+            with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile)
                 # create file if not present
                 print(
                     f'Created file guild{ctx.guild.id}.json in bot_config...')
 
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         mute_role_id = int(data.get('mute_role'))
 
@@ -230,6 +230,46 @@ class Moderation(commands.Cog):
             await ctx.send(f"It looks like i dont have the permission `MANAGE_MESSAGES` to do this. Please check my permissions and try running the command again.")
         else:
             await ctx.send(f"{amount} messages deleted.")
+
+    @commands.command(name='warn')
+    @commands.has_permissions(administrator=True)
+    async def warn_command(self, ctx, member: discord.Member ,*, reason: str):
+
+        if member.id in [ctx.author.id, self.bot.user.id]:
+            return await ctx.send("You cannot warn yourself.")
+
+
+        if not os.path.exists(f'bot_config/warns/guild{ctx.guild.id}.json'):
+            with open(f'bot_config/warns/guild{ctx.guild.id}.json', "w") as createFile:
+                json.dump({}, createFile)
+                # create file if not present
+                print(
+                    f'Created file guild{ctx.guild.id}.json in bot_config/warns...')
+        
+        with open(f'bot_config/warns/guild{ctx.guild.id}.json', 'r') as warns_file:
+            data = json.load(warns_file)
+
+ # 
+        with open(f'bot_config/warns/guild{ctx.guild.id}.json', 'r') as warns_file:
+            data = json.load(warns_file)
+            data[ctx.guild.id] = {"user_id": member.id, "guild_id": member.guild.id, "reason": reason, "warned_by": ctx.author.id}
+        with open(f'bot_config/warns/guild{ctx.guild.id}.json', 'w') as warns_file:
+            json.dump(data, warns_file)
+
+        embed = discord.Embed(
+            title="You are being warned:",
+            description=f"__**Reason**__\n{reason}",
+            colour=member.color,
+            timestamp=ctx.message.created_at
+        )
+
+        embed.set_author(name=ctx.guild.name, icon_url=ctx.guild.icon_url)
+
+        try:
+            await member.send(embed=embed)
+            await ctx.send("Warned that user in dm's")
+        except discord.HTTPException:
+            await ctx.send(member.mention, embed=embed)
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
