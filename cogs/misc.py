@@ -39,7 +39,7 @@ class Misc(commands.Cog):
         embed.set_footer(
             text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(
-            url=f"{self.bot.avatar_url}")
+            url=f"{self.bot.user.avatar_url}")
 
         await ctx.send(embed=embed)
 
