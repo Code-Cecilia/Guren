@@ -271,5 +271,7 @@ class Moderation(commands.Cog):
         except discord.HTTPException:
             await ctx.send(member.mention, embed=embed)
 
+# Warning system is incomplete, wont't get support with it if you use it.
+
 def setup(bot):
     bot.add_cog(Moderation(bot))
