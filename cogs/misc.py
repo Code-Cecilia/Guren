@@ -39,7 +39,7 @@ class Misc(commands.Cog):
         embed.set_footer(
             text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(
-            url="https://cdn.discordapp.com/avatars/669973381067571240/350b378596401f453fb4d5bd3411a682.webp?size=1024")
+            url=f"{self.bot.avatar_url}")
 
         await ctx.send(embed=embed)
 

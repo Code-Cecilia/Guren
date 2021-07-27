@@ -55,12 +55,17 @@ def get_prefix(bot, message):
             prefix_server = prefixes.get(str(message.guild.id))
         except AttributeError:  # direct messages dont have a message.guild
             return 'g$'
+            # its ignoring per server prefixes now smh smh smh smh smh smh smh smh smh, got an idea
 
         if prefix_server is None:
             prefix_server = "g$"  # default prefix
+        data = prefix_server
+        return commands.when_mentioned_or(data)(bot, message)
 
-        return prefix_server
-
+# it will allow the server and default prefix but the mention wont work at all the commands.when_mentioned_or in the command_prefix is enough as per the docs but it just does not work
+# share the link to the docs, lets see
+# okay, i got it
+# im in pycharm now
 bot = commands.Bot(
     command_prefix=get_prefix,
     description=description,
