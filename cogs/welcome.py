@@ -17,9 +17,9 @@ class Welcome(commands.Cog):
         owner = guild.owner
         try:
             await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now.\n"
-                             f"I wanted to let you know that my prefix is `{main_prefix}`, and "
-                             f"my help command can be accessed through `{main_prefix}help`.\n"
-                             f"Have a good day ahead!")
+                             f"My prefix `{main_prefix}`, and "
+                             f"Do `{main_prefix}help to find out more about me`.\n")
+                             
         except:
             print('couldn\'t send message to owner')
         if not os.path.exists(f'bot_config/guilds/guild{guild.id}.json'):
@@ -38,10 +38,8 @@ class Welcome(commands.Cog):
     async def on_guild_remove(self, guild):
         owner = guild.owner
         try:
-            await owner.send(f"Hello, it seems I have been removed from {guild.name}.\n"
-                             f"Your server's config files will be deleted, along with the mute files, and custom prefix.\n"
-                             f"Thank you for having me in your server for this long.\n"
-                             f"Until next time!")
+            await owner.send(f"Thanks for having me in: {guild.name}.\n"
+                             f"Your server's config files will be deleted, along with the mute files, and custom prefix.")
         except:
             print(f'couldn\'t send message to owner of {guild.owner}')
         if os.path.exists(f'bot_config/guilds/guild{guild.id}.json'):

@@ -5,7 +5,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from assets import time_calc
+from utils import time_calc
 
 
 class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or for a selected country\n"

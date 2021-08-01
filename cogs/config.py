@@ -35,8 +35,8 @@ class Config(commands.Cog):
         embed.add_field(name='Set channel for welcome messages',
                         value=f'`{prefix}setwelcomechannel [channel]`\nExample: `{prefix}setwelcomechannel #welcome`\n'
                               f'__**What you\'d see:**__\n'
-                              f'{ctx.author.mention} has joined **{ctx.guild.name}**! Say hi!\n'
-                              f'{ctx.author.mention} has left **{ctx.guild.name}**. Until Next time!',
+                              f':inbox_tray: | {ctx.author.mention} has joined **{ctx.guild.name}**! Say hi!\n'
+                              f':outbox_tray: | {ctx.author.mention} has left **{ctx.guild.name}**. Until Next time!',
                         inline=False)
 
         embed.add_field(name='Set the mute role for this server',

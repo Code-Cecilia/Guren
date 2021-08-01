@@ -4,7 +4,6 @@ import os
 import asyncio
 import traceback
 
-
 class Owner(commands.Cog):
     """Owner only commands."""
 
@@ -136,7 +135,6 @@ class Owner(commands.Cog):
 
             if timer == 0:
                 active = False
-
 
 def setup(bot):
     bot.add_cog(Owner(bot))
