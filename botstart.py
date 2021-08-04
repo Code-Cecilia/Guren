@@ -9,6 +9,8 @@ from discord.ext import commands
 from pathlib import Path
 from traceback import format_exception
 
+from discord.flags import Intents
+
 from utils.util import clean_code, Pag
 from discord_slash import SlashCommand
 
@@ -17,7 +19,13 @@ from spotdl.download.downloader import DownloadManager
 from spotdl.search.spotifyClient import SpotifyClient
 import spotdl.search.songGatherer as songGatherer
 
-intents = discord.Intents.all()
+intents = discord.Intents(messages=True, bans=True, guilds=True)
+intents.reactions = True
+intents.guild_messages = True
+intents.typing = True
+intents.members = True
+intents.voice_states = True
+
 initial_extensions = ['cogs.leveling']
 with open('./bot_config/secrets.json', 'r') as configFile:
     data = json.load(configFile)
@@ -71,7 +79,7 @@ bot = commands.Bot(
     description=description,
     owner_id=219410026631135232,
     case_insensitive=True,
-    intents=discord.Intents.all(),
+    intents=intents,
     help_command=NewHelpName()
 )
 
