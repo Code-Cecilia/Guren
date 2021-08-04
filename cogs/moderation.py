@@ -110,7 +110,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def mute_func(self, ctx, user: discord.Member, time_period=None):
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         mute_role_id = data.get('mute_role')
         # get the actual mute role from the role's ID
@@ -188,8 +188,8 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unmute_func(self, ctx, user: discord.Member):
-        if not os.path.exists(f'bot_config/guilds/guild{ctx.guild.id}.json'):
-            with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'w') as createFile:
+        if not os.path.exists(f'bot_config/mute_files/guild{ctx.guild.id}.json'):
+            with open(f'bot_config/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile)
                 # create file if not present
                 print(
