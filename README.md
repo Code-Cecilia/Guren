@@ -19,7 +19,7 @@
 
 # Guren
 
-[![Discord Bots](https://top.gg/api/widget/669973381067571240.svg)](https://top.gg/bot/669973381067571240)
+[![Guren Ichinose Top.gg link](https://top.gg/api/widget/669973381067571240.svg)](https://top.gg/bot/669973381067571240)
 
 A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim my code as yours.
