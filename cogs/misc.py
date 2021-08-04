@@ -153,7 +153,7 @@ class Misc(commands.Cog):
 
     @commands.command(name='inspire', aliases=['quote'], description='Sends a random quote')
     async def get_quote_func(self, ctx):
-        quote = quotes.get_quote()
+        quote = await quotes.get_quote()
         await ctx.send(quote)
 
 
