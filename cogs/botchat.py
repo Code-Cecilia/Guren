@@ -19,15 +19,15 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
     async def set_botchat_channel(self, ctx, channel: discord.TextChannel):
         channel_id = channel.id
         # create file if not exists
-        if not os.path.exists(f'bot_config/guild{ctx.guild.id}.json'):
-            with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
+        if not os.path.exists(f'bot_config/guilds/guild{ctx.guild.id}.json'):
+            with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
 
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'r') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         data['botchat_channel'] = channel_id
 
-        with open(f'bot_config/guild{ctx.guild.id}.json', 'w') as jsonFile:
+        with open(f'bot_config/guilds/guild{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile, indent=4)
 
         await ctx.send(f"Set botchat channel as {channel} succesfully!")
@@ -39,11 +39,11 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
             return
 
         # create file if not exists
-        if not os.path.exists(f'bot_config/guild{message.guild.id}.json'):
+        if not os.path.exists(f'bot_config/guilds/guild{message.guild.id}.json'):
             with open(f'bot_config/guild{message.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
 
-        with open(f'bot_config/guild{message.guild.id}.json') as jsonFIle:
+        with open(f'bot_config/guilds/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
             if data.get('botchat_channel') is not None:
                 botchat_channel_id = int(data.get('botchat_channel'))
