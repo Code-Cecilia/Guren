@@ -1,6 +1,5 @@
 import os
 
-
 def countlines(start, lines=0):
     for thing in os.listdir(start):
         thing = os.path.join(start, thing)
