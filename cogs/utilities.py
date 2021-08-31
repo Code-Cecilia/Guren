@@ -29,6 +29,15 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
         print(ctx.author.name, 'used the command avatar')
 
+    @commands.command(name="vote")
+    @commands.guild_only()
+    async def vote(self, ctx, member: discord.Member = None):
+        """Shows the vote link for this bot"""
+        member = ctx.author if not member else member
+        embed = discord.Embed(colour=member.color)
+        embed.add_field(name="Vote for me here", value=f"[Link to vote](https://top.gg/bot/669973381067571240/vote)")
+        await ctx.send(embed=embed)
+
     @commands.command(name="userinfo")
     @commands.guild_only()
     async def userinfo(self, ctx, member: discord.Member = None):
@@ -100,6 +109,8 @@ class Utilities(commands.Cog):
                         value=f"`{master.commit.hexsha[:6]}`\n`{master.commit.message}`")
         embed.add_field(name="Support Server",
                         value=f"[I live here.](https://discord.gg/8wCez2n)")
+        embed.add_field(name="Vote for me!",
+                        value=f"[Vote link](https://top.gg/bot/669973381067571240/vote)")
         embed.add_field(
             name="Sibling",
             value=f"[BotMan](https://discord.com/api/oauth2/authorize?client_id=845225811152732179&permissions"

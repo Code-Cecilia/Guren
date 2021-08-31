@@ -63,6 +63,8 @@ class Welcome(commands.Cog):
             welcome_channel_id = dict(data).get('welcome_channel')
             member_role_id = data.get('member_role')
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
+        if welcome_channel is None:
+            return
         await welcome_channel.send(f'{member.mention} has joined **{member.guild.name}**! Say hi!')
         if not member.bot:
             # add the member role
@@ -79,6 +81,8 @@ class Welcome(commands.Cog):
             data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
+        if welcome_channel is None:
+            return
         await welcome_channel.send(f'{member.mention} has left **{member.guild.name}**. Until Next time!')
         if member.bot:
             await welcome_channel.send('It\'s a bot. Oh, well...')

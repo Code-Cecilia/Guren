@@ -24,19 +24,28 @@ class Modlogs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        if self.modlogsFile.get(str(before.guild.id)) is None:
+        message_channel_id = self.modlogsFile.get(str(before.guild.id))
+        if message_channel_id is None:
             return
-
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
+            return
+        message_link = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
         embed = discord.Embed(title=f"Message edited in {before.channel.name}",
                               color=get_color.get_color(before.author), timestamp=after.created_at)
         embed.add_field(name="Before", value=before.content, inline=False)
         embed.add_field(name="After", value=after.content, inline=False)
-        embed.set_footer(text=f"Author  •  {before.author}  |  Edited", icon_url=before.author.avatar_url)
+        embed.add_field(
+            name="Link", value=f"__[Message]({message_link})__", inline=False)
+        embed.set_footer(text=f"Author  •  {before.author}  |  Edited")
+        embed.set_thumbnail(url=before.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(before.guild.id))))
-        if message_channel is None:
-            return
-        await message_channel.send(embed=embed)
+        try:
+            await message_channel.send(embed=embed)
+        except:  # embeds dont have a message.content, so it gives us an error
+            pass
+
+            # from mahasvan#0001 ape botman.py
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -72,30 +81,45 @@ class Modlogs(commands.Cog):
 
     # member update event
     @commands.Cog.listener()
-    async def on_member_update(self, after, before):
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(after.guild.id))))
+    async def on_member_update(self, before, after):
+        message_channel_id = self.modlogsFile.get(str(before.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
-        if before.display_name != after.display_name:
-            embed = discord.Embed(title=f"{after} changed their nickname", color=after.color,
-                                  timestamp=datetime.datetime.utcnow())
-            embed.set_thumbnail(url=f"{after.avatar_url}")
-            embed.set_footer(text=f"UUID: {after.id}")
-            fields = [("After", before.display_name, False),
-                      ("Before", after.display_name, False)]
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
+
+        # nickname change
+        if not before.nick == after.nick:
+            embed = discord.Embed(title=f"{before}'s nickname has been updated", description=f"ID: {before.id}",
+                                  color=get_color.get_color(after), timestamp=before.created_at)
+
+            embed.add_field(
+                name="Before", value=before.display_name, inline=False)
+            embed.add_field(
+                name="After", value=after.display_name, inline=False)
+
+            embed.set_thumbnail(url=after.avatar_url)
+            embed.set_footer(text="Account created at")
             await message_channel.send(embed=embed)
-        elif before.roles != after.roles:
-            embed = discord.Embed(title=f"Roles updated for {after}", color=after.color,
-                                  timestamp=datetime.datetime.utcnow())
-            embed.set_thumbnail(url=f"{after.avatar_url}")
-            embed.set_footer(text=f"UUID: {after.id}")
-            fields = [("After", " |\u200B".join([r.mention for r in before.roles]), False),
-                      ("Before", " |\u200B ".join([r.mention for r in after.roles]), False)]
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
+
+        # role change
+        if not before.roles == after.roles:
+            embed = discord.Embed(title=f"{before}'s roles have been updated", description=f"ID: {before.id}",
+                                  color=after.color, timestamp=before.created_at)
+            before_roles_str, after_roles_str = "", ""
+            for x in before.roles[::-1]:
+                before_roles_str += f"{x.mention} "
+            for x in after.roles[::-1]:
+                after_roles_str += f"{x.mention} "
+            embed.add_field(
+                name="Before", value=before_roles_str, inline=False)
+            embed.add_field(name="After", value=after_roles_str, inline=False)
+            embed.set_thumbnail(url=after.avatar_url)
+            embed.set_footer(text="Account created at")
             await message_channel.send(embed=embed)
+
+            # from mahasvan#0001 ape botman.py
 
     # ban event
     @commands.Cog.listener()
@@ -124,8 +148,11 @@ class Modlogs(commands.Cog):
     
     # join event
     @commands.Cog.listener()
-    async def on_member_join(self, guild, member: discord.Member):
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(guild.id))))
+    async def on_member_join(self, member):
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
         embed = discord.Embed(title=f"Member {member} joined the the server.", color=member.color,
@@ -137,8 +164,11 @@ class Modlogs(commands.Cog):
 
     # leave event
     @commands.Cog.listener()
-    async def on_member_remove(self, guild, member: discord.Member):
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(guild.id))))
+    async def on_member_remove(self, member):
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
         roles = [role for role in member.roles]
