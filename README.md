@@ -38,4 +38,4 @@ This README.md file is outdated and it will shortly be updated to match the bot 
 
 Thanks to these people and their contributions this project has been maintained and alive for a long time:
 
-- [Mahas1](https://github.com/orgs/Code-Cecilia/people/Mahas1)
+- [Mahas1](https://github.com/Mahas1)
