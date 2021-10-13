@@ -2,22 +2,15 @@ import asyncio
 import os
 import random
 import logging
-import sqlite3
 
 import discord
 from discord.ext import commands
 from pathlib import Path
-from traceback import format_exception
 
-from discord.flags import Intents
-
-from utils.util import clean_code, Pag
 from discord_slash import SlashCommand
 
 import json
-from spotdl.download.downloader import DownloadManager
 from spotdl.search.spotifyClient import SpotifyClient
-import spotdl.search.songGatherer as songGatherer
 
 intents = discord.Intents(messages=True, bans=True, guilds=True)
 intents.reactions = True
@@ -96,25 +89,6 @@ async def on_ready():
     print("Bot ID:", bot.user.id)
     print('Bot latency:', bot.latency * 1000, 2)
     print('Running discord.py version ' + discord.__version__)
-
-@bot.event
-async def on_guild_join(guild):
-    main = sqlite3.connect('Leveling/main.db')
-    cursor = main.cursor()
-    cursor.execute(f"SELECT enabled FROM glevel WHERE guild_id = '{guild.id}'")
-    result = cursor.fetchone()
-    if result is None:
-        sql = "INSERT INTO glevel(guild_id, enabled) VALUES(?,?)"
-        val = (str(guild.id), 'enabled')
-        cursor.execute(sql, val)
-        main.commit()
-    elif str(result[0]) == 'disabled':
-        sql = "UPDATE glevel SET enabled = ? WHERE guild_id = ?"
-        val = ('enabled', str(guild.id))
-        cursor.execute(sql, val)
-        main.commit()
-    cursor.close()
-    main.close()
 
 
 async def chng_pr():
