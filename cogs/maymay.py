@@ -145,6 +145,15 @@ class Maymay(commands.Cog):
         embed = discord.Embed(title=choice, color=discord.Colour.random())
         await ctx.send(embed=embed)
 
+    @commands.command(name="bam")
+    async def bam(self, ctx, member: discord.Member, *, reason="No reason"):
+            embed = discord.Embed(title=f"`{ctx.author}` bammed {member}",
+                                  colour=member.color, timestamp=datetime.datetime.utcnow())
+            embed.add_field(name="● Details:", value=f" - Reason: {reason}")
+            embed.set_footer(
+                icon_url=f"{ctx.author.avatar_url}", text=f"{ctx.author.name} ")
+            await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Maymay(bot))
