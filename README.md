@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href=""><img src="https://cdn.discordapp.com/attachments/713430084039737354/731176680139522139/wallpaperflare.com_wallpaper_2.jpg" alt="Guren"></a>
+  <a href=""><img src="" alt="Guren"></a>
   <br>
   Guren Ichinose Discord Bot
   <br>
