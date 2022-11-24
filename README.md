@@ -1,7 +1,5 @@
 <h1 align="center">
   <br>
-  <a href=""><img src="" alt="Guren"></a>
-  <br>
   Guren Ichinose Discord Bot
   <br>
 </h1>
@@ -20,6 +18,8 @@ This README.md file is outdated and it will shortly be updated to match the bot 
 - Note 3: Working on the project again, if you want a stable instance up and running of the bot use my own. [Invite Link](https://discord.com/oauth2/authorize?client_id=669973381067571240&scope=bot&permissions=8)
 
 - Note 4: This readme will be reworked tomorrow! :D
+
+- Note 5: This project is discontinued and there will be no further updates regarding this organization projects. Please do not open issues as they will be ignored. 
   
 # Credits
 
