@@ -8,9 +8,6 @@
 
 <h4 align="center">Utilities, Moderation, Memes, Music, Logs, Economy, Leveling.</h4>
 
-
-# Guren
-
 A discord bot written by [YuiiiiPTChan](https://github.com/YuiiiPTChan) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim my code as yours.
 
